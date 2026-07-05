@@ -1,11 +1,12 @@
 import os
 import json
 import re
-
+from typing import Dict, Any
 from groq import Groq
 
 MODEL = "llama-3.3-70b-versatile"
 
+# System prompt for English analysis
 SYSTEM_PROMPT_EN = """You are a security analyst assistant. You will be given a piece of text \
 (an email, a message, a URL, or a code snippet) that a user suspects might be malicious.
 
@@ -28,6 +29,7 @@ Write the "category" and "reasoning" fields in English.
 Be conservative: only flag things a careful human analyst would actually flag. If the text looks \
 benign, say so plainly rather than inventing concerns."""
 
+# System prompt for Hindi analysis (देवनागरी)
 SYSTEM_PROMPT_HI = """आप एक सुरक्षा विश्लेषक सहायक हैं। आपको एक टेक्स्ट (ईमेल, संदेश, यूआरएल, या कोड स्निपेट) \
 दिया जाएगा जिसे उपयोगकर्ता संदिग्ध मानता है।
 
@@ -52,45 +54,49 @@ SYSTEM_PROMPT_HI = """आप एक सुरक्षा विश्लेष�
 
 
 def _get_client() -> Groq:
+    """Instantiate Groq client from environment."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
         raise RuntimeError(
-            "GROQ_API_KEY is not set. Copy backend/.env.example to backend/.env "
-            "and add a free key from https://console.groq.com"
+            "GROQ_API_KEY environment variable is missing. Set it in .env or your deployment dashboard."
         )
     return Groq(api_key=api_key)
 
 
-def _extract_json(raw: str) -> dict:
-    # Strip markdown fences if the model adds them despite instructions not to.
+def _extract_json(raw: str) -> Dict[str, Any]:
+    """Parse JSON string and strip codeblock fences if present."""
     cleaned = re.sub(r"^```(json)?|```$", "", raw.strip(), flags=re.MULTILINE).strip()
     return json.loads(cleaned)
 
 
-def analyze_with_ai(text: str, lang: str = "en") -> dict:
+def analyze_with_ai(text: str, lang: str = "en") -> Dict[str, Any]:
+    """Call Groq API to evaluate text snippet."""
     client = _get_client()
-
     system_prompt = SYSTEM_PROMPT_HI if lang == "hi" else SYSTEM_PROMPT_EN
 
     completion = client.chat.completions.create(
         model=MODEL,
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": text[:6000]},  # cap input size
+            {"role": "user", "content": text[:6000]},
         ],
         temperature=0.2,
-        max_tokens=400,
+        max_tokens=450,
     )
 
-    raw = completion.choices[0].message.content
-    data = _extract_json(raw)
+    raw_content = completion.choices[0].message.content
+    data = _extract_json(raw_content)
 
-    # Clamp/validate so a malformed model response can't break the API contract.
-    data["risk_score"] = max(0, min(100, int(data.get("risk_score", 0))))
-    data["confidence"] = max(0.0, min(1.0, float(data.get("confidence", 0.5))))
-    data["verdict"] = data.get("verdict") or "suspicious"
-    data["category"] = data.get("category") or ("अनिर्दिष्ट" if lang == "hi" else "Unspecified")
-    data["reasoning"] = data.get("reasoning") or (
-        "कोई कारण नहीं दिया गया।" if lang == "hi" else "No reasoning provided."
-    )
-    return data
+    # Sanitize & normalize fields
+    risk_score = int(data.get("risk_score", 0))
+    confidence_val = float(data.get("confidence", 0.85))
+
+    return {
+        "verdict": str(data.get("verdict") or "suspicious").lower(),
+        "risk_score": max(0, min(100, risk_score)),
+        "category": str(data.get("category") or ("अनिर्दिष्ट" if lang == "hi" else "Unspecified")),
+        "reasoning": str(data.get("reasoning") or (
+            "कोई विवरण उपलब्ध नहीं है।" if lang == "hi" else "No detailed reasoning provided."
+        )),
+        "confidence": max(0.0, min(1.0, confidence_val))
+    }
