@@ -909,15 +909,15 @@
     transform-origin: center bottom;
   }
 
-  /* Fan-out values on Stack Container Hover */
-  .card-stack:hover .stack-card:nth-child(3) {
+  /* Fan-out values on Stack Container Hover when no card is focused */
+  .card-stack:not(.has-active-card):hover .stack-card:nth-child(3) {
     transform: translate3d(240px, 0, -20px) rotate(6deg) scale(0.95);
   }
-  .card-stack:hover .stack-card:nth-child(2) {
+  .card-stack:not(.has-active-card):hover .stack-card:nth-child(2) {
     transform: translate3d(0, -10px, 0) rotate(-1deg) scale(1);
     z-index: 10;
   }
-  .card-stack:hover .stack-card:nth-child(1) {
+  .card-stack:not(.has-active-card):hover .stack-card:nth-child(1) {
     transform: translate3d(-240px, 0, -40px) rotate(-7deg) scale(0.9);
   }
 
@@ -1560,6 +1560,8 @@ const STRINGS = {
     workspaceSub: "Paste any URL to analyze it for phishing indicators.",
     inputTitle: "Input Sandbox",
     inputSub: "Enter text, links, or upload screenshot files for analysis",
+    dropTitle: "Drop screenshot or Click",
+    dropSub: "Supports OCR image scan",
     presetLabel: "Presets:",
     btnDeepReport: "View Deep AI Analysis Report",
     deepTitle: "Deep Security Analysis",
@@ -1582,6 +1584,8 @@ const STRINGS = {
     workspaceSub: "फ़िशिंग संकेतों के विश्लेषण के लिए कोई भी यूआरएल दर्ज करें।",
     inputTitle: "इनपुट सैंडबॉक्स",
     inputSub: "विश्लेषण के लिए टेक्स्ट, लिंक दर्ज करें या स्क्रीनशॉट अपलोड करें",
+    dropTitle: "स्क्रीनशॉट डालें या क्लिक करें",
+    dropSub: "चित्रों से पाठ पठन समर्थित (OCR)",
     presetLabel: "उदाहरण:",
     btnDeepReport: "विस्तृत AI रिपोर्ट देखें",
     deepTitle: "विस्तृत सुरक्षा विश्लेषण",
@@ -1757,11 +1761,10 @@ setTimeout(updateConnectionPaths, 300);
 // Animate packet flows along SVG paths
 function spawnPackets(fromLeft) {
   if (window.innerWidth <= 900) return;
-  const container = document.getElementById('dashboard-layout');
   const svg = document.getElementById('workspace-svg');
   
   // Clean old packets
-  document.querySelectorAll('.svg-packet').forEach(p => p.remove());
+  document.querySelectorAll('.svg-packet-wrap').forEach(p => p.remove());
 
   const pathIds = fromLeft 
     ? ['path-threat-db', 'path-ml-engine', 'path-url-parser']
@@ -1771,22 +1774,33 @@ function spawnPackets(fromLeft) {
     const pathEl = document.getElementById(pid);
     if (!pathEl) return;
     
+    const pathD = pathEl.getAttribute('d');
+    
     // Create 3 offset packets per path
     for (let i = 0; i < 3; i++) {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', 'svg-packet-wrap');
+      
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('r', '4');
+      circle.setAttribute('r', '4.5');
       circle.setAttribute('fill', 'var(--brand)');
-      circle.setAttribute('class', 'svg-packet');
-      circle.style.animationDelay = `${i * 0.4}s`;
-      circle.style.offsetPath = `path('${pathEl.getAttribute('d')}')`;
-      circle.style.boxShadow = '0 0 10px var(--brand-glow)';
-      svg.appendChild(circle);
+      circle.style.filter = 'drop-shadow(0 0 5px var(--brand))';
+      
+      const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+      anim.setAttribute('dur', '1.6s');
+      anim.setAttribute('repeatCount', 'indefinite');
+      anim.setAttribute('path', pathD);
+      anim.setAttribute('begin', `${i * 0.45}s`);
+      
+      g.appendChild(circle);
+      g.appendChild(anim);
+      svg.appendChild(g);
     }
   });
 }
 
 function stopPackets() {
-  document.querySelectorAll('.svg-packet').forEach(p => p.remove());
+  document.querySelectorAll('.svg-packet-wrap').forEach(p => p.remove());
 }
 
 /* ==========================================================================
@@ -1901,8 +1915,9 @@ async function triggerAnalysisFlow() {
 
   if (aiData) {
     score = aiData.risk_score;
-    verdict = aiData.verdict;
-    confidence = aiData.confidence;
+    const v = aiData.verdict ? aiData.verdict.toLowerCase() : '';
+    verdict = (v === 'flagged' || v === 'danger') ? 'flagged' : (v === 'suspicious' || v === 'caution' || score > 40) ? 'suspicious' : 'safe';
+    confidence = aiData.confidence || 0.95;
   } else {
     // Local rules fallback
     if (highHeuristics >= 2 || matches.length >= 3) {
@@ -2037,12 +2052,17 @@ function renderAnalysisResults(verdict, score, confidence, matches, aiData) {
 }
 
 function renderHeuristicGrid(text, matches) {
+  // Extract URL from input if present
+  const urlRegex = /(https?:\/\/[^\s]+)/gi;
+  const urlMatch = text.match(urlRegex);
+  const urlToCheck = urlMatch ? urlMatch[0] : null;
+
   // Check Length
   const len = text.length;
   const lengthCard = document.getElementById('h-card-length');
   const lengthBadge = document.getElementById('h-badge-length');
   document.getElementById('h-val-length').textContent = `${len} chars`;
-  if (len > 60) {
+  if (len > 120) {
     lengthCard.className = 'heuristic-card flagged-card';
     lengthBadge.className = 'heuristic-badge flagged';
     lengthBadge.textContent = 'FLAGGED';
@@ -2053,38 +2073,45 @@ function renderHeuristicGrid(text, matches) {
   }
 
   // Check HTTPS
-  const isHttps = text.toLowerCase().startsWith('https://');
-  const isHttp = text.toLowerCase().startsWith('http://');
   const httpsCard = document.getElementById('h-card-https');
   const httpsBadge = document.getElementById('h-badge-https');
   const httpsVal = document.getElementById('h-val-https');
-  if (isHttps) {
+  if (urlToCheck) {
+    const isHttps = urlToCheck.toLowerCase().startsWith('https://');
+    const isHttp = urlToCheck.toLowerCase().startsWith('http://');
+    if (isHttps) {
+      httpsCard.className = 'heuristic-card safe-card';
+      httpsBadge.className = 'heuristic-badge safe';
+      httpsBadge.textContent = 'SAFE';
+      httpsVal.textContent = 'Secure (HTTPS)';
+    } else if (isHttp) {
+      httpsCard.className = 'heuristic-card flagged-card';
+      httpsBadge.className = 'heuristic-badge flagged';
+      httpsBadge.textContent = 'INSECURE';
+      httpsVal.textContent = 'Plain HTTP';
+    } else {
+      httpsCard.className = 'heuristic-card';
+      httpsBadge.className = 'heuristic-badge';
+      httpsBadge.textContent = 'NO PROTOCOL';
+      httpsVal.textContent = 'Domain Only';
+    }
+  } else {
     httpsCard.className = 'heuristic-card safe-card';
     httpsBadge.className = 'heuristic-badge safe';
-    httpsBadge.textContent = 'SAFE';
-    httpsVal.textContent = 'Secure (HTTPS)';
-  } else if (isHttp) {
-    httpsCard.className = 'heuristic-card flagged-card';
-    httpsBadge.className = 'heuristic-badge flagged';
-    httpsBadge.textContent = 'INSECURE';
-    httpsVal.textContent = 'Plain HTTP';
-  } else {
-    httpsCard.className = 'heuristic-card';
-    httpsBadge.className = 'heuristic-badge';
-    httpsBadge.textContent = 'NO PROTOCOL';
-    httpsVal.textContent = 'Domain Only';
+    httpsBadge.textContent = 'N/A';
+    httpsVal.textContent = 'No URL in input';
   }
 
   // Check IP
-  const hasIp = /https?:\/\/(\d{1,3}\.){3}\d{1,3}/.test(text.toLowerCase());
   const ipCard = document.getElementById('h-card-ip');
   const ipBadge = document.getElementById('h-badge-ip');
   const ipVal = document.getElementById('h-val-ip');
-  if (hasIp) {
+  const hasIp = urlToCheck ? /https?:\/\/(\d{1,3}\.){3}\d{1,3}/.test(urlToCheck.toLowerCase()) : false;
+  if (hasIp && urlToCheck) {
     ipCard.className = 'heuristic-card flagged-card';
     ipBadge.className = 'heuristic-badge flagged';
     ipBadge.textContent = 'IP DETECTED';
-    ipVal.textContent = text.match(/(\d{1,3}\.){3}\d{1,3}/)[0];
+    ipVal.textContent = urlToCheck.match(/(\d{1,3}\.){3}\d{1,3}/)[0];
   } else {
     ipCard.className = 'heuristic-card safe-card';
     ipBadge.className = 'heuristic-badge safe';
@@ -2127,21 +2154,28 @@ function renderHeuristicGrid(text, matches) {
   }
 
   // Check Subdomains
-  const urlParts = text.replace(/^https?:\/\//, '').split('/')[0].split('.');
-  const subCount = urlParts.length > 2 ? urlParts.length - 2 : 0;
   const subdomainCard = document.getElementById('h-card-subdomains');
   const subdomainBadge = document.getElementById('h-badge-subdomains');
   const subdomainVal = document.getElementById('h-val-subdomains');
-  if (subCount >= 3) {
-    subdomainCard.className = 'heuristic-card flagged-card';
-    subdomainBadge.className = 'heuristic-badge flagged';
-    subdomainBadge.textContent = 'EXCESSIVE';
-    subdomainVal.textContent = `${subCount} subdomains`;
+  if (urlToCheck) {
+    const urlParts = urlToCheck.replace(/^https?:\/\//, '').split('/')[0].split('.');
+    const subCount = urlParts.length > 2 ? urlParts.length - 2 : 0;
+    if (subCount >= 3) {
+      subdomainCard.className = 'heuristic-card flagged-card';
+      subdomainBadge.className = 'heuristic-badge flagged';
+      subdomainBadge.textContent = 'EXCESSIVE';
+      subdomainVal.textContent = `${subCount} subdomains`;
+    } else {
+      subdomainCard.className = 'heuristic-card safe-card';
+      subdomainBadge.className = 'heuristic-badge safe';
+      subdomainBadge.textContent = 'SAFE';
+      subdomainVal.textContent = `${subCount} found`;
+    }
   } else {
     subdomainCard.className = 'heuristic-card safe-card';
     subdomainBadge.className = 'heuristic-badge safe';
-    subdomainBadge.textContent = 'SAFE';
-    subdomainVal.textContent = `${subCount} found`;
+    subdomainBadge.textContent = 'N/A';
+    subdomainVal.textContent = '0 found';
   }
 }
 
@@ -2160,11 +2194,13 @@ function revealDeepAnalysis() {
 function focusCard(cardEl) {
   playSynth('beep');
   const allCards = document.querySelectorAll('.stack-card');
+  const stackContainer = document.getElementById('report-card-stack');
   
   if (cardEl.classList.contains('active-focus')) {
     // Reset focus
     cardEl.classList.remove('active-focus');
     allCards.forEach(c => c.classList.remove('has-active-sibling'));
+    stackContainer.classList.remove('has-active-card');
     activeStackCard = null;
   } else {
     // Focus clicked card
@@ -2174,6 +2210,7 @@ function focusCard(cardEl) {
     });
     cardEl.classList.remove('has-active-sibling');
     cardEl.classList.add('active-focus');
+    stackContainer.classList.add('has-active-card');
     activeStackCard = cardEl;
   }
 }
@@ -2181,6 +2218,7 @@ function focusCard(cardEl) {
 function typewriterStream(text, element) {
   clearTimeout(typewriterTimer);
   element.innerHTML = '';
+  if (!text) return;
   let i = 0;
   function type() {
     if (i < text.length) {
