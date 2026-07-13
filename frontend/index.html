@@ -121,8 +121,8 @@
 
   body.lang-hi { font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; }
 
-  /* Blurry Liquid Smoky Background Canvas */
-  #bg-canvas, #fx-canvas {
+  /* Blurry Liquid Smoky Background Canvas & Interactive Grid */
+  #bg-canvas, #fx-canvas, #particles-canvas {
     position: fixed;
     inset: 0;
     width: 100vw;
@@ -133,6 +133,9 @@
   #bg-canvas {
     filter: blur(80px);
     opacity: 0.85;
+  }
+  #particles-canvas {
+    z-index: -1;
   }
   #fx-canvas { z-index: 99; }
 
@@ -1053,8 +1056,9 @@
 </head>
 <body class="theme-dark">
 
-<!-- Canvas Elements for Smoky Background & Confetti -->
+<!-- Canvas Elements for Smoky Background, Interactive Particles, & Confetti -->
 <canvas id="bg-canvas"></canvas>
+<canvas id="particles-canvas"></canvas>
 <canvas id="fx-canvas"></canvas>
 
 <!-- Floating notification toast -->
@@ -1539,6 +1543,14 @@ let currentMode = "auto";
 let lastAnalysisResult = null;
 let typewriterTimer = null;
 let activeStackCard = null;
+let isScanningState = false;
+let mouseX = -1000;
+let mouseY = -1000;
+
+window.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
 
 // Presets data dict
 const PRESETS = {
@@ -1695,6 +1707,137 @@ function drawBlobs() {
   requestAnimationFrame(drawBlobs);
 }
 requestAnimationFrame(drawBlobs);
+
+/* ==========================================================================
+   INTERACTIVE PARTICLES CONSTELLATION SHIELD NETWORK
+   ========================================================================== */
+const partCanvas = document.getElementById('particles-canvas');
+const pCtx = partCanvas.getContext('2d');
+let pw, ph, particles = [];
+
+function resizeParticles() {
+  pw = partCanvas.width = window.innerWidth;
+  ph = partCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeParticles);
+resizeParticles();
+
+function initParticles() {
+  particles = Array.from({ length: 65 }, () => ({
+    x: Math.random() * pw,
+    y: Math.random() * ph,
+    vx: (Math.random() - 0.5) * 0.8,
+    vy: (Math.random() - 0.5) * 0.8,
+    r: 1 + Math.random() * 2
+  }));
+}
+initParticles();
+
+function drawParticles() {
+  pCtx.clearRect(0, 0, pw, ph);
+  
+  // Center coordinates of input sandbox for gravity simulation
+  let cX = pw / 2;
+  let cY = ph / 2;
+  const centerCard = document.querySelector('.scan-card');
+  if (centerCard) {
+    const rect = centerCard.getBoundingClientRect();
+    cX = rect.left + rect.width / 2;
+    cY = rect.top + rect.height / 2;
+  }
+  
+  particles.forEach(p => {
+    if (isScanningState) {
+      // Sucked towards central scanner card gravity well
+      const dx = cX - p.x;
+      const dy = cY - p.y;
+      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+      if (dist > 35) {
+        const force = 0.28;
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
+      } else {
+        // Recycle sucked particles back to screen edges
+        p.x = Math.random() * pw;
+        p.y = Math.random() * ph;
+        p.vx = (Math.random() - 0.5) * 0.8;
+        p.vy = (Math.random() - 0.5) * 0.8;
+      }
+    } else {
+      // Gentle attraction towards cursor
+      const dxM = mouseX - p.x;
+      const dyM = mouseY - p.y;
+      const distM = Math.sqrt(dxM*dxM + dyM*dyM) || 1;
+      if (distM < 160) {
+        const force = 0.08;
+        p.vx += (dxM / distM) * force;
+        p.vy += (dyM / distM) * force;
+      }
+    }
+    
+    // Friction damping
+    p.vx *= 0.94;
+    p.vy *= 0.94;
+    
+    // Maintain minimum micro-drift motion
+    p.vx += (Math.random() - 0.5) * 0.12;
+    p.vy += (Math.random() - 0.5) * 0.12;
+    
+    p.x += p.vx;
+    p.y += p.vy;
+    
+    // Bounce / wrap around boundary bounds
+    if (p.x < 0) p.x = pw;
+    if (p.x > pw) p.x = 0;
+    if (p.y < 0) p.y = ph;
+    if (p.y > ph) p.y = 0;
+    
+    // Draw particle node
+    pCtx.fillStyle = currentTheme === 'light' ? 'rgba(13, 148, 136, 0.4)' : 'rgba(16, 185, 129, 0.45)';
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pCtx.fill();
+    
+    // Draw cursor connections
+    if (!isScanningState) {
+      const dxM = mouseX - p.x;
+      const dyM = mouseY - p.y;
+      const distM = Math.sqrt(dxM*dxM + dyM*dyM);
+      if (distM < 140) {
+        pCtx.strokeStyle = currentTheme === 'light' 
+          ? `rgba(13, 148, 136, ${0.15 * (1 - distM/140)})`
+          : `rgba(16, 185, 129, ${0.2 * (1 - distM/140)})`;
+        pCtx.lineWidth = 1.0;
+        pCtx.beginPath();
+        pCtx.moveTo(p.x, p.y);
+        pCtx.lineTo(mouseX, mouseY);
+        pCtx.stroke();
+      }
+    }
+  });
+  
+  // Draw link paths between neighbor nodes
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        pCtx.strokeStyle = currentTheme === 'light'
+          ? `rgba(13, 148, 136, ${0.08 * (1 - dist/100)})`
+          : `rgba(16, 185, 129, ${0.12 * (1 - dist/100)})`;
+        pCtx.lineWidth = 0.8;
+        pCtx.beginPath();
+        pCtx.moveTo(particles[i].x, particles[i].y);
+        pCtx.lineTo(particles[j].x, particles[j].y);
+        pCtx.stroke();
+      }
+    }
+  }
+  
+  requestAnimationFrame(drawParticles);
+}
+requestAnimationFrame(drawParticles);
 
 /* ==========================================================================
    INTERACTIVE DYNAMIC SVG CONNECTION PATHS
@@ -1943,6 +2086,7 @@ async function triggerAnalysisFlow() {
 }
 
 function setScanningStateUI(isScanning) {
+  isScanningState = isScanning;
   const btn = document.getElementById('btn-scan');
   const spinner = document.getElementById('btn-spinner');
   const shield = document.getElementById('btn-shield-icon');
