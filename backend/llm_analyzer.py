@@ -64,8 +64,15 @@ def _get_client() -> Groq:
 
 
 def _extract_json(raw: str) -> Dict[str, Any]:
-    """Parse JSON string and strip codeblock fences if present."""
-    cleaned = re.sub(r"^```(json)?|```$", "", raw.strip(), flags=re.MULTILINE).strip()
+    """Parse JSON string and strip codeblock fences or conversational text if present."""
+    # Find the outermost curly braces to isolate JSON content from conversational wrapper text
+    match = re.search(r"(\{.*\})", raw, re.DOTALL)
+    if match:
+        raw_json = match.group(1)
+    else:
+        raw_json = raw
+
+    cleaned = re.sub(r"^```(json)?|```$", "", raw_json.strip(), flags=re.MULTILINE).strip()
     return json.loads(cleaned)
 
 
