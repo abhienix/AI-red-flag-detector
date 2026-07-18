@@ -1052,6 +1052,106 @@
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .floating-toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ==========================================================================
+     RESPONSIVE FIXES FOR NAVIGATION BAR & INTERACTIVE WIDGETS
+     ========================================================================== */
+  @media (max-width: 600px) {
+    .brand-name {
+      display: none;
+    }
+    .topbar {
+      top: 8px;
+      width: calc(100% - 16px);
+      padding: 0 12px;
+      height: 52px;
+    }
+    .controls-group {
+      gap: 6px;
+    }
+    .control-btn {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
+    .sound-toggle-btn {
+      width: 28px;
+      height: 28px;
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-layout {
+      display: flex;
+      flex-direction: column;
+    }
+    .dashboard-layout .scan-card {
+      order: 1;
+    }
+    .dashboard-layout .side-column:nth-of-type(2) {
+      order: 2;
+    }
+    .dashboard-layout .side-column:nth-of-type(1) {
+      order: 3;
+    }
+    .side-column {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .side-column .side-card {
+      flex: 1 1 calc(33.333% - 10px);
+      min-width: 90px;
+      padding: 10px;
+      align-items: center;
+      text-align: center;
+    }
+    .side-card-title {
+      font-size: 9px;
+    }
+    .side-card-desc {
+      font-size: 13px !important;
+    }
+    .side-card-status {
+      font-size: 8px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .card-stack {
+      height: 480px;
+    }
+    .card-stack:not(.has-active-card):hover .stack-card:nth-child(3) {
+      transform: translate3d(0, 30px, -20px) rotate(2deg) scale(0.95);
+    }
+    .card-stack:not(.has-active-card):hover .stack-card:nth-child(2) {
+      transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+      z-index: 10;
+    }
+    .card-stack:not(.has-active-card):hover .stack-card:nth-child(1) {
+      transform: translate3d(0, -30px, -40px) rotate(-2deg) scale(0.9);
+    }
+  }
+
+  /* Light Theme Line Visibility Overrides */
+  body.theme-light .workspace-svg-layer path {
+    stroke: rgba(0, 0, 0, 0.08);
+  }
+  body.theme-light .workspace-svg-layer path.active-line {
+    stroke: rgba(13, 148, 136, 0.35);
+  }
+  body.theme-light .widget-svg-overlay path {
+    stroke: rgba(0, 0, 0, 0.08);
+  }
+  body.theme-light .widget-svg-overlay path.active-glow.flow-red {
+    stroke: var(--danger);
+  }
+  body.theme-light .widget-svg-overlay path.active-glow.flow-purple {
+    stroke: var(--purple-node);
+  }
+  body.theme-light .widget-svg-overlay path.active-glow.flow-green {
+    stroke: var(--safe);
+  }
 </style>
 </head>
 <body class="theme-dark">
@@ -1541,6 +1641,7 @@ let currentTheme = "dark";
 let soundEnabled = true;
 let currentMode = "auto";
 let lastAnalysisResult = null;
+let lastScannedText = "";
 let typewriterTimer = null;
 let activeStackCard = null;
 let isScanningState = false;
@@ -1583,7 +1684,7 @@ const STRINGS = {
     downloadReport: "Export Report",
     verdictPending: "Analyzing...",
     verdictSafe: "Safe URL — Verified clean by multiple security checkers",
-    verdictCaution: "Suspicious URL — Caution advised, minor indicators matched",
+    verdictSuspicious: "Suspicious URL — Caution advised, minor indicators matched",
     verdictFlagged: "Phishing Detected — ML Threat Index classification probability score check."
   },
   hi: {
@@ -1607,7 +1708,7 @@ const STRINGS = {
     downloadReport: "रिपोर्ट डाउनलोड करें",
     verdictPending: "विश्लेषण हो रहा है...",
     verdictSafe: "सुरक्षित यूआरएल — एकाधिक सुरक्षा चेकर्स द्वारा सत्यापित रूप से सुरक्षित",
-    verdictCaution: "संदिग्ध यूआरएल — सावधानी बरतें, कुछ जोखिम संकेत मिले हैं",
+    verdictSuspicious: "संदिग्ध यूआरएल — सावधानी बरतें, कुछ जोखिम संकेत मिले हैं",
     verdictFlagged: "फ़िशिंग खोजी गई — ML थ्रेट इंडेक्स क्लासिफिकेशन स्कोर जोखिम संकेत देता है।"
   }
 };
@@ -1898,8 +1999,47 @@ function updateConnectionPaths() {
   workspaceSvg.innerHTML = html;
 }
 
-window.addEventListener('resize', updateConnectionPaths);
-setTimeout(updateConnectionPaths, 300);
+function updateWidgetPaths() {
+  const container = document.getElementById('widget-diagram');
+  if (!container) return;
+  const source = container.querySelector('.node-source');
+  const scanner = container.querySelector('.node-scanner');
+  const lexical = container.querySelector('.node-lexical');
+  const intel = container.querySelector('.node-intel');
+  const verdict = container.querySelector('.node-verdict');
+
+  if (!source || !scanner || !lexical || !intel || !verdict) return;
+
+  const cSource = getElementCenterRelativeTo(source, container);
+  const cScanner = getElementCenterRelativeTo(scanner, container);
+  const cLexical = getElementCenterRelativeTo(lexical, container);
+  const cIntel = getElementCenterRelativeTo(intel, container);
+  const cVerdict = getElementCenterRelativeTo(verdict, container);
+
+  // wpath-1: Source Right to Scanner Left
+  document.getElementById('wpath-1').setAttribute('d', `M ${cSource.rightX} ${cSource.y} L ${cScanner.leftX} ${cScanner.y}`);
+
+  // wpath-2: Scanner Right to Lexical Left (cubic bezier curve)
+  document.getElementById('wpath-2').setAttribute('d', `M ${cScanner.rightX} ${cScanner.y} C ${(cScanner.rightX + cLexical.leftX)/2} ${cScanner.y}, ${(cScanner.rightX + cLexical.leftX)/2} ${cLexical.y}, ${cLexical.leftX} ${cLexical.y}`);
+
+  // wpath-3: Scanner Right to Intel Left (cubic bezier curve)
+  document.getElementById('wpath-3').setAttribute('d', `M ${cScanner.rightX} ${cScanner.y} C ${(cScanner.rightX + cIntel.leftX)/2} ${cScanner.y}, ${(cScanner.rightX + cIntel.leftX)/2} ${cIntel.y}, ${cIntel.leftX} ${cIntel.y}`);
+
+  // wpath-4: Lexical Right to Verdict Left (cubic bezier curve)
+  document.getElementById('wpath-4').setAttribute('d', `M ${cLexical.rightX} ${cLexical.y} C ${(cLexical.rightX + cVerdict.leftX)/2} ${cLexical.y}, ${(cLexical.rightX + cVerdict.leftX)/2} ${cVerdict.y}, ${cVerdict.leftX} ${cVerdict.y}`);
+
+  // wpath-5: Intel Right to Verdict Left (cubic bezier curve)
+  document.getElementById('wpath-5').setAttribute('d', `M ${cIntel.rightX} ${cIntel.y} C ${(cIntel.rightX + cVerdict.leftX)/2} ${cIntel.y}, ${(cIntel.rightX + cVerdict.leftX)/2} ${cVerdict.y}, ${cVerdict.leftX} ${cVerdict.y}`);
+}
+
+window.addEventListener('resize', () => {
+  updateConnectionPaths();
+  updateWidgetPaths();
+});
+setTimeout(() => {
+  updateConnectionPaths();
+  updateWidgetPaths();
+}, 300);
 
 // Animate packet flows along SVG paths
 function spawnPackets(fromLeft) {
@@ -1981,9 +2121,13 @@ function scanLocalRules(text) {
   const domains = text.match(/\b(?:https?:\/\/)?([a-z0-9-]+\.[a-z0-9.-]+)\b/gi) || [];
   domains.forEach(d => {
     const host = d.replace(/^https?:\/\//i, '').split('/')[0].toLowerCase();
+    const hostParts = host.split('.');
+    const hostSld = hostParts[hostParts.length - 2] || host;
     BRANDS.forEach(b => {
-      const dist = levenshtein(host, b);
-      if(dist > 0 && dist <= 2) {
+      const brandSld = b.split('.')[0];
+      const dist = levenshtein(hostSld, brandSld);
+      const containsImpersonation = hostSld !== brandSld && (hostSld.includes(brandSld) || hostSld.replace(/0/g, 'o').replace(/1/g, 'i').includes(brandSld));
+      if ((dist > 0 && dist <= 2) || containsImpersonation) {
         matches.push({ key: 'typosquat', cat: 'Fake Domain', sev: 'high', tag: 'Typosquat Link', desc: `Domain "${host}" closely mimics official domain "${b}".` });
       }
     });
@@ -2023,9 +2167,22 @@ document.getElementById('url-input').addEventListener('keydown', (e) => {
   }
 });
 
+// Live Auto-Scan (600ms Debounce)
+let debounceTimer = null;
+document.getElementById('url-input').addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    const val = document.getElementById('url-input').value.trim();
+    if (val && !isScanningState && val !== lastScannedText) {
+      triggerAnalysisFlow();
+    }
+  }, 600);
+});
+
 async function triggerAnalysisFlow() {
   const val = document.getElementById('url-input').value.trim();
-  if(!val) return;
+  if(!val || val === lastScannedText) return;
+  lastScannedText = val;
 
   // Set scanning interface
   playSynth('beep');
@@ -2418,7 +2575,8 @@ function handleScreenshotFile(file) {
   playSynth('beep');
   
   if (window.Tesseract) {
-    Tesseract.recognize(file, 'eng')
+    const ocrLang = currentLang === 'hi' ? 'hin+eng' : 'eng';
+    Tesseract.recognize(file, ocrLang)
       .then(({ data: { text } }) => {
         document.getElementById('drop-sub-text').textContent = STRINGS[currentLang].dropSub;
         if (text && text.trim()) {
