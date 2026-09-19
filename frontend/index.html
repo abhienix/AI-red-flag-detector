@@ -346,21 +346,6 @@
     letter-spacing: 0.05em;
     color: var(--ink-soft);
   }
-  .widget-replica-ok {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--brand);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .widget-pulsar {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #FF4D4D; box-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
-    animation: blink-anim 1s infinite alternate;
-  }
-  @keyframes blink-anim { 0% { opacity: 0.3; } 100% { opacity: 1; } }
-
   /* Diagram nodes layout */
   .diagram-flow {
     position: relative;
@@ -389,8 +374,8 @@
 
   /* Individual Node Colors */
   .node-source { border-color: var(--danger); color: var(--danger); box-shadow: 0 0 15px var(--danger-glow); }
-  .node-scanner { border-color: var(--purple-node); color: var(--purple-node); box-shadow: 0 0 15px var(--purple-node-glow); }
   .node-lexical, .node-intel { width: 62px; height: 62px; border-color: var(--border); color: var(--ink-soft); }
+  .node-intel { border-color: var(--purple-node); color: var(--purple-node); box-shadow: 0 0 12px var(--purple-node-glow); }
   .node-verdict { border-color: var(--safe); color: var(--safe); box-shadow: 0 0 15px var(--safe-glow); }
 
   /* Diagram splits */
@@ -1219,14 +1204,7 @@
     <div class="glass-card live-analyzer-widget">
       <div class="widget-header">
         <div class="widget-status">
-          <div class="widget-pulsar"></div>
-          <span>LIVE ANALYZER // NODE_01</span>
-        </div>
-        <div class="widget-replica-ok">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <span>DB_REPLICAS: OK</span>
+          <span>HOW IT WORKS</span>
         </div>
       </div>
 
@@ -1234,16 +1212,14 @@
       <div class="diagram-flow" id="widget-diagram">
         <!-- SVG lines drawn behind nodes -->
         <svg class="widget-svg-overlay">
-          <!-- Path 1: Source to Scanner -->
-          <path id="wpath-1" class="active-glow flow-red" d="M 36 90 L 140 90" />
-          <!-- Path 2: Scanner to Lexical -->
-          <path id="wpath-2" class="active-glow flow-purple" d="M 140 90 C 180 90, 180 36, 230 36" />
-          <!-- Path 3: Scanner to Intel -->
-          <path id="wpath-3" class="active-glow flow-purple" d="M 140 90 C 180 90, 180 144, 230 144" />
-          <!-- Path 4: Lexical to Verdict -->
-          <path id="wpath-4" class="active-glow flow-green" d="M 292 36 C 342 36, 342 90, 396 90" />
-          <!-- Path 5: Intel to Verdict -->
-          <path id="wpath-5" class="active-glow flow-green" d="M 292 144 C 342 144, 342 90, 396 90" />
+          <!-- Path 1: Source to Local Rules -->
+          <path id="wpath-1" class="active-glow flow-red" d="M 36 90 C 76 90, 76 36, 116 36" />
+          <!-- Path 2: Source to AI Model -->
+          <path id="wpath-2" class="active-glow flow-red" d="M 36 90 C 76 90, 76 144, 116 144" />
+          <!-- Path 3: Local Rules to Verdict -->
+          <path id="wpath-3" class="active-glow flow-purple" d="M 178 36 C 218 36, 218 90, 258 90" />
+          <!-- Path 4: AI Model to Verdict -->
+          <path id="wpath-4" class="active-glow flow-purple" d="M 178 144 C 218 144, 218 90, 258 90" />
         </svg>
 
         <!-- Node: Source -->
@@ -1252,38 +1228,24 @@
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
           </svg>
-          <span>Source</span>
+          <span>Your Input</span>
         </div>
 
-        <!-- Node: Scanner -->
-        <div class="node-box node-scanner">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="4" y="4" width="16" height="16" rx="2"/>
-            <rect x="9" y="9" width="6" height="6"/>
-            <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
-            <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
-            <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/>
-            <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/>
-          </svg>
-          <span>Scanner</span>
-        </div>
-
-        <!-- Split Col: Lexical & Intel DB -->
+        <!-- Split Col: the two checks that actually run on every scan -->
         <div class="split-column">
           <div class="node-box node-lexical">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+              <path d="M8 9h8M8 13h5"/>
             </svg>
-            <span style="font-size:7px;">Lexical</span>
+            <span style="font-size:7px;">Local Rules</span>
           </div>
           <div class="node-box node-intel">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <ellipse cx="12" cy="5" rx="9" ry="3"/>
-              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-              <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3.5 2"/>
             </svg>
-            <span style="font-size:7px;">Intel DB</span>
+            <span style="font-size:7px;">AI Model</span>
           </div>
         </div>
 
@@ -1296,19 +1258,19 @@
         </div>
       </div>
 
-      <!-- Widget Stats Footer -->
+      <!-- Widget Facts Footer -->
       <div class="widget-stats-grid">
         <div class="widget-stat-card">
-          <div class="widget-stat-label">Sys_Threats_Blocked</div>
-          <div class="widget-stat-val" style="color: var(--danger);" id="widget-threats">84,729</div>
+          <div class="widget-stat-label">Local Rules</div>
+          <div class="widget-stat-val" style="color: var(--ink-soft); font-size: 13px;">Regex + typosquat check</div>
         </div>
         <div class="widget-stat-card">
-          <div class="widget-stat-label">Inference_Time</div>
-          <div class="widget-stat-val" style="color: var(--purple-node);" id="widget-time">12.4ms</div>
+          <div class="widget-stat-label">AI Model</div>
+          <div class="widget-stat-val" style="color: var(--purple-node); font-size: 13px;">Groq · Llama 3.3 70B</div>
         </div>
         <div class="widget-stat-card">
-          <div class="widget-stat-label">Threat_Level</div>
-          <div class="widget-stat-val" style="color: var(--safe);" id="widget-threat-lvl">SECURE</div>
+          <div class="widget-stat-label">Returns</div>
+          <div class="widget-stat-val" style="color: var(--safe); font-size: 13px;">Score + reasoning</div>
         </div>
       </div>
     </div>
@@ -1329,32 +1291,24 @@
 
       <!-- Left Column: Status Indicators -->
       <div class="side-column">
-        <!-- Threat DB Card -->
+        <!-- AI Engine Card (status is live-checked against the real API) -->
         <div class="side-card" id="card-threat-db">
-          <div class="side-card-title">THREAT DB</div>
-          <div class="side-card-desc">PhishTank / VirusTotal</div>
+          <div class="side-card-title">AI ENGINE</div>
+          <div class="side-card-desc">Groq · Llama 3.3 70B</div>
           <div class="side-card-status">
-            <div class="status-dot online"></div>
-            <span>ONLINE</span>
+            <div class="status-dot"></div>
+            <span>CHECKING…</span>
           </div>
         </div>
-        <!-- ML Engine Card -->
+        <!-- Input Types Card -->
         <div class="side-card" id="card-ml-engine">
-          <div class="side-card-title">ML ENGINE</div>
-          <div class="side-card-desc">RandomForest Model</div>
-          <div class="side-card-status">
-            <div class="status-dot online"></div>
-            <span>ONLINE</span>
-          </div>
+          <div class="side-card-title">INPUT TYPES</div>
+          <div class="side-card-desc">URL · Message · Code</div>
         </div>
-        <!-- URL Parser Card -->
+        <!-- Languages Card -->
         <div class="side-card" id="card-url-parser">
-          <div class="side-card-title">URL PARSER</div>
-          <div class="side-card-desc">Feature Extraction</div>
-          <div class="side-card-status">
-            <div class="status-dot online"></div>
-            <span>ONLINE</span>
-          </div>
+          <div class="side-card-title">LANGUAGES</div>
+          <div class="side-card-desc">English · हिंदी</div>
         </div>
       </div>
 
@@ -1652,6 +1606,42 @@ window.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
 });
+
+/* ==========================================================================
+   REAL BACKEND HEALTH CHECK — pings the actual API instead of a fake dot.
+   Render's free tier sleeps the backend after idle, so this also lets us
+   tell the user honestly when the first request will be slow (cold start).
+   ========================================================================== */
+async function checkBackendHealth(attempt = 1) {
+  const dot = document.querySelector('#card-threat-db .status-dot');
+  const label = document.querySelector('#card-threat-db .side-card-status span');
+  if (!dot || !label) return;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+
+  try {
+    const res = await fetch(`${API_BASE}/`, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (res.ok) {
+      dot.classList.add('online');
+      label.textContent = 'ONLINE';
+      return;
+    }
+    throw new Error('bad status');
+  } catch (err) {
+    clearTimeout(timeout);
+    // Render's free tier sleeps after idle — first ping can take 20-50s to
+    // wake it up. Keep retrying quietly instead of showing a false verdict.
+    if (attempt < 4) {
+      label.textContent = 'WAKING UP…';
+      setTimeout(() => checkBackendHealth(attempt + 1), 8000);
+    } else {
+      label.textContent = 'UNAVAILABLE';
+    }
+  }
+}
+checkBackendHealth();
 
 // Presets data dict
 const PRESETS = {
@@ -2003,33 +1993,28 @@ function updateWidgetPaths() {
   const container = document.getElementById('widget-diagram');
   if (!container) return;
   const source = container.querySelector('.node-source');
-  const scanner = container.querySelector('.node-scanner');
-  const lexical = container.querySelector('.node-lexical');
-  const intel = container.querySelector('.node-intel');
+  const localRules = container.querySelector('.node-lexical');
+  const aiModel = container.querySelector('.node-intel');
   const verdict = container.querySelector('.node-verdict');
 
-  if (!source || !scanner || !lexical || !intel || !verdict) return;
+  if (!source || !localRules || !aiModel || !verdict) return;
 
   const cSource = getElementCenterRelativeTo(source, container);
-  const cScanner = getElementCenterRelativeTo(scanner, container);
-  const cLexical = getElementCenterRelativeTo(lexical, container);
-  const cIntel = getElementCenterRelativeTo(intel, container);
+  const cLocal = getElementCenterRelativeTo(localRules, container);
+  const cAi = getElementCenterRelativeTo(aiModel, container);
   const cVerdict = getElementCenterRelativeTo(verdict, container);
 
-  // wpath-1: Source Right to Scanner Left
-  document.getElementById('wpath-1').setAttribute('d', `M ${cSource.rightX} ${cSource.y} L ${cScanner.leftX} ${cScanner.y}`);
+  // wpath-1: Source to Local Rules
+  document.getElementById('wpath-1').setAttribute('d', `M ${cSource.rightX} ${cSource.y} C ${(cSource.rightX + cLocal.leftX)/2} ${cSource.y}, ${(cSource.rightX + cLocal.leftX)/2} ${cLocal.y}, ${cLocal.leftX} ${cLocal.y}`);
 
-  // wpath-2: Scanner Right to Lexical Left (cubic bezier curve)
-  document.getElementById('wpath-2').setAttribute('d', `M ${cScanner.rightX} ${cScanner.y} C ${(cScanner.rightX + cLexical.leftX)/2} ${cScanner.y}, ${(cScanner.rightX + cLexical.leftX)/2} ${cLexical.y}, ${cLexical.leftX} ${cLexical.y}`);
+  // wpath-2: Source to AI Model
+  document.getElementById('wpath-2').setAttribute('d', `M ${cSource.rightX} ${cSource.y} C ${(cSource.rightX + cAi.leftX)/2} ${cSource.y}, ${(cSource.rightX + cAi.leftX)/2} ${cAi.y}, ${cAi.leftX} ${cAi.y}`);
 
-  // wpath-3: Scanner Right to Intel Left (cubic bezier curve)
-  document.getElementById('wpath-3').setAttribute('d', `M ${cScanner.rightX} ${cScanner.y} C ${(cScanner.rightX + cIntel.leftX)/2} ${cScanner.y}, ${(cScanner.rightX + cIntel.leftX)/2} ${cIntel.y}, ${cIntel.leftX} ${cIntel.y}`);
+  // wpath-3: Local Rules to Verdict
+  document.getElementById('wpath-3').setAttribute('d', `M ${cLocal.rightX} ${cLocal.y} C ${(cLocal.rightX + cVerdict.leftX)/2} ${cLocal.y}, ${(cLocal.rightX + cVerdict.leftX)/2} ${cVerdict.y}, ${cVerdict.leftX} ${cVerdict.y}`);
 
-  // wpath-4: Lexical Right to Verdict Left (cubic bezier curve)
-  document.getElementById('wpath-4').setAttribute('d', `M ${cLexical.rightX} ${cLexical.y} C ${(cLexical.rightX + cVerdict.leftX)/2} ${cLexical.y}, ${(cLexical.rightX + cVerdict.leftX)/2} ${cVerdict.y}, ${cVerdict.leftX} ${cVerdict.y}`);
-
-  // wpath-5: Intel Right to Verdict Left (cubic bezier curve)
-  document.getElementById('wpath-5').setAttribute('d', `M ${cIntel.rightX} ${cIntel.y} C ${(cIntel.rightX + cVerdict.leftX)/2} ${cIntel.y}, ${(cIntel.rightX + cVerdict.leftX)/2} ${cVerdict.y}, ${cVerdict.leftX} ${cVerdict.y}`);
+  // wpath-4: AI Model to Verdict
+  document.getElementById('wpath-4').setAttribute('d', `M ${cAi.rightX} ${cAi.y} C ${(cAi.rightX + cVerdict.leftX)/2} ${cAi.y}, ${(cAi.rightX + cVerdict.leftX)/2} ${cVerdict.y}, ${cVerdict.leftX} ${cVerdict.y}`);
 }
 
 window.addEventListener('resize', () => {
@@ -2723,22 +2708,6 @@ function triggerConfetti() {
   }
   requestAnimationFrame(step);
 }
-
-/* ==========================================================================
-   WIDGET FAKE DATA ANIMATIONS
-   ========================================================================== */
-setInterval(() => {
-  // Threats blocked counter increments slowly
-  const threatsEl = document.getElementById('widget-threats');
-  let currentVal = parseInt(threatsEl.textContent.replace(',', ''));
-  currentVal += Math.floor(Math.random() * 3) + 1;
-  threatsEl.textContent = currentVal.toLocaleString();
-
-  // Inference time variations
-  const timeEl = document.getElementById('widget-time');
-  const randomTime = (10 + Math.random() * 5).toFixed(1);
-  timeEl.textContent = `${randomTime}ms`;
-}, 3000);
 
 /* ==========================================================================
    WORKSPACE MODE SLIDER INDICATOR
